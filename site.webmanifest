@@ -1,0 +1,21 @@
+{
+    "name": "Zerikai - Strategic AI Architect",
+    "short_name": "EB",
+    "description": "Lead AI Solutions Architect with 30+ years building production-grade AI orchestration, multi-agent systems, and scalable full-stack architectures.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#2A2B30",
+    "theme_color": "#BE5E38",
+    "icons": [
+        {
+            "src": "src/assets/images/favicon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "src/assets/images/favicon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

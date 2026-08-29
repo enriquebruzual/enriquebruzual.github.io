@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S1Y40WEYM3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-S1Y40WEYM3');
+    </script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <!-- Dynamic Title -->
+    <title>Connecting Python to NewsAPI.org: Core Concepts for Beginners | Enrique Bruzual</title>
+
+    <!-- Meta Description & SEO -->
+    <meta name="description" content="step-by-step tutorial on exactly how to connect your Python scripts to a modern REST API to fetch live data from a server.">
+    
+    <link rel="canonical" href="https://enriquebruzual.substack.com/p/connecting-python-to-newsapiorg-core">
+    <meta property="og:url" content="https://enriquebruzual.substack.com/p/connecting-python-to-newsapiorg-core">
+    
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:title" content="Connecting Python to NewsAPI.org: Core Concepts for Beginners">
+    <meta property="og:description" content="step-by-step tutorial on exactly how to connect your Python scripts to a modern REST API to fetch live data from a server.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png">
+    <meta name="twitter:image" content="https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Connecting Python to NewsAPI.org: Core Concepts for Beginners">
+    <meta name="twitter:description" content="step-by-step tutorial on exactly how to connect your Python scripts to a modern REST API to fetch live data from a server.">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/src/assets/images/favicon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/src/assets/images/favicon-512.png" />
+    <link rel="apple-touch-icon" href="/src/assets/images/favicon-192.png" />
+
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Fonts & Tailwind -->
+    <link rel="stylesheet" href="/src/css/tailwind.css" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2A2B30;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        html.dark {
+            background-color: #2A2B30;
+        }
+    </style>
+    
+
+<!-- Pygments (Monokai theme) CSS overrides for Stitch dark-mode design:
+     colors codehilite spans, inline <code>, tables, blockquotes, and
+     headings. Uses Playfair Display serif for H2/H3 with primary accent
+     left-border. Inline code gets primary-color tinted background. -->
+<style>
+    /* Pygments Monokai Theme */
+    .codehilite pre {
+        padding: 1.5rem;
+        overflow-x: auto;
+        margin: 0;
+        background-color: transparent !important;
+    }
+
+    .codehilite .hll {
+        background-color: #49483e
+    }
+
+    .codehilite {
+        background: transparent !important;
+        color: #F8F8F2;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.875rem;
+    }
+
+    .codehilite .c {
+        color: #959077
+    }
+
+    /* Comment */
+    .codehilite .err {
+        color: #ED007E;
+        background-color: #1E0010
+    }
+
+    /* Error */
+    .codehilite .esc {
+        color: #F8F8F2
+    }
+
+    /* Escape */
+    .codehilite .g {
+        color: #F8F8F2
+    }
+
+    /* Generic */
+    .codehilite .k {
+        color: #66D9EF
+    }
+
+    /* Keyword */
+    .codehilite .l {
+        color: #AE81FF
+    }
+
+    /* Literal */
+    .codehilite .n {
+        color: #F8F8F2
+    }
+
+    /* Name */
+    .codehilite .o {
+        color: #FF4689
+    }
+
+    /* Operator */
+    .codehilite .x {
+        color: #F8F8F2
+    }
+
+    /* Other */
+    .codehilite .p {
+        color: #F8F8F2
+    }
+
+    /* Punctuation */
+    .codehilite .ch {
+        color: #959077
+    }
+
+    /* Comment.Hashbang */
+    .codehilite .cm {
+        color: #959077
+    }
+
+    /* Comment.Multiline */
+    .codehilite .cp {
+        color: #959077
+    }
+
+    /* Comment.Preproc */
+    .codehilite .cpf {
+        color: #959077
+    }
+
+    /* Comment.PreprocFile */
+    .codehilite .c1 {
+        color: #959077
+    }
+
+    /* Comment.Single */
+    .codehilite .cs {
+        color: #959077
+    }
+
+    /* Comment.Special */
+    .codehilite .gd {
+        color: #FF4689
+    }
+
+    /* Generic.Deleted */
+    .codehilite .ge {
+        color: #F8F8F2;
+        font-style: italic
+    }
+
+    /* Generic.Emph */
+    .codehilite .ges {
+        color: #F8F8F2;
+        font-weight: bold;
+        font-style: italic
+    }
+
+    /* Generic.EmphStrong */
+    .codehilite .gr {
+        color: #F8F8F2
+    }
+
+    /* Generic.Error */
+    .codehilite .gh {
+        color: #F8F8F2
+    }
+
+    /* Generic.Heading */
+    .codehilite .gi {
+        color: #A6E22E
+    }
+
+    /* Generic.Inserted */
+    .codehilite .go {
+        color: #66D9EF
+    }
+
+    /* Generic.Output */
+    .codehilite .gp {
+        color: #FF4689;
+        font-weight: bold
+    }
+
+    /* Generic.Prompt */
+    .codehilite .gs {
+        color: #F8F8F2;
+        font-weight: bold
+    }
+
+    /* Generic.Strong */
+    .codehilite .gu {
+        color: #959077
+    }
+
+    /* Generic.Subheading */
+    .codehilite .gt {
+        color: #F8F8F2
+    }
+
+    /* Generic.Traceback */
+    .codehilite .kc {
+        color: #66D9EF
+    }
+
+    /* Keyword.Constant */
+    .codehilite .kd {
+        color: #66D9EF
+    }
+
+    /* Keyword.Declaration */
+    .codehilite .kn {
+        color: #FF4689
+    }
+
+    /* Keyword.Namespace */
+    .codehilite .kp {
+        color: #66D9EF
+    }
+
+    /* Keyword.Pseudo */
+    .codehilite .kr {
+        color: #66D9EF
+    }
+
+    /* Keyword.Reserved */
+    .codehilite .kt {
+        color: #66D9EF
+    }
+
+    /* Keyword.Type */
+    .codehilite .ld {
+        color: #E6DB74
+    }
+
+    /* Literal.Date */
+    .codehilite .m {
+        color: #AE81FF
+    }
+
+    /* Literal.Number */
+    .codehilite .s {
+        color: #E6DB74
+    }
+
+    /* Literal.String */
+    .codehilite .na {
+        color: #A6E22E
+    }
+
+    /* Name.Attribute */
+    .codehilite .nb {
+        color: #66D9EF
+    }
+
+    /* Name.Builtin (using cyan instead of white) */
+    .codehilite .nc {
+        color: #A6E22E
+    }
+
+    /* Name.Class */
+    .codehilite .no {
+        color: #66D9EF
+    }
+
+    /* Name.Constant */
+    .codehilite .nd {
+        color: #A6E22E
+    }
+
+    /* Name.Decorator */
+    .codehilite .ni {
+        color: #F8F8F2
+    }
+
+    /* Name.Entity */
+    .codehilite .ne {
+        color: #A6E22E
+    }
+
+    /* Name.Exception */
+    .codehilite .nf {
+        color: #A6E22E
+    }
+
+    /* Name.Function */
+    .codehilite .nl {
+        color: #F8F8F2
+    }
+
+    /* Name.Label */
+    .codehilite .nn {
+        color: #F8F8F2
+    }
+
+    /* Name.Namespace */
+    .codehilite .nx {
+        color: #A6E22E
+    }
+
+    /* Name.Other */
+    .codehilite .py {
+        color: #F8F8F2
+    }
+
+    /* Name.Property */
+    .codehilite .nt {
+        color: #FF4689
+    }
+
+    /* Name.Tag */
+    .codehilite .nv {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable */
+    .codehilite .ow {
+        color: #FF4689
+    }
+
+    /* Operator.Word */
+    .codehilite .pm {
+        color: #F8F8F2
+    }
+
+    /* Punctuation.Marker */
+    .codehilite .w {
+        color: #F8F8F2
+    }
+
+    /* Text.Whitespace */
+    .codehilite .mb {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Bin */
+    .codehilite .mf {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Float */
+    .codehilite .mh {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Hex */
+    .codehilite .mi {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Integer */
+    .codehilite .mo {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Oct */
+    .codehilite .sa {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Affix */
+    .codehilite .sb {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Backtick */
+    .codehilite .sc {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Char */
+    .codehilite .dl {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Delimiter */
+    .codehilite .sd {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Doc */
+    .codehilite .s2 {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Double */
+    .codehilite .se {
+        color: #AE81FF
+    }
+
+    /* Literal.String.Escape */
+    .codehilite .sh {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Heredoc */
+    .codehilite .si {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Interpol */
+    .codehilite .sx {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Other */
+    .codehilite .sr {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Regex */
+    .codehilite .s1 {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Single */
+    .codehilite .ss {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Symbol */
+    .codehilite .bp {
+        color: #F8F8F2
+    }
+
+    /* Name.Builtin.Pseudo */
+    .codehilite .fm {
+        color: #A6E22E
+    }
+
+    /* Name.Function.Magic */
+    .codehilite .vc {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Class */
+    .codehilite .vg {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Global */
+    .codehilite .vi {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Instance */
+    .codehilite .vm {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Magic */
+    .codehilite .il {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Integer.Long */
+
+    /* Inline Code Styling */
+    :not(pre)>code {
+        background-color: rgba(190, 94, 56, 0.1);
+        /* Primary color at 10% opacity */
+        color: #BE5E38;
+        /* Primary color */
+        padding: 0.2em 0.4em;
+        font-size: 85%;
+        border-radius: 0;
+        font-family: 'Fira Code', monospace;
+    }
+
+    /* General Markdown Prose Styles tailored to the Stitch design */
+    .prose p {
+        color: #9CA3AF;
+        /* muted-gray */
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+
+    .prose h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.875rem;
+        /* text-3xl */
+        font-weight: 700;
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+        padding-left: 1.5rem;
+        border-left: 4px solid #BE5E38;
+        /* Primary Accent */
+        color: #F5F5F7;
+        /* Ivory */
+    }
+
+    .prose h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        /* text-2xl */
+        font-weight: 700;
+        margin-top: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: #F5F5F7;
+    }
+
+    .prose a {
+        color: #BE5E38;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .prose a:hover {
+        color: #F5F5F7;
+    }
+
+    .prose blockquote {
+        margin: 3rem 0;
+        padding-left: 2rem;
+        border-left: 4px solid #BE5E38;
+        font-style: italic;
+        font-size: 1.5rem;
+        color: #9CA3AF;
+        line-height: 1.625;
+        quotes: none;
+        /* remove default quotes if any */
+    }
+
+    /* Tables */
+    .prose table {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 3rem 0;
+    }
+
+    .prose thead tr {
+        background-color: #323339;
+        /* surface */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .prose th {
+        padding: 1rem;
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #F5F5F7;
+    }
+
+    .prose tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .prose tbody tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.02);
+        /* Slight zebra striping */
+    }
+
+    .prose td {
+        padding: 1rem;
+        color: #9CA3AF;
+    }
+
+    /* Images */
+    .prose img {
+        max-width: 100%;
+        height: auto;
+        margin: 2rem auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Lists */
+    .prose ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        color: #9CA3AF;
+        margin-bottom: 2rem;
+    }
+
+    .prose ol {
+        list-style-type: decimal;
+        padding-left: 1.5rem;
+        color: #9CA3AF;
+        margin-bottom: 2rem;
+    }
+
+    .prose li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<!-- FAQ JSON-LD Schema: conditionally rendered when ai_faq is True.
+     Injects schema.org FAQPage structured data from pre-built faq_jsonld
+     (generated by build_blog.py from frontmatter + body extraction). -->
+
+<script type="application/ld+json">
+        {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "Q: Why do we pass `timeout=REQUEST_TIMEOUT` to the `requests.get()` function?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "If the NewsAPI servers freeze, your Python script could sit entirely idle forever waiting for a response. Adding a `timeout` explicitly tells Python, 'If you can't connect or read data within 15 seconds, cancel the request and throw a Timeout error.'"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "I am getting a `401 Unauthorized` HTTP error. What does that mean?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This means NewsAPI.org does not recognize your API key. Usually, it's a typo in the `.env` file, or the `load_dotenv()` function isn't finding it. Double-check that your file is named exactly `.env`!"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How do I change the topic to fetch different news?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "In the `main()` function, locate the line `fetch_news('Artificial Intelligence')`. Change the string to any topic you want, such as `'SpaceX'` or `'Python Programming'`, and rerun the script!"
+            }
+        }
+    ]
+}
+    </script>
+
+
+<!-- Article Schema (NewsArticle, BlogPosting, or custom): Google Rich
+     Results compliant JSON-LD with headline, datePublished, mainEntityOfPage
+     ImageObject, publisher Organization, and author Person. Uses Jinja2
+     template variables from post frontmatter for all dynamic fields. -->
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Connecting Python to NewsAPI.org: Core Concepts for Beginners",
+        "datePublished": "2026-02-27T00:00:00+00:00",
+        "dateModified": "2026-02-27T00:00:00+00:00",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "url": "https://enriquebruzual.substack.com/p/connecting-python-to-newsapiorg-core",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png"
+            }
+        },
+        "description": "step-by-step tutorial on exactly how to connect your Python scripts to a modern REST API to fetch live data from a server.",
+        "image": [
+            "https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png"
+        ],
+        "publisher": {
+            "@type": "Organization",
+            "name": "Enrique Bruzual",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io"
+            }
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Enrique Bruzual",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png",
+                "width": 512,
+                "height": 512
+            }
+        },
+        "@id": "https://enriquebruzual.substack.com/p/connecting-python-to-newsapiorg-core"
+    }
+    </script>
+
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-body antialiased selection:bg-primary/30">
+
+    <script>
+        // Force dark mode to match the portfolio aesthetic 
+        document.documentElement.classList.add('dark');
+    </script>
+
+    <!-- Navigation: dark-mode fixed navbar with Tailwind backdrop-blur,
+         responsive mobile menu toggle (vanilla JS), Enrique Bruzual brand
+         link, and ElevenLabs convai contact trigger via shadow DOM. -->
+    <nav
+        class="fixed w-full z-50 bg-white/90 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="/" class="hover:opacity-80 transition-opacity">
+                        <span class="text-2xl font-serif font-bold tracking-tighter text-primary">E/B</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-12">
+                    <a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                        href="/">Home</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest text-primary"
+                        href="/blog/">Blog</a>
+                    <a class="px-6 py-2 border border-primary text-primary text-sm font-medium hover:bg-primary hover:text-white transition-all uppercase tracking-widest"
+                        href="#" id="contact-link">Contact</a>
+                </div>
+                <!-- Mobile button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-500 hover:text-primary focus:outline-none">
+                        <span class="material-icons">menu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu"
+            class="md:hidden hidden bg-background-light dark:bg-background-dark border-b border-gray-200 dark:border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
+                <a class="block px-3 py-2 text-base font-medium hover:text-primary transition-colors uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                    href="/">Home</a>
+                <a class="block px-3 py-2 text-base font-medium hover:text-primary transition-colors uppercase tracking-widest text-primary"
+                    href="/blog/">Blog</a>
+                <a class="block px-3 py-2 mt-4 border border-primary text-primary text-base font-medium hover:bg-primary hover:text-white transition-all uppercase tracking-widest w-1/2 text-center"
+                    href="#" id="mobile-contact-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
+        
+<div class="max-w-[800px] mx-auto">
+    <!-- Article Header -->
+    <div class="mb-12">
+        <span class="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Tutorial: Python</span>
+        <h1 class="font-display text-4xl md:text-6xl font-bold leading-tight mb-6 text-gray-100">
+            Connecting Python to NewsAPI.org: Core Concepts for Beginners
+        </h1>
+        <p class="text-xl italic text-gray-400 mb-10 leading-relaxed font-light">
+            "One of the greatest reasons we write Python code is to solve problems and gather information efficiently."
+        </p>
+
+        <div class="flex items-center justify-between py-6 border-y border-primary">
+            <div class="flex items-center gap-4">
+                <img alt="Enrique Bruzual" class="w-12 h-12 object-cover grayscale brightness-110"
+                    src="/src/assets/images/enrique_bruzual_48-48.png" />
+                <div class="text-sm">
+                    <p class="font-semibold text-gray-100">Enrique Bruzual</p>
+                    <p class="text-gray-400">Feb 27, 2026</p>
+                </div>
+            </div>
+            <div class="flex gap-4 text-gray-400">
+                <span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors"
+                    onclick="navigator.clipboard.writeText(window.location.href); const originalText = this.innerText; this.innerText = 'check'; setTimeout(() => this.innerText = originalText, 2000);"
+                    title="Copy link to clipboard">share</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Content -->
+    <article class="prose prose-invert max-w-none">
+        <div class="flex items-center gap-6 mb-8 mt-12">
+            <a class="text-primary flex items-center gap-3 font-bold text-sm tracking-widest uppercase group !no-underline"
+                href="/blog/">
+                <span class="font-sans text-lg group-hover:-translate-x-1 transition-transform"
+                    aria-hidden="true">&#8592;</span>
+                All Articles
+            </a>
+        </div>
+
+        <!-- The converted Markdown will be injected here -->
+        <p>If you've ever wondered how applications pull live data-like weather, stock prices, or news headlines they do it by talking to an API (Application Programming Interface).</p>
+<p>In this tutorial, you will learn exactly how to connect your Python scripts to a modern REST API to fetch live data from a server. We use <strong>News API</strong> (a free service) as our playground, but the underlying mechanics we build apply to almost any API you will encounter in the wild.</p>
+<p><img alt="API Concept Illustration" src="/src/assets/blogs/api_concept_illustration.png" /></p>
+<hr />
+<blockquote>
+<p><strong>Chat prompts:</strong> I will be adding chat prompt hints throughout the tutorial to help you explore more detailed concepts related to what we are implementing. Use the <code>Chat Window</code> in your IDE to help you understand.</p>
+</blockquote>
+<hr />
+<h2>In This Tutorial, You'll Learn How To</h2>
+<p>By the end of this tutorial, you will understand how to:</p>
+<ul>
+<li><strong>Connect to a modern REST API</strong> using Python's famous <code>requests</code> library.</li>
+<li><strong>chat prompt:</strong> <code>what is the python request library and how does it work?</code></li>
+<li><strong>Handle and parse JSON data</strong> into accessible Python dictionaries.</li>
+<li><strong>chat prompt:</strong> <code>what is JSON data and how does Python's dictionary relate to it?</code></li>
+<li><strong>Securely manage API keys</strong> using environment variables so you don't leak passwords.</li>
+<li><strong>Format URLs with Query Parameters</strong> to filter the exact news articles you want.</li>
+<li><strong>Implement basic Error Handling</strong> to check HTTP Status Codes and prevent crashes.</li>
+<li><strong>Use Type Hints</strong> to make your functions predictable, readable, and easier to debug.</li>
+<li><strong>chat prompt:</strong> <code>explain the basics of Python type hints introduced in PEP 484</code></li>
+</ul>
+<blockquote>
+<p>[!NOTE]
+We purposefully will <strong>not</strong> be using the official Python client library provided by NewsAPI. By writing the connection ourselves, you will learn the underlying mechanics of how <em>any</em> API connection works in Python.</p>
+</blockquote>
+<hr />
+<h2>Prerequisites</h2>
+<p>Before we start writing code, ensure you have the following:</p>
+<ul>
+<li><strong>An Active API Key:</strong></li>
+<li>Create a free account at <a href="https://newsapi.org">newsapi.org</a>.</li>
+<li>Grab your unique <strong>API key</strong> from your account dashboard.</li>
+<li><strong>Python 3.8+</strong> installed on your machine.</li>
+<li><strong>A terminal or command prompt</strong> ready to go.</li>
+</ul>
+<hr />
+<h2>Step 1: Set Up Your Project Environment</h2>
+<p>It is a best practice to keep your Python projects isolated from one another. We do this using <strong>Virtual Environments</strong>. Let's set up a clean workspace.</p>
+<ol>
+<li><strong>Activate your virtual environment</strong> (<code>venv</code>). Open your terminal and run either of the following based on your Operating System:</li>
+</ol>
+<p><strong>Windows (PowerShell):</strong></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">powershell</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">-m</span> <span class="n">venv</span> <span class="n">venv</span>
+<span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">activate</span><span class="p">.</span><span class="n">bat</span>
+</pre></div>
+
+</div>
+</p>
+<p><strong>macOS/Linux (Shell):</strong></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nb">python3</span><span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+<span class="nb">source</span><span class="w"> </span>venv/bin/activate
+</pre></div>
+
+</div>
+</p>
+<ul>
+<li>
+<p><strong>chat prompt:</strong> <code>why is it a best practice to use a virtual environment like venv in Python?</code></p>
+</li>
+<li>
+<p><strong>Install our dependencies:</strong></p>
+</li>
+</ul>
+<p>We need two essential third-party libraries for this project. <code>requests</code> to handle the web traffic, and <code>python-dotenv</code> to handle our secret API keys securely.</p>
+<p><strong>Terminal:</strong></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nb">pip</span><span class="w"> </span>install<span class="w"> </span>requests<span class="w"> </span>python-dotenv
+</pre></div>
+
+</div>
+</p>
+<ul>
+<li>
+<p><strong>chat prompt:</strong> <code>what is pip and how does it manage third-party packages in Python?</code></p>
+</li>
+<li>
+<p><strong>Create a <code>.env</code> file:</strong></p>
+</li>
+</ul>
+<blockquote>
+<p>[!CAUTION]
+You should <strong>never</strong> hardcode passwords or API keys directly in your Python code where someone else could find them (like if you upload your code to GitHub).</p>
+</blockquote>
+<p>In the same folder you are working in, create a new file named exactly <code>.env</code> (don't forget the dot at the beginning). Open it, and paste your key inside like this:</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">env</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>NEWS_API_KEY=your_newsapi_org_key_here
+</pre></div>
+
+</div>
+</p>
+<p><em>(Make sure to replace <code>your_newsapi_org_key_here</code> with the actual key you got from the website).</em></p>
+<hr />
+<h2>Step 2: Grasp the 6 Core Python Concepts</h2>
+<p>Before writing the script, let's briefly review the tools and concepts we are about to use. Don't worry if this sounds a bit overwhelming right now; we'll see them in action soon!</p>
+<ol>
+<li><strong>HTTP Requests (<code>requests</code> library)</strong>: This is how Python talks to the internet. To grab news articles, we use an <strong>HTTP GET</strong> request to pull data from an <strong>API Endpoint</strong>.</li>
+<li><strong>JSON Data Handling</strong>: NewsAPI.org formats its data as a giant string of text called <strong>JSON</strong>. We need to parse that JSON into Python dictionaries to extract titles and links.</li>
+<li><strong>Environment Variables (<code>os</code> and <code>dotenv</code>)</strong>: We will use the <code>python-dotenv</code> library to securely load the key from our <code>.env</code> file into our script.</li>
+<li><strong>Query Parameters</strong>: When asking for articles, we add requirements (like keywords or dates) directly to the URL. These are known as <strong>query parameters</strong> (e.g., <code>?q=technology&amp;language=en</code>).</li>
+<li><strong>Basic Error Handling (<code>try</code> / <code>except</code>)</strong>: We need to check if the server responded successfully (<strong>200 OK</strong>) and handle errors gracefully.</li>
+<li><strong>Type Hints (<code>typing</code> module)</strong>: Introduced in Python 3.5, type hints allow you to define exactly what type of data your functions expect to receive and what they will return. This makes your code self-documenting and helps IDEs catch bugs before you even run the script.</li>
+</ol>
+<hr />
+<h2>Step 3: Secure Your Environment Variables</h2>
+<p>Now it's time to write some code! Create a new file named <code>api_connect.py</code>.</p>
+<p>The first thing we need to do is import our tools and load our API key. We want to ensure our script has access to the <code>.env</code> file before it tries to do anything else.</p>
+<p><code>Python: api_connect.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+
+<span class="c1"># --- Configuration &amp; Constants ---</span>
+<span class="n">NEWS_API_URL</span> <span class="o">=</span> <span class="s2">&quot;https://newsapi.org/v2/everything&quot;</span>
+<span class="n">REQUEST_TIMEOUT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>  <span class="c1"># (connect, read) timeout in seconds</span>
+
+<span class="c1"># Load environment variables securely</span>
+<span class="n">load_dotenv</span><span class="p">()</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;NEWS_API_KEY&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</p>
+<ul>
+<li><strong>chat prompt:</strong> <code>explain how os.getenv() works and why it is safer than hardcoding variables</code></li>
+</ul>
+<p>In this block, <code>load_dotenv()</code> finds our <code>.env</code> file and quietly loads it into memory. Then, <code>os.getenv("NEWS_API_KEY")</code> looks for that specific variable name and assigns it to our <code>API_KEY</code> constant.</p>
+<p>We also defined <code>REQUEST_TIMEOUT</code> as a tuple. This tells the <code>requests</code> library to wait up to 5 seconds to connect to the server, and 15 seconds to read the data before giving up.</p>
+<hr />
+<h2>Step 4: Create the API Connection Function</h2>
+<p>Next, we'll write the function that actually talks to NewsAPI.org. We will pass it a topic (<code>query</code>) and tell it to return a list of dictionaries. Notice the extensive use of <strong>Type Hints</strong> in the function definition.</p>
+<p>Add the following function to your <code>api_connect.py</code> file:</p>
+<p><code>Python: api_connect.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fetch_news</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;en&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch articles from NewsAPI based on a search term.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Fail cleanly if the API Key is missing</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">API_KEY</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NEWS_API_KEY not found. Check your .env file.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Dictionary of URL Query Parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span> <span class="n">API_KEY</span><span class="p">,</span>
+        <span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+        <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="n">language</span><span class="p">,</span>
+        <span class="s2">&quot;sortBy&quot;</span><span class="p">:</span> <span class="s2">&quot;publishedAt&quot;</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Make the HTTP GET Request</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">NEWS_API_URL</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">REQUEST_TIMEOUT</span><span class="p">)</span>
+
+    <span class="c1"># Check for HTTP errors (like 401 Unauthorized or 404 Not Found)</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+    <span class="c1"># Parse the JSON text into a Python Dictionary</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="c1"># Return just the list of articles, defaulting to an empty list</span>
+    <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">,</span> <span class="p">[])</span>
+</pre></div>
+
+</div>
+</p>
+<p>Let's break down the Pythonic principles at work here:</p>
+<ol>
+<li><strong>Understanding the Type Hint:</strong> Look at <code>def fetch_news(query: str, language: str = "en") -&gt; List[Dict[str, Any]]:</code>.</li>
+<li>We are explicitly stating that <code>query</code> must be a string (<code>str</code>).</li>
+<li>The arrow <code>-&gt;</code> tells us exactly what the function spits out: A List, containing Dictionaries, where the keys are strings (<code>str</code>) and the values can be anything (<code>Any</code>).</li>
+<li><strong>chat prompt:</strong> <code>how do Python type hints like List[Dict[str, Any]] improve code readability and IDE support?</code></li>
+<li><strong>Failing Early:</strong> By checking <code>if not API_KEY:</code> immediately, we trigger a clear <code>ValueError</code> rather than trying to connect and failing mysteriously.</li>
+<li><strong>The <code>params</code> Dictionary:</strong> Instead of building a messy URL manually, the <code>requests</code> library accepts a clean dictionary and formats the Query Parameters for us safely.</li>
+<li><strong>Status Checking:</strong> <code>response.raise_for_status()</code> guarantees that if the server denied our request for any reason, the script halts and throws an error we can catch later.</li>
+</ol>
+<hr />
+<h2>Step 5: Process and Display the Data</h2>
+<p>We successfully fetched the data, but it's currently a massive list of Python dictionaries. Let's write a small helper function to print the headlines cleanly to the terminal.</p>
+<p>Add this function to your file:</p>
+<p><code>Python: api_connect.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">show_headlines</span><span class="p">(</span><span class="n">articles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Display news headlines cleanly in the terminal.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">articles</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No news found for the given query.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Fetched </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span><span class="si">}</span><span class="s2"> headlines:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">30</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">:</span>
+        <span class="c1"># Provide a default &quot;No Title&quot; fallback if the dictionary is missing the key</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;No Title&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;• </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</p>
+<p>There are two major concepts hidden in this short function:</p>
+<ol>
+<li><strong>The <code>-&gt; None</code> Type Hint:</strong> Notice that this function returns <code>-&gt; None</code>. This means the function performs an action (printing to the screen) but doesn't hand any data back to the rest of the program.</li>
+<li><strong>The Early Return:</strong> Notice the pattern at the top: <code>if not articles: return</code>. Instead of wrapping the entire loop in an <code>if</code> block (which would unnecessarily indent all our code), we exit immediately if there's no data. <em>Flat is better than nested.</em></li>
+<li><strong>chat prompt:</strong> <code>explain the "early return" pattern in Python and why it is considered better than deep nesting</code></li>
+</ol>
+<hr />
+<h2>Step 6: Putting It All Together</h2>
+<p>Finally, we need a main execution block to tie our functions together and catch any errors that might have slipped through. Add this to the very bottom of your script:</p>
+<p><code>Python: api_connect.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entry point for the script.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">fetch_news</span><span class="p">(</span><span class="s2">&quot;Artificial Intelligence&quot;</span><span class="p">)</span>
+        <span class="n">show_headlines</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">val_err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Configuration Error: </span><span class="si">{</span><span class="n">val_err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Network Error: The request timed out. Check your internet connection.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">req_err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Network Error: </span><span class="si">{</span><span class="n">req_err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</p>
+<ul>
+<li><strong>chat prompt:</strong> <code>what does if __name__ == "__main__": mean in Python?</code></li>
+<li><strong>chat prompt:</strong> <code>explain how a try...except block catches network errors in Python</code></li>
+</ul>
+<p>By wrapping our <code>fetch_news()</code> call in a <code>try...except</code> block, we ensure that if the internet cuts out or our <code>.env</code> is misconfigured, the user gets a polite, plain-English error message instead of a terrifying crash traceback.</p>
+<h3>The Final Script</h3>
+<p>If you followed the steps correctly, your final <code>api_connect.py</code> file should look exactly like this:</p>
+<p><code>Python: api_connect.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+
+<span class="c1"># --- Configuration &amp; Constants ---</span>
+<span class="n">NEWS_API_URL</span> <span class="o">=</span> <span class="s2">&quot;https://newsapi.org/v2/everything&quot;</span>
+<span class="n">REQUEST_TIMEOUT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>  <span class="c1"># (connect, read) timeout in seconds</span>
+
+<span class="c1"># Load environment variables securely</span>
+<span class="n">load_dotenv</span><span class="p">()</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;NEWS_API_KEY&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch_news</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;en&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch articles from NewsAPI based on a search term.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">API_KEY</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NEWS_API_KEY not found. Check your .env file.&quot;</span><span class="p">)</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span> <span class="n">API_KEY</span><span class="p">,</span>
+        <span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+        <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="n">language</span><span class="p">,</span>
+        <span class="s2">&quot;sortBy&quot;</span><span class="p">:</span> <span class="s2">&quot;publishedAt&quot;</span>
+    <span class="p">}</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">NEWS_API_URL</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">REQUEST_TIMEOUT</span><span class="p">)</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">show_headlines</span><span class="p">(</span><span class="n">articles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Display news headlines cleanly in the terminal.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">articles</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No news found for the given query.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Fetched </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span><span class="si">}</span><span class="s2"> headlines:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">30</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">:</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;No Title&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;• </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entry point for the script.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">fetch_news</span><span class="p">(</span><span class="s2">&quot;Artificial Intelligence&quot;</span><span class="p">)</span>
+        <span class="n">show_headlines</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">val_err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Configuration Error: </span><span class="si">{</span><span class="n">val_err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Network Error: The request timed out. Check your internet connection.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">req_err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Network Error: </span><span class="si">{</span><span class="n">req_err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</p>
+<hr />
+<h2>Running the Script</h2>
+<p>Once your <code>.env</code> file is ready and the libraries are installed, you must ensure your virtual environment is active before running the script. Open your terminal and run the activation command for your OS:</p>
+<p><strong>Windows (PowerShell):</strong></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">powershell</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">activate</span><span class="p">.</span><span class="n">bat</span>
+</pre></div>
+
+</div>
+</p>
+<p><strong>macOS/Linux (Shell):</strong></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nb">source</span><span class="w"> </span>venv/bin/activate
+</pre></div>
+
+</div>
+</p>
+<p>Now that you see <code>(venv)</code> at the beginning of your terminal prompt, execute the script:</p>
+<p><strong>Terminal:</strong></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nb">python</span><span class="w"> </span>api_connect.py
+</pre></div>
+
+</div>
+</p>
+<p>You should see an output similar to:</p>
+<p><strong>Interactive REPL:</strong></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">text</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>&gt;&gt;&gt; python api_connect.py
+
+Fetched 100 headlines:
+==============================
+• What is Artificial Intelligence?
+• Google announces new AI model...
+• Why AI is the future of Python...
+</pre></div>
+
+</div>
+</p>
+<hr />
+<h2>Frequently Asked Questions (FAQ)</h2>
+<p><strong>Q: Why do we pass <code>timeout=REQUEST_TIMEOUT</code> to the <code>requests.get()</code> function?</strong>
+If the NewsAPI servers freeze, your Python script could sit entirely idle forever waiting for a response. Adding a <code>timeout</code> explicitly tells Python, <em>"If you can't connect or read data within 15 seconds, cancel the request and throw a Timeout error."</em></p>
+<p><strong>Q: I am getting a <code>401 Unauthorized</code> HTTP error. What does that mean?</strong>
+This means NewsAPI.org does not recognize your API key. Usually, it's a typo in the <code>.env</code> file, or the <code>load_dotenv()</code> function isn't finding it. Double-check that your file is named exactly <code>.env</code>!</p>
+<p><strong>Q: How do I change the topic to fetch different news?</strong>
+In the <code>main()</code> function, locate the line <code>fetch_news("Artificial Intelligence")</code>. Change the string to any topic you want, such as <code>"SpaceX"</code> or <code>"Python Programming"</code>, and rerun the script!</p>
+
+        
+        <div class="mt-16 pt-8 border-t border-white/5">
+            <a class="text-gray-400 hover:text-gray-100 transition-colors text-sm flex items-center gap-2 no-underline"
+                href="https://enriquebruzual.substack.com/p/connecting-python-to-newsapiorg-core" target="_blank" rel="noopener noreferrer">
+                Also published on Substack
+                <span class="material-symbols-outlined text-xs">north_east</span>
+            </a>
+        </div>
+        
+    </article>
+
+    <!-- Author Bio Card: fixed bio section for Enrique Bruzual with title,
+     description, Substack and GitHub follow links. Only rendered when
+     visibility is not ai_only (hidden from machine-only content). -->
+    
+    <section class="mt-20 p-8 bg-[#323339] border-l-4 border-primary">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="font-display text-2xl font-bold text-gray-100">Enrique Bruzual</h3>
+                <p class="text-primary text-sm font-medium tracking-wide uppercase">Strategic AI Architect</p>
+            </div>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+            Enrique is a Lead AI Solutions Architect specializing in scalable AI systems and distributed
+            orchestration. With over 30 years in the industry, he focuses on bridging the gap between complex
+            data infrastructure and elegant, production-grade solutions.
+        </p>
+        <div class="flex gap-6">
+            <a class="text-xs font-bold uppercase tracking-widest text-gray-100 hover:text-primary underline decoration-primary underline-offset-8"
+                href="https://substack.com/@enriquebruzual" target="_blank" rel="noopener noreferrer">Follow on
+                Substack</a>
+            <a class="text-xs font-bold uppercase tracking-widest text-gray-100 hover:text-primary underline decoration-primary underline-offset-8"
+                href="https://github.com/KikeVen" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+        </div>
+    </section>
+    
+</div>
+
+<!-- Copy Code: vanilla JS clipboard integration targeting .copy-code-btn
+     within .my-10 code containers. Copies the innerText of the adjacent
+     .codehilite pre block; provides 2-second check icon visual feedback
+     using Material Symbols swap and Tailwind color transitions. -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const copyButtons = document.querySelectorAll('.copy-code-btn');
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Find the closest parent container and then the associated pre tag
+                const container = btn.closest('.my-10');
+                if (container) {
+                    const codeBlock = container.querySelector('.codehilite pre');
+                    if (codeBlock) {
+                        navigator.clipboard.writeText(codeBlock.innerText);
+                        const icon = btn.querySelector('.material-icons');
+                        const originalIcon = icon.innerText;
+
+                        // Visual feedback
+                        icon.innerText = 'check';
+                        btn.classList.remove('text-gray-500');
+                        btn.classList.add('text-primary'); // match the brand
+
+                        setTimeout(() => {
+                            icon.innerText = originalIcon;
+                            btn.classList.add('text-gray-500');
+                            btn.classList.remove('text-primary');
+                        }, 2000);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+    </main>
+
+    <!-- Footer: 4-column Tailwind grid with brand tagline, site navigation,
+         social links (Substack, GitHub, Facebook) via Material Icons, and
+         ElevenLabs convai widget embed with contact-link trigger logic. -->
+    <footer class="bg-[#1a1b1e] text-white pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 border-b border-gray-800 pb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <h2 class="font-display text-5xl mb-6">Let's build something <br /><span
+                            class="text-primary italic">extraordinary.</span></h2>
+                    <p class="text-gray-400 max-w-md mb-8">
+                        Available for select freelance opportunities and consulting roles. Let's discuss your
+                        architectural challenges. Start a Technical Briefing with my AI
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Navigation</h4>
+                    <ul class="space-y-4">
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/">Home</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About
+                                Me</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
+                                href="/#services">Services</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
+                                href="/#work">Projects</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Social</h4>
+                    <ul class="space-y-4">
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://substack.com/@enriquebruzual" rel="noopener noreferrer"
+                                target="_blank"><span class="material-icons text-xs mr-2">link</span> Substack</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://github.com/KikeVen" rel="noopener noreferrer" target="_blank"><span
+                                    class="material-icons text-xs mr-2">code</span> GitHub</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://www.facebook.com/ZerikaiConsulting/" rel="noopener noreferrer"
+                                target="_blank"><span class="material-icons text-xs mr-2">thumb_up</span> Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
+                <p>© 2026 Enrique Bruzual. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a class="hover:text-gray-400 transition-colors" href="#">Privacy Policy</a>
+                    <a class="hover:text-gray-400 transition-colors" href="#">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ElevenLabs Agent (Inherited) -->
+    <elevenlabs-convai id="enrique-agent" agent-id="agent_0101kjr8jk36fpatbexzk50k5m6c"
+        variant="tiny"></elevenlabs-convai>
+    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close menu when clicking a link
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // AI Widget Integration Trigger
+            const agent = document.querySelector('elevenlabs-convai');
+            const contactLinks = document.querySelectorAll('#contact-link, #mobile-contact-link');
+
+            contactLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (!agent) return;
+
+                    agent.setAttribute('override-first-message', "I can assist you with reaching Enrique. You can email him at zerikai.dev@gmail.com, or I can take a message and your preferred contact time right here.");
+
+                    const openWidget = () => {
+                        const shadow = agent.shadowRoot;
+                        if (!shadow) return;
+                        const btn = shadow.querySelector('button[aria-label="Ask anything"]') ||
+                                    shadow.querySelector('button[aria-label="Open widget"]') ||
+                                    shadow.querySelector('button[aria-label="Open chat"]') ||
+                                    shadow.querySelector('button:first-of-type');
+                        if (btn) btn.click();
+                    };
+
+                    setTimeout(openWidget, 80);
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

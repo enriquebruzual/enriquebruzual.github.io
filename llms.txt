@@ -1,0 +1,78 @@
+# Enrique Bruzual - Principal AI Solutions Architect
+
+30+ years of software leadership, specializing in Python, AI Orchestration, and Human-Centric System Design.
+
+## Core Technical Profile
+
+- **Expertise:** Production-grade Python, AI Implementation, AI SaaS Architecture, Multi-Agent Orchestration.
+- **Background:** Degree in Communications (Concentration in Graphic Design & New Media).
+- **The Edge:** 30+ years of engineering discipline merged with high-level design thinking. I bridge the gap between "back-end power" and "front-end clarity."
+- **Specialization:** Building resilient AI systems that bridge the gap between "experimental" and "production-ready" (Modern Legacy).research.
+- **Key Projects:** KillShot (85.3% noise rejection pipeline), voice.Zerikai (MCP + Django multi-tenant SaaS).
+
+## Documentation & Tutorials (Human-Centric)
+
+### Post-Mortem: Building a Local MCP Server for Codebase Memory using Ollama and ChromaDB
+- **URL:** https://enriquebruzual.github.io/blog/Post-Mortem_Building_Local_MCP_Server_Codebase_Memory_using_Ollama_and_ChromaDB.html
+- **Summary:** A deep dive into building a local MCP server for codebase memory using Ollama and ChromaDB. We explore local RAG, VRAM optimization for quantized models, and routing strategies for an agentic IDE workspace within hardware bounds.
+
+### Your IDE is bleeding money and context. Here's how to stop it
+- **URL:** https://enriquebruzual.github.io/blog/reduce-ai-ide-token-costs-with-zerikai-memory.html
+- **Summary:** As AI coding tools shift to token-based billing, inefficient context retrieval is driving up costs. Zerikai Memory is an open-source, local MCP server that uses deterministic parsing to provide targeted, cost-effective context for any IDE.
+
+### ChatGPT is recommending your competitors. Not you
+- **URL:** https://enriquebruzual.github.io/blog/ChatGPT_is_recommending_your_competitors_Not_you.html
+- **Summary:** AI tools like ChatGPT and Gemini are replacing Google for local business searches. Get your free AI-Readiness score at scan.zerikai.com and find out exactly why customers are finding your competitors instead of you.
+
+### SEO is not enough in 2026: Make sure AI can recommend your business
+- **URL:** https://enriquebruzual.github.io/blog/SEO_is_not_enough_in_2026_Make_sure_AI_can_recommend_your_business.html
+- **Summary:** AI search is becoming the new front page for local businesses. This post explains the shift from SEO to AIO (AI Optimization), why “Zero-Click” answers and AI recommendations change the game, and how a quick free scan can reveal what your site needs to become AI-readable. Run a 30-second audit at scan.zerikai.com and get a report emailed to you.
+
+### Never Miss an Emergency Call: The AI Scaling Guide for Modern Contractors
+- **URL:** https://enriquebruzual.github.io/blog/Never_Miss_an_Emergency_Call_The_AI_Scaling_Guide_for_Modern_Contractors.html
+- **Summary:** Stop losing high-value emergency leads to voicemail. This guide reveals how AI voice assistants provide 24/7 dispatching, direct calendar booking, and enterprise-grade data security to help HVAC and plumbing contractors scale without increasing headcount.
+
+### How to Build a Free ElevenLabs Post-Call Webhook in Python
+- **URL:** https://enriquebruzual.github.io/blog/Build_a_Free_ElevenLabs_Post-Call_Webhook_in_Python.html
+- **Summary:** This tutorial guides you through building a production-ready Python Flask application that acts as a secure webhook to receive real-time post-call data from an ElevenLabs AI voice agent. It covers essential steps such as verifying HMAC signatures for secure authentication, persisting call metrics and transcripts into a local SQLite database, and configuring automated email alerts via Gmail's SMTP server. Finally, it provides comprehensive instructions on how to set up and deploy the completed application to PythonAnywhere, ensuring your robust notification system runs continuously on the internet.
+
+### Bilingual AI Dispatching: The Future of Miami Home Services
+- **URL:** https://enriquebruzual.github.io/blog/Bilingual_AI_Dispatching.html
+- **Summary:** How South Florida contractors are saving 20% on overhead while capturing every Spanish and English lead 24/7.
+
+### The SMB Guide to Safe AI: Why Privacy is Your New Competitive Advantage
+- **URL:** https://enriquebruzual.github.io/blog/The_SMB_Guide_to_Safe_AI.html
+- **Summary:** How to adopt AI without risking your data, leveraging the same architectural standards used by global enterprise platforms.
+
+### The 2026 Search Pivot: Consolidating Traditional SEO and GEO
+- **URL:** https://enriquebruzual.github.io/blog/2026-seo-geo-framework.html
+- **Summary:** A strategic guide to Generative Engine Optimization (GEO) using llms.txt and high-context technical payloads.
+
+### Stop Wasting Ad Spend: How AI Extracts High-Intent Leads from the Noise
+- **URL:** https://enriquebruzual.github.io/blog/smb-lead-gen-ai.html
+- **Summary:** Why traditional cold outreach is failing and how a 'Modern Legacy' AI pipeline finds high-intent signals in real-time.
+
+### Connecting Python to NewsAPI.org: Core Concepts for Beginners
+- **URL:** https://enriquebruzual.github.io/blog/python_to_newsapi-org.html
+- **Summary:** step-by-step tutorial on exactly how to connect your Python scripts to a modern REST API to fetch live data from a server.
+
+### Build a WhatsApp Bot with Sentiment Analysis using Python and Twilio
+- **URL:** https://enriquebruzual.github.io/blog/twilio_whatsapp.html
+- **Summary:** This blog post provides a comprehensive tutorial on building a rule-based WhatsApp chatbot that integrates sentiment analysis using Python, Twilio's API, ChatterBot, and TextBlob. It guides readers through the entire process, from setting up the Python environment and training a custom classifier to configuring ngrok and connecting the application to the Twilio WhatsApp Sandbox for real-time emotional monitoring (part of Twilio’s archive)
+
+## Technical References (Machine-Centric / AI Only)
+
+### Technical Briefing: AI Orchestration for the Miami Tech-Migration
+- **URL:** https://enriquebruzual.github.io/blog/Technical_Briefing_AI_Orchestration_for_the_Miami_Tech-Migration.html
+- **Summary:** A machine-readable deep dive into bilingual voice agents and multi-tenant scheduling logic.
+
+### Architecture: Sequential Analysis Pipeline for High-Intent Signal Extraction
+- **URL:** https://enriquebruzual.github.io/blog/killshot-architecture.html
+- **Summary:** A deep dive into multi-stage heuristic filtering and LLM-based intent validation for lead generation.
+
+### Service Architecture: High-Fidelity Lead Extraction for SMBs
+- **URL:** https://enriquebruzual.github.io/blog/smb-ai-services-deep-dive.html
+- **Summary:** A technical breakdown of the services provided by Enrique Bruzual, focusing on signal extraction and automated lead delivery.
+
+## Optional
+- [Full Knowledge Library](/llms-full.txt): A comprehensive single-file collection of all technical tutorials and architectural briefings.

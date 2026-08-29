@@ -1,0 +1,9 @@
+/* TEAM */
+Lead AI Solutions Architect: Enrique Bruzual at Zerikai
+Site: https://zerikai.com
+Location: United States
+
+/* SITE */
+Last update: 2026-03-03
+Standards: HTML5, CSS3, JavaScript
+Software: Tailwind CSS, ElevenLabs ConvAI

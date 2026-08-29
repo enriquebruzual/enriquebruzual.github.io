@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S1Y40WEYM3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-S1Y40WEYM3');
+    </script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <!-- Dynamic Title -->
+    <title>How to Build a Free ElevenLabs Post-Call Webhook in Python | Enrique Bruzual</title>
+
+    <!-- Meta Description & SEO -->
+    <meta name="description" content="This tutorial guides you through building a production-ready Python Flask application that acts as a secure webhook to receive real-time post-call data from an ElevenLabs AI voice agent. It covers essential steps such as verifying HMAC signatures for secure authentication, persisting call metrics and transcripts into a local SQLite database, and configuring automated email alerts via Gmail's SMTP server. Finally, it provides comprehensive instructions on how to set up and deploy the completed application to PythonAnywhere, ensuring your robust notification system runs continuously on the internet.">
+    
+    <link rel="canonical" href="https://enriquebruzual.github.io/blog/Build_a_Free_ElevenLabs_Post-Call_Webhook_in_Python.html">
+    <meta property="og:url" content="https://enriquebruzual.github.io/blog/Build_a_Free_ElevenLabs_Post-Call_Webhook_in_Python.html">
+    
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:title" content="How to Build a Free ElevenLabs Post-Call Webhook in Python">
+    <meta property="og:description" content="This tutorial guides you through building a production-ready Python Flask application that acts as a secure webhook to receive real-time post-call data from an ElevenLabs AI voice agent. It covers essential steps such as verifying HMAC signatures for secure authentication, persisting call metrics and transcripts into a local SQLite database, and configuring automated email alerts via Gmail's SMTP server. Finally, it provides comprehensive instructions on how to set up and deploy the completed application to PythonAnywhere, ensuring your robust notification system runs continuously on the internet.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png">
+    <meta name="twitter:image" content="https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Build a Free ElevenLabs Post-Call Webhook in Python">
+    <meta name="twitter:description" content="This tutorial guides you through building a production-ready Python Flask application that acts as a secure webhook to receive real-time post-call data from an ElevenLabs AI voice agent. It covers essential steps such as verifying HMAC signatures for secure authentication, persisting call metrics and transcripts into a local SQLite database, and configuring automated email alerts via Gmail's SMTP server. Finally, it provides comprehensive instructions on how to set up and deploy the completed application to PythonAnywhere, ensuring your robust notification system runs continuously on the internet.">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/src/assets/images/favicon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/src/assets/images/favicon-512.png" />
+    <link rel="apple-touch-icon" href="/src/assets/images/favicon-192.png" />
+
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Fonts & Tailwind -->
+    <link rel="stylesheet" href="/src/css/tailwind.css" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2A2B30;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        html.dark {
+            background-color: #2A2B30;
+        }
+    </style>
+    
+
+<!-- Pygments (Monokai theme) CSS overrides for Stitch dark-mode design:
+     colors codehilite spans, inline <code>, tables, blockquotes, and
+     headings. Uses Playfair Display serif for H2/H3 with primary accent
+     left-border. Inline code gets primary-color tinted background. -->
+<style>
+    /* Pygments Monokai Theme */
+    .codehilite pre {
+        padding: 1.5rem;
+        overflow-x: auto;
+        margin: 0;
+        background-color: transparent !important;
+    }
+
+    .codehilite .hll {
+        background-color: #49483e
+    }
+
+    .codehilite {
+        background: transparent !important;
+        color: #F8F8F2;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.875rem;
+    }
+
+    .codehilite .c {
+        color: #959077
+    }
+
+    /* Comment */
+    .codehilite .err {
+        color: #ED007E;
+        background-color: #1E0010
+    }
+
+    /* Error */
+    .codehilite .esc {
+        color: #F8F8F2
+    }
+
+    /* Escape */
+    .codehilite .g {
+        color: #F8F8F2
+    }
+
+    /* Generic */
+    .codehilite .k {
+        color: #66D9EF
+    }
+
+    /* Keyword */
+    .codehilite .l {
+        color: #AE81FF
+    }
+
+    /* Literal */
+    .codehilite .n {
+        color: #F8F8F2
+    }
+
+    /* Name */
+    .codehilite .o {
+        color: #FF4689
+    }
+
+    /* Operator */
+    .codehilite .x {
+        color: #F8F8F2
+    }
+
+    /* Other */
+    .codehilite .p {
+        color: #F8F8F2
+    }
+
+    /* Punctuation */
+    .codehilite .ch {
+        color: #959077
+    }
+
+    /* Comment.Hashbang */
+    .codehilite .cm {
+        color: #959077
+    }
+
+    /* Comment.Multiline */
+    .codehilite .cp {
+        color: #959077
+    }
+
+    /* Comment.Preproc */
+    .codehilite .cpf {
+        color: #959077
+    }
+
+    /* Comment.PreprocFile */
+    .codehilite .c1 {
+        color: #959077
+    }
+
+    /* Comment.Single */
+    .codehilite .cs {
+        color: #959077
+    }
+
+    /* Comment.Special */
+    .codehilite .gd {
+        color: #FF4689
+    }
+
+    /* Generic.Deleted */
+    .codehilite .ge {
+        color: #F8F8F2;
+        font-style: italic
+    }
+
+    /* Generic.Emph */
+    .codehilite .ges {
+        color: #F8F8F2;
+        font-weight: bold;
+        font-style: italic
+    }
+
+    /* Generic.EmphStrong */
+    .codehilite .gr {
+        color: #F8F8F2
+    }
+
+    /* Generic.Error */
+    .codehilite .gh {
+        color: #F8F8F2
+    }
+
+    /* Generic.Heading */
+    .codehilite .gi {
+        color: #A6E22E
+    }
+
+    /* Generic.Inserted */
+    .codehilite .go {
+        color: #66D9EF
+    }
+
+    /* Generic.Output */
+    .codehilite .gp {
+        color: #FF4689;
+        font-weight: bold
+    }
+
+    /* Generic.Prompt */
+    .codehilite .gs {
+        color: #F8F8F2;
+        font-weight: bold
+    }
+
+    /* Generic.Strong */
+    .codehilite .gu {
+        color: #959077
+    }
+
+    /* Generic.Subheading */
+    .codehilite .gt {
+        color: #F8F8F2
+    }
+
+    /* Generic.Traceback */
+    .codehilite .kc {
+        color: #66D9EF
+    }
+
+    /* Keyword.Constant */
+    .codehilite .kd {
+        color: #66D9EF
+    }
+
+    /* Keyword.Declaration */
+    .codehilite .kn {
+        color: #FF4689
+    }
+
+    /* Keyword.Namespace */
+    .codehilite .kp {
+        color: #66D9EF
+    }
+
+    /* Keyword.Pseudo */
+    .codehilite .kr {
+        color: #66D9EF
+    }
+
+    /* Keyword.Reserved */
+    .codehilite .kt {
+        color: #66D9EF
+    }
+
+    /* Keyword.Type */
+    .codehilite .ld {
+        color: #E6DB74
+    }
+
+    /* Literal.Date */
+    .codehilite .m {
+        color: #AE81FF
+    }
+
+    /* Literal.Number */
+    .codehilite .s {
+        color: #E6DB74
+    }
+
+    /* Literal.String */
+    .codehilite .na {
+        color: #A6E22E
+    }
+
+    /* Name.Attribute */
+    .codehilite .nb {
+        color: #66D9EF
+    }
+
+    /* Name.Builtin (using cyan instead of white) */
+    .codehilite .nc {
+        color: #A6E22E
+    }
+
+    /* Name.Class */
+    .codehilite .no {
+        color: #66D9EF
+    }
+
+    /* Name.Constant */
+    .codehilite .nd {
+        color: #A6E22E
+    }
+
+    /* Name.Decorator */
+    .codehilite .ni {
+        color: #F8F8F2
+    }
+
+    /* Name.Entity */
+    .codehilite .ne {
+        color: #A6E22E
+    }
+
+    /* Name.Exception */
+    .codehilite .nf {
+        color: #A6E22E
+    }
+
+    /* Name.Function */
+    .codehilite .nl {
+        color: #F8F8F2
+    }
+
+    /* Name.Label */
+    .codehilite .nn {
+        color: #F8F8F2
+    }
+
+    /* Name.Namespace */
+    .codehilite .nx {
+        color: #A6E22E
+    }
+
+    /* Name.Other */
+    .codehilite .py {
+        color: #F8F8F2
+    }
+
+    /* Name.Property */
+    .codehilite .nt {
+        color: #FF4689
+    }
+
+    /* Name.Tag */
+    .codehilite .nv {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable */
+    .codehilite .ow {
+        color: #FF4689
+    }
+
+    /* Operator.Word */
+    .codehilite .pm {
+        color: #F8F8F2
+    }
+
+    /* Punctuation.Marker */
+    .codehilite .w {
+        color: #F8F8F2
+    }
+
+    /* Text.Whitespace */
+    .codehilite .mb {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Bin */
+    .codehilite .mf {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Float */
+    .codehilite .mh {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Hex */
+    .codehilite .mi {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Integer */
+    .codehilite .mo {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Oct */
+    .codehilite .sa {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Affix */
+    .codehilite .sb {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Backtick */
+    .codehilite .sc {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Char */
+    .codehilite .dl {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Delimiter */
+    .codehilite .sd {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Doc */
+    .codehilite .s2 {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Double */
+    .codehilite .se {
+        color: #AE81FF
+    }
+
+    /* Literal.String.Escape */
+    .codehilite .sh {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Heredoc */
+    .codehilite .si {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Interpol */
+    .codehilite .sx {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Other */
+    .codehilite .sr {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Regex */
+    .codehilite .s1 {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Single */
+    .codehilite .ss {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Symbol */
+    .codehilite .bp {
+        color: #F8F8F2
+    }
+
+    /* Name.Builtin.Pseudo */
+    .codehilite .fm {
+        color: #A6E22E
+    }
+
+    /* Name.Function.Magic */
+    .codehilite .vc {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Class */
+    .codehilite .vg {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Global */
+    .codehilite .vi {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Instance */
+    .codehilite .vm {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Magic */
+    .codehilite .il {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Integer.Long */
+
+    /* Inline Code Styling */
+    :not(pre)>code {
+        background-color: rgba(190, 94, 56, 0.1);
+        /* Primary color at 10% opacity */
+        color: #BE5E38;
+        /* Primary color */
+        padding: 0.2em 0.4em;
+        font-size: 85%;
+        border-radius: 0;
+        font-family: 'Fira Code', monospace;
+    }
+
+    /* General Markdown Prose Styles tailored to the Stitch design */
+    .prose p {
+        color: #9CA3AF;
+        /* muted-gray */
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+
+    .prose h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.875rem;
+        /* text-3xl */
+        font-weight: 700;
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+        padding-left: 1.5rem;
+        border-left: 4px solid #BE5E38;
+        /* Primary Accent */
+        color: #F5F5F7;
+        /* Ivory */
+    }
+
+    .prose h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        /* text-2xl */
+        font-weight: 700;
+        margin-top: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: #F5F5F7;
+    }
+
+    .prose a {
+        color: #BE5E38;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .prose a:hover {
+        color: #F5F5F7;
+    }
+
+    .prose blockquote {
+        margin: 3rem 0;
+        padding-left: 2rem;
+        border-left: 4px solid #BE5E38;
+        font-style: italic;
+        font-size: 1.5rem;
+        color: #9CA3AF;
+        line-height: 1.625;
+        quotes: none;
+        /* remove default quotes if any */
+    }
+
+    /* Tables */
+    .prose table {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 3rem 0;
+    }
+
+    .prose thead tr {
+        background-color: #323339;
+        /* surface */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .prose th {
+        padding: 1rem;
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #F5F5F7;
+    }
+
+    .prose tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .prose tbody tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.02);
+        /* Slight zebra striping */
+    }
+
+    .prose td {
+        padding: 1rem;
+        color: #9CA3AF;
+    }
+
+    /* Images */
+    .prose img {
+        max-width: 100%;
+        height: auto;
+        margin: 2rem auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Lists */
+    .prose ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        color: #9CA3AF;
+        margin-bottom: 2rem;
+    }
+
+    .prose ol {
+        list-style-type: decimal;
+        padding-left: 1.5rem;
+        color: #9CA3AF;
+        margin-bottom: 2rem;
+    }
+
+    .prose li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<!-- FAQ JSON-LD Schema: conditionally rendered when ai_faq is True.
+     Injects schema.org FAQPage structured data from pre-built faq_jsonld
+     (generated by build_blog.py from frontmatter + body extraction). -->
+
+<script type="application/ld+json">
+        {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "Why am I getting a 401 Unauthorized error?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Most likely, your `ELEVENLABS_HMAC_KEY` in the `.env` file does not match the key generated in the ElevenLabs dashboard. Ensure the `.env` file is in the correct directory and that you reload the PythonAnywhere web app after making changes."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Why did my webhook fail, but the email still arrived?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The free tier of PythonAnywhere strictly restricts background threading. If you try to run the `send_alert_email` function in a daemon thread so your Flask app can respond to ElevenLabs immediately, the WSGI worker might kill the thread before the email actually sends. This tutorial runs the email function synchronously to guarantee delivery, meaning ElevenLabs has to wait a few seconds for the `200 OK` response."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How do I test this locally without making actual phone calls?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Set `LOCAL_DEV=true` in your `.env` file to temporarily bypass the HMAC check. You can then use tools like `curl` or Postman to send a mocked JSON payload directly to `http://127.0.0.1:5000/webhook/elevenlabs`. Ensure you remove `LOCAL_DEV=true` before pushing to production!"
+            }
+        }
+    ]
+}
+    </script>
+
+
+<!-- Article Schema (NewsArticle, BlogPosting, or custom): Google Rich
+     Results compliant JSON-LD with headline, datePublished, mainEntityOfPage
+     ImageObject, publisher Organization, and author Person. Uses Jinja2
+     template variables from post frontmatter for all dynamic fields. -->
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "How to Build a Free ElevenLabs Post-Call Webhook in Python",
+        "datePublished": "2026-03-09T00:00:00+00:00",
+        "dateModified": "2026-03-09T00:00:00+00:00",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "url": "https://enriquebruzual.github.io/blog/Build_a_Free_ElevenLabs_Post-Call_Webhook_in_Python.html",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png"
+            }
+        },
+        "description": "This tutorial guides you through building a production-ready Python Flask application that acts as a secure webhook to receive real-time post-call data from an ElevenLabs AI voice agent. It covers essential steps such as verifying HMAC signatures for secure authentication, persisting call metrics and transcripts into a local SQLite database, and configuring automated email alerts via Gmail&#39;s SMTP server. Finally, it provides comprehensive instructions on how to set up and deploy the completed application to PythonAnywhere, ensuring your robust notification system runs continuously on the internet.",
+        "image": [
+            "https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png"
+        ],
+        "publisher": {
+            "@type": "Organization",
+            "name": "Enrique Bruzual",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io"
+            }
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Enrique Bruzual",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png",
+                "width": 512,
+                "height": 512
+            }
+        },
+        "@id": "https://enriquebruzual.github.io/blog/Build_a_Free_ElevenLabs_Post-Call_Webhook_in_Python.html"
+    }
+    </script>
+
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-body antialiased selection:bg-primary/30">
+
+    <script>
+        // Force dark mode to match the portfolio aesthetic 
+        document.documentElement.classList.add('dark');
+    </script>
+
+    <!-- Navigation: dark-mode fixed navbar with Tailwind backdrop-blur,
+         responsive mobile menu toggle (vanilla JS), Enrique Bruzual brand
+         link, and ElevenLabs convai contact trigger via shadow DOM. -->
+    <nav
+        class="fixed w-full z-50 bg-white/90 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="/" class="hover:opacity-80 transition-opacity">
+                        <span class="text-2xl font-serif font-bold tracking-tighter text-primary">E/B</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-12">
+                    <a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                        href="/">Home</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest text-primary"
+                        href="/blog/">Blog</a>
+                    <a class="px-6 py-2 border border-primary text-primary text-sm font-medium hover:bg-primary hover:text-white transition-all uppercase tracking-widest"
+                        href="#" id="contact-link">Contact</a>
+                </div>
+                <!-- Mobile button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-500 hover:text-primary focus:outline-none">
+                        <span class="material-icons">menu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu"
+            class="md:hidden hidden bg-background-light dark:bg-background-dark border-b border-gray-200 dark:border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
+                <a class="block px-3 py-2 text-base font-medium hover:text-primary transition-colors uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                    href="/">Home</a>
+                <a class="block px-3 py-2 text-base font-medium hover:text-primary transition-colors uppercase tracking-widest text-primary"
+                    href="/blog/">Blog</a>
+                <a class="block px-3 py-2 mt-4 border border-primary text-primary text-base font-medium hover:bg-primary hover:text-white transition-all uppercase tracking-widest w-1/2 text-center"
+                    href="#" id="mobile-contact-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
+        
+<div class="max-w-[800px] mx-auto">
+    <!-- Article Header -->
+    <div class="mb-12">
+        <span class="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Tutorial: Webhooks</span>
+        <h1 class="font-display text-4xl md:text-6xl font-bold leading-tight mb-6 text-gray-100">
+            How to Build a Free ElevenLabs Post-Call Webhook in Python
+        </h1>
+        <p class="text-xl italic text-gray-400 mb-10 leading-relaxed font-light">
+            "Voice AI agents are changing how we interact with applications. But what happens after the conversation ends?"
+        </p>
+
+        <div class="flex items-center justify-between py-6 border-y border-primary">
+            <div class="flex items-center gap-4">
+                <img alt="Enrique Bruzual" class="w-12 h-12 object-cover grayscale brightness-110"
+                    src="/src/assets/images/enrique_bruzual_48-48.png" />
+                <div class="text-sm">
+                    <p class="font-semibold text-gray-100">Enrique Bruzual</p>
+                    <p class="text-gray-400">Mar 9, 2026</p>
+                </div>
+            </div>
+            <div class="flex gap-4 text-gray-400">
+                <span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors"
+                    onclick="navigator.clipboard.writeText(window.location.href); const originalText = this.innerText; this.innerText = 'check'; setTimeout(() => this.innerText = originalText, 2000);"
+                    title="Copy link to clipboard">share</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Content -->
+    <article class="prose prose-invert max-w-none">
+        <div class="flex items-center gap-6 mb-8 mt-12">
+            <a class="text-primary flex items-center gap-3 font-bold text-sm tracking-widest uppercase group !no-underline"
+                href="/blog/">
+                <span class="font-sans text-lg group-hover:-translate-x-1 transition-transform"
+                    aria-hidden="true">&#8592;</span>
+                All Articles
+            </a>
+        </div>
+
+        <!-- The converted Markdown will be injected here -->
+        <p>If you are running an AI voice agent - perhaps for customer support, lead qualification, or answering FAQs - you probably want to know the outcome of those calls immediately.</p>
+<p><img alt="webhook workflow" src="/src/assets/blogs/elevenlabs_webhook_35.png" /></p>
+<p>Relying on a dashboard to check call logs manually is rarely the best approach. Instead, your application should react to calls automatically. In this tutorial, you will learn how to build a robust Python application that receives real-time webhooks from ElevenLabs the exact moment a call finishes.</p>
+<p>By the end of this tutorial, you'll understand how webhook architectures work and you will deploy a live, production-ready Flask application.</p>
+<h2>In This Tutorial, You'll Learn How To</h2>
+<ul>
+<li>Receive and process webhook payloads using <strong>Flask</strong>.</li>
+<li>Verify <strong>HMAC signatures</strong> to securely authenticate incoming requests from <strong>ElevenLabs</strong>.</li>
+<li><strong>Extract</strong> key information - such as transcripts, durations, and collected data - from the post-call payload.</li>
+<li><strong>Persist</strong> the call <strong>data</strong> permanently using <strong>SQLite</strong>.</li>
+<li>Send an <strong>automated alert</strong> email using <strong>Gmail's SMTP</strong> server.</li>
+<li><strong>Deploy</strong> your web application to PythonAnywhere so it <strong>runs 24/7</strong> on the internet.</li>
+</ul>
+<h2>What is a Webhook?</h2>
+<p>Before writing code, let's briefly understand the mechanism driving this application: the <strong>webhook</strong>.</p>
+<p><strong>A webhook is essentially a "reverse API"</strong>. In a traditional API request, your application asks a server for data. With a webhook, the external server (ElevenLabs) proactively pushes data to your application when a specific event occurs.</p>
+<p>In this scenario, as soon as an ElevenLabs voice agent finishes a call and completes its transcription, their servers will format that call data as a JSON object and send it via an <strong>HTTP POST</strong> request to a URL you provide. Your Flask application will sit at that URL waiting for the data to arrive.</p>
+<h2>Prerequisites</h2>
+<p>To follow this tutorial, you should have a basic understanding of Python and web programming concepts. You will need:</p>
+<ul>
+<li><strong>Python 3.8+</strong> installed on your machine. (<em>Free</em>)</li>
+<li>An <strong>ElevenLabs account</strong> (any plan with a voice agent). (<em>Free</em>)</li>
+<li>A <strong>PythonAnywhere account</strong> (the free tier is sufficient for this tutorial). (<em>Free</em>)</li>
+<li>A <strong>Gmail account</strong> to send the email alerts (you will generate an App Password in a later step). (<em>Free</em>)</li>
+</ul>
+<p>Ready to build your AI agent's notification system? Let's get started.</p>
+<h2>Step 1: Project Structure</h2>
+<p>To keep things organized, create a dedicated directory for your project. Your project will eventually contain the main Flask application, a dependencies file, an environment file for secrets, and a database folder.</p>
+<p>Here is what your project structure will look like:</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">text</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>my_project/
+├── eleven_app.py
+├── requirements.txt
+├── .env                  ← Never commit this file to version control
+└── db/                   ← Created automatically when the app runs
+</pre></div>
+
+</div>
+</p>
+<p>Begin by creating this root folder and navigating into it via your terminal.</p>
+<h2>Step 2: Install Dependencies</h2>
+<p>Next, let's install the Python libraries needed to build our webhook. You'll install three packages:</p>
+<ol>
+<li><strong>Flask</strong>: A lightweight Python web framework perfect for building simple APIs and webhook endpoints.</li>
+<li><strong>python-dotenv</strong>: A tool that loads environment variables from a <code>.env</code> file into your application, keeping your secrets secure.</li>
+<li><strong>elevenlabs</strong>: The official ElevenLabs Python SDK. We install this not to generate voice, but to access its built-in secure HMAC signature verification method.</li>
+</ol>
+<p>Run the following command in your terminal to install these packages:</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">shell</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nb">pip</span><span class="w"> </span>install<span class="w"> </span>flask<span class="w"> </span>python-dotenv<span class="w"> </span>elevenlabs
+</pre></div>
+
+</div>
+</p>
+<p>To ensure your application is easily deployable to PythonAnywhere (or any other hosting platform) later, create a <code>requirements.txt</code> file and populate it with these dependencies.</p>
+<p><code>Python: requirements.txt</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">text</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>flask
+python-dotenv
+elevenlabs
+</pre></div>
+
+</div>
+</p>
+<h2>Step 3: Create an ElevenLabs Agent</h2>
+<p>Before we can test our webhook, we need a voice agent that will actually make or receive calls. Because the UI for ElevenLabs updates frequently, the best way to get step-by-step instructions is to ask an AI assistant.</p>
+<p>Go to <strong>Google.com</strong>, click the <strong>AI Overview</strong> or <strong>AI Mode</strong> button, and search for:</p>
+<blockquote>
+<p>"How do I create an ElevenLabs agent?"</p>
+</blockquote>
+<p>Follow the generated instructions to set up your free voice agent. Keep that tab open, because we will come back to the agent settings in Step 8 to attach our webhook.</p>
+<h2>Step 4: Create a PythonAnywhere Web App</h2>
+<p>Our webhook needs to be hosted on a public URL so ElevenLabs can reach it over the internet. PythonAnywhere is an excellent free host for this.</p>
+<p>Once again, because the PythonAnywhere dashboard may change, use Google's <strong>AI Mode</strong> to get the latest instructions. Search for:</p>
+<blockquote>
+<p>"How do I create a web app in PythonAnywhere?"</p>
+</blockquote>
+<p>Follow the generated steps to create your free account and spin up a basic Python web application. Note your public URL (it usually looks like <code>yourusername.pythonanywhere.com</code>).</p>
+<h2>Step 5: Get a Gmail App Password</h2>
+<p>Your Flask app needs to send you an email alert when a voice agent finishes a call. We will use Python's built-in <code>smtplib</code> to send the email via Gmail.</p>
+<p>However, Gmail blocks third-party scripts from logging in with your plain text password. Instead, you must generate a secure <strong>App Password</strong>.</p>
+<ol>
+<li>Navigate to your Google Account <strong>Security</strong> page (<a href="https://myaccount.google.com/security">https://myaccount.google.com/security</a>).</li>
+<li>Ensure <strong>2-Step Verification</strong> is turned on.</li>
+<li>Use the <strong>search bar</strong> at the top of the security page and type in <strong>"App Passwords"</strong>.</li>
+<li>In the "App Passwords" screen, enter "flask-webhook" (or another memorable name) as the app name and click <strong>Generate</strong>.</li>
+<li>Google will present a 16-character password in a yellow box. Copy this password carefully; you won't be able to see it again.</li>
+</ol>
+<blockquote>
+<p>[!NOTE]
+Why are we using Gmail instead of a service like SendGrid or smtp2go?
+Transactional email services often require a verified sending domain to prevent spam, which adds a lot of friction to a simple tutorial. A Gmail App Password works immediately.</p>
+<p>If you plan to scale this or deploy it professionally on a paid PythonAnywhere tier, upgrading to an API-based provider (like Mailgun or smtp2go) is highly recommended.</p>
+</blockquote>
+<h2>Step 6: Manage Environment Variables</h2>
+<p>A cardinal rule of web development is to never hardcode secrets (like database passwords or API keys) directly into your source code. The <code>.env</code> file acts as a secure vault for these keys.</p>
+<p>Create a file named <code>.env</code> in the root of your project directory and populate it with the following template:</p>
+<p><code>Python: .env</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">dotenv</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span># ElevenLabs
+# Webhook signing secret from Workspace Settings -&gt; Webhooks.
+# We will get this value in Step 8, but define the structure now.
+ELEVENLABS_HMAC_KEY=your_webhook_secret
+
+# Gmail Configuration
+GMAIL_USER=youremail@gmail.com
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx          # The 16-character app password from Step 5
+ALERT_EMAIL=youremail@gmail.com                 # Where you want the alerts delivered
+GMAIL_SMTP_PORT=465                             # Port 465 for local dev, 587 for PythonAnywhere
+
+# Local testing flag (Set to true to bypass HMAC when testing locally with tools like Postman)
+# LOCAL_DEV=true
+</pre></div>
+
+</div>
+</p>
+<blockquote>
+<p>[!CAUTION]
+If you are using Git, immediately add <code>.env</code> to a <code>.gitignore</code> file to ensure you do not accidentally push your passwords to GitHub or another public repository.
+</p>
+</blockquote>
+<h2>Step 7: The Flask Application</h2>
+<p>It is time to write the actual webhook handler. Because this application handles a few different responsibilities (HTTP routing, database connections, email sending), we are going to break it down logically.</p>
+<p>Create a new file named <code>eleven_app.py</code>.</p>
+<h3>7.1 Setting Up Paths and Initialization</h3>
+<p>Our application needs to be resilient, especially regarding how it loads secrets. When running on platforms like PythonAnywhere, the WSGI server may execute your code from a different starting directory than you expect. Relying on simple relative paths (like <code>load_dotenv(".env")</code>) <strong>can silently fail</strong> in production.</p>
+<p>By using <code>Path(__file__).parent</code>, we dynamically determine the exact directory where <code>eleven_app.py</code> lives, guaranteeing our application always finds the <code>.env</code> file regardless of where it is launched from. Let's initialize the Flask application using this absolute path approach.</p>
+<p><code>Python: eleven_app.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">smtplib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">email.message</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailMessage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">jsonify</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">elevenlabs.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">ElevenLabs</span>
+
+
+<span class="c1"># ── Path setup ──────────────────────────────────────────────────────────────</span>
+<span class="c1"># Using Path(__file__).parent ensures we always find the absolute</span>
+<span class="c1"># directory containing this script. This prevents &quot;file not found&quot;</span>
+<span class="c1"># errors when running under a WSGI server in production.</span>
+<span class="n">current_directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+<span class="n">load_dotenv</span><span class="p">(</span><span class="n">current_directory</span> <span class="o">/</span> <span class="s2">&quot;.env&quot;</span><span class="p">)</span>
+
+<span class="c1"># ── App &amp; Clients ────────────────────────────────────────────────────────────</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># We instantiate the ElevenLabs client specifically to borrow its built-in</span>
+<span class="c1"># webhook verification logic. We pass our secret from the .env file.</span>
+<span class="n">el_client</span> <span class="o">=</span> <span class="n">ElevenLabs</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ELEVENLABS_HMAC_KEY&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</p>
+<h3>7.2 Creating the SQLite Database</h3>
+<p>Webhook payloads represent a snapshot in time. What if your email fails to send? Or what if you want to analyze call durations at the end of the month? It's always a good idea to persist incoming data locally.</p>
+<p>SQLite is perfect for this: it requires no external server setup and stores everything securely in a local file. Let's create an <code>init_db()</code> function that ensures our database table exists every time the server boots.</p>
+<p>Add this code directly below the initialization block in <code>eleven_app.py</code>:</p>
+<p><code>Python: eleven_app.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="c1"># ── SQLite Setup ─────────────────────────────────────────────────────────────</span>
+<span class="c1"># We will create a local &#39;db&#39; folder adjacent to our eleven_app.py script.</span>
+<span class="n">DB_PATH</span> <span class="o">=</span> <span class="n">current_directory</span> <span class="o">/</span> <span class="s2">&quot;db&quot;</span> <span class="o">/</span> <span class="s2">&quot;webhooks.db&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">init_db</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the calls table if it does not exist.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Ensure the /db directory exists</span>
+    <span class="n">DB_PATH</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Connect to (or create) the local database file</span>
+    <span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DB_PATH</span><span class="p">)</span>
+
+    <span class="c1"># Create our table to store the call records</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CREATE TABLE IF NOT EXISTS calls (</span>
+<span class="s2">            id                          INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s2">            received_at                 TEXT,</span>
+<span class="s2">            event_timestamp             TEXT,</span>
+<span class="s2">            conversation_id             TEXT,</span>
+<span class="s2">            agent_id                    TEXT,</span>
+<span class="s2">            user_id                     TEXT,</span>
+<span class="s2">            status                      TEXT,</span>
+<span class="s2">            call_duration_secs          INTEGER,</span>
+<span class="s2">            cost                        INTEGER,</span>
+<span class="s2">            call_successful             TEXT,</span>
+<span class="s2">            transcript_summary          TEXT,</span>
+<span class="s2">            evaluation_criteria_results TEXT,</span>
+<span class="s2">            data_collection_results     TEXT,</span>
+<span class="s2">            raw_payload                 TEXT</span>
+<span class="s2">        )</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Call the initialization function immediately on startup.</span>
+<span class="n">init_db</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</p>
+<p>If the <code>webhooks.db</code> file does not exist, SQLite will automatically create it. If it does exist, this code harmlessly confirms the table structure is maintained.</p>
+<h3>7.3 Formatting the Email Alert</h3>
+<p>When you receive the email alert, you want the most critical information - what the caller said and who they are - presented clearly. The ElevenLabs payload returns the <code>data_collection_results</code> as a nested dictionary.</p>
+<p>Let's write a quick helper function to extract this data into a neat bulleted list. Add this to <code>eleven_app.py</code>:</p>
+<p><code>Python: eleven_app.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="c1"># ── Email Helpers ─────────────────────────────────────────────────────────────</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_format_data_collected</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract key fields from data_collection_results as clean bullet lines.&quot;&quot;&quot;</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="s2">&quot;preferred_time&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">]</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="c1"># Handle potential nested &#39;value&#39; key if ElevenLabs alters its schema</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="n">val</span>
+            <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                <span class="c1"># Replace underscores with spaces for readability</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="k">if</span> <span class="n">lines</span> <span class="k">else</span> <span class="s2">&quot;  (none)&quot;</span>
+</pre></div>
+
+</div>
+</p>
+<p>Next, let's create the function that actually composes and sends the email using <code>smtplib</code>. Notice how we gracefully handle missing caller names by falling back to the conversation ID for the email subject line.</p>
+<blockquote>
+<p>[!NOTE]
+<strong>Why do we need an <code>if</code> statement for the ports?</strong>
+Python's built-in <code>smtplib</code> library handles connection encryption differently depending on the protocol:</p>
+</blockquote>
+<ul>
+<li><strong>Port 465 (Implicit SSL):</strong> The connection must start fully encrypted from the very first byte. We use the <code>smtplib.SMTP_SSL()</code> class for this.</li>
+<li><strong>Port 587 (Explicit TLS):</strong> The connection starts unencrypted, and then the client explicitly sends a <code>STARTTLS</code> command to securely upgrade it. We use the standard <code>smtplib.SMTP()</code> class followed by <code>smtp.starttls()</code>.</li>
+</ul>
+<p>Because these classes behave differently, we cannot simply pass our <code>GMAIL_SMTP_PORT</code> variable into a single function. We must branch the logic dynamically based on the port number provided in your <code>.env</code> file.</p>
+<p><code>Python: eleven_app.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">send_alert_email</span><span class="p">(</span><span class="n">conversation_id</span><span class="p">,</span> <span class="n">event_ts_str</span><span class="p">,</span> <span class="n">call_successful</span><span class="p">,</span>
+                     <span class="n">transcript_summary</span><span class="p">,</span> <span class="n">data_collected</span><span class="p">,</span>
+                     <span class="n">agent_id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">call_duration_secs</span><span class="p">,</span> <span class="n">cost</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a plain-text alert email via Gmail SMTP with an App Password.&quot;&quot;&quot;</span>
+
+    <span class="n">gmail_user</span>     <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GMAIL_USER&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">gmail_password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GMAIL_APP_PASSWORD&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">recipient</span>      <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ALERT_EMAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">smtp_port</span>      <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GMAIL_SMTP_PORT&quot;</span><span class="p">,</span> <span class="s2">&quot;587&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Use caller name in subject if available, fall back to conversation_id</span>
+    <span class="n">caller_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_collected</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">caller_name</span> <span class="o">=</span> <span class="n">data_collected</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">subject_name</span> <span class="o">=</span> <span class="n">caller_name</span> <span class="k">if</span> <span class="n">caller_name</span> <span class="k">else</span> <span class="n">conversation_id</span>
+
+    <span class="n">body</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Date:            </span><span class="si">{</span><span class="n">event_ts_str</span><span class="si">}</span>
+<span class="s2">Call Result:     </span><span class="si">{</span><span class="n">call_successful</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span>
+<span class="s2">Duration:        </span><span class="si">{</span><span class="n">call_duration_secs</span><span class="si">}</span><span class="s2">s</span>
+<span class="s2">Cost:            </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2"> credits</span>
+
+<span class="s2">Summary</span>
+<span class="s2">-------</span>
+<span class="si">{</span><span class="n">transcript_summary</span><span class="si">}</span>
+
+<span class="s2">Data Collected</span>
+<span class="s2">--------------</span>
+<span class="si">{</span><span class="n">_format_data_collected</span><span class="p">(</span><span class="n">data_collected</span><span class="p">)</span><span class="si">}</span>
+
+<span class="s2">---</span>
+<span class="s2">Conversation ID: </span><span class="si">{</span><span class="n">conversation_id</span><span class="si">}</span>
+<span class="s2">Agent ID:        </span><span class="si">{</span><span class="n">agent_id</span><span class="si">}</span>
+<span class="s2">User ID:         </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">EmailMessage</span><span class="p">()</span>
+    <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;Subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;New AI Call from </span><span class="si">{</span><span class="n">subject_name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;From&quot;</span><span class="p">]</span>    <span class="o">=</span> <span class="n">gmail_user</span>
+    <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;To&quot;</span><span class="p">]</span>      <span class="o">=</span> <span class="n">recipient</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">set_content</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">smtp_port</span> <span class="o">==</span> <span class="mi">465</span><span class="p">:</span>
+            <span class="c1"># Port 465 uses Implicit SSL</span>
+            <span class="k">with</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP_SSL</span><span class="p">(</span><span class="s2">&quot;smtp.gmail.com&quot;</span><span class="p">,</span> <span class="mi">465</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="k">as</span> <span class="n">smtp</span><span class="p">:</span>
+                <span class="n">smtp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">gmail_user</span><span class="p">,</span> <span class="n">gmail_password</span><span class="p">)</span>
+                <span class="n">smtp</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Port 587 (or others) uses explicit STARTTLS</span>
+            <span class="k">with</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s2">&quot;smtp.gmail.com&quot;</span><span class="p">,</span> <span class="n">smtp_port</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="k">as</span> <span class="n">smtp</span><span class="p">:</span>
+                <span class="n">smtp</span><span class="o">.</span><span class="n">ehlo</span><span class="p">()</span>
+                <span class="n">smtp</span><span class="o">.</span><span class="n">starttls</span><span class="p">()</span>
+                <span class="n">smtp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">gmail_user</span><span class="p">,</span> <span class="n">gmail_password</span><span class="p">)</span>
+                <span class="n">smtp</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Email send failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</p>
+<h3>7.4 The Webhook Endpoint and HMAC Verification</h3>
+<p>Now for the main event: the Flask route that receives the POST request.</p>
+<p>One of the most critical aspects of building a webhook is security. If your URL is public, anyone could send fake POST requests to it, spamming your inbox or corrupting your database.</p>
+<p>To prevent this, ElevenLabs uses <strong>HMAC (Hash-based Message Authentication Code)</strong>. They take the raw payload, combine it with a secret key only you know, perform a one-way cryptographic hash, and send that hash in the <code>elevenlabs-signature</code> header. Your server does the exact same math. If the hashes match, the request is definitively authentic.</p>
+<p>We will use the ElevenLabs SDK to perform this check automatically.</p>
+<blockquote>
+<p>[!NOTE]
+<strong>The Raw Payload Trap</strong></p>
+<p>Notice that we use <code>request.get_data(as_text=True)</code> instead of Flask's convenient <code>request.json</code> helper.</p>
+<p>The HMAC signature provided by ElevenLabs is calculated against the <em>exact byte layout</em> of the raw HTTP request. If you allow Flask to parse the JSON into a Python dictionary, and then attempt to re-serialize it back to a string to check the signature, the whitespace and key ordering will inevitably shift. This will result in a mismatched SHA256 hash and a failed verification. Always verify signatures against the untouched, raw body string!</p>
+</blockquote>
+<p><code>Python: eleven_app.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="c1"># ── Webhook Route ─────────────────────────────────────────────────────────────</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/webhook/elevenlabs&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">elevenlabs_webhook</span><span class="p">():</span>
+    <span class="c1"># Read raw body first. This is strictly required for HMAC verification.</span>
+    <span class="c1"># If you let Flask parse it as JSON first, the formatting changes slightly</span>
+    <span class="c1"># and the cryptographic signature will fail to match.</span>
+    <span class="n">raw_body</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">as_text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Allow bypassing HMAC locally by checking our environment variable</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;LOCAL_DEV&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># construct_event takes positional args only; do NOT use kwargs</span>
+            <span class="c1"># If this executes without throwing an exception, the payload is authentic.</span>
+            <span class="n">el_client</span><span class="o">.</span><span class="n">webhooks</span><span class="o">.</span><span class="n">construct_event</span><span class="p">(</span>
+                <span class="n">raw_body</span><span class="p">,</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;elevenlabs-signature&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ELEVENLABS_HMAC_KEY&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;HMAC FAIL | sig=</span><span class="si">%s</span><span class="s2"> | secret_len=</span><span class="si">%d</span><span class="s2"> | err=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;elevenlabs-signature&quot;</span><span class="p">,</span> <span class="s2">&quot;MISSING&quot;</span><span class="p">),</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ELEVENLABS_HMAC_KEY&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">}),</span> <span class="mi">401</span>
+</pre></div>
+
+</div>
+</p>
+<p>If the signature fails, we log the error and immediately return a <code>401 Unauthorized</code> HTTP status code, stopping out any fraudulent requests.</p>
+<h3>7.5 Processing the Payload and Triggering the Alert</h3>
+<p>Once past the HMAC check, we can safely parse the JSON payload. The ElevenLabs post-call payload contains a wealth of data, including the transcription summary, the duration of the call, and any variables the AI was instructed to collect (like names or email addresses).</p>
+<p>Add the rest of the webhook logic to extract this data, save it to SQLite, and send the email alert.</p>
+<p><code>Python: eleven_app.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>    <span class="c1"># Parse and validate the JSON payload</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw_body</span><span class="p">)</span>
+
+    <span class="c1"># Ensure the payload has the expected structure</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">payload</span> <span class="ow">or</span> <span class="s2">&quot;data&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">payload</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Invalid payload&quot;</span><span class="p">}),</span> <span class="mi">400</span>
+
+    <span class="n">data</span>     <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">analysis</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;analysis&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+    <span class="c1"># Extract human-readable timestamps</span>
+    <span class="n">raw_ts</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;event_timestamp&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">event_ts_str</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">raw_ts</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%B </span><span class="si">%d</span><span class="s2">, %Y at %I:%M %p UTC&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">received_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+    <span class="c1"># Extract core call metrics</span>
+    <span class="n">conversation_id</span>    <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;conversation_id&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">agent_id</span>           <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agent_id&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">user_id</span>            <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user_id&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">status</span>             <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">call_duration_secs</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;call_duration_secs&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">cost</span>               <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">call_successful</span>    <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;call_successful&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">transcript_summary</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;transcript_summary&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">evaluation_results</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;evaluation_criteria_results&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">data_collected</span>     <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data_collection_results&quot;</span><span class="p">,</span> <span class="p">{})</span>
+</pre></div>
+
+</div>
+</p>
+<h3>7.6 Persisting the Call Data</h3>
+<p>With all the critical metrics extracted into clean Python variables, the next step is to save them into our local SQLite database. Even if the email fails to send later, we will have a persistent record of the call.</p>
+<p>Notice that we serialize the complex nested dictionaries <code>evaluation_results</code> and <code>data_collected</code> into strings using <code>json.dumps()</code> before inserting them.</p>
+<blockquote>
+<p>[!NOTE]
+<strong>Working with JSON in SQLite</strong></p>
+<p>Unlike PostgreSQL, which possesses robust native <code>JSONB</code> column types, standard SQLite does not natively understand nested JSON structures. By serializing the dictionaries into strings before insertion, we are ensuring compatibility while effectively treating SQLite as a simple Document store for our archival needs.</p>
+</blockquote>
+<p><code>Python: eleven_app.py (continued)</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>    <span class="c1"># Persist the extracted data to SQLite</span>
+    <span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DB_PATH</span><span class="p">)</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        INSERT INTO calls (</span>
+<span class="s2">            received_at, event_timestamp, conversation_id, agent_id,</span>
+<span class="s2">            user_id, status, call_duration_secs, cost,</span>
+<span class="s2">            call_successful, transcript_summary,</span>
+<span class="s2">            evaluation_criteria_results, data_collection_results, raw_payload</span>
+<span class="s2">        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span>
+        <span class="n">received_at</span><span class="p">,</span> <span class="n">event_ts_str</span><span class="p">,</span> <span class="n">conversation_id</span><span class="p">,</span> <span class="n">agent_id</span><span class="p">,</span>
+        <span class="n">user_id</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">call_duration_secs</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span>
+        <span class="n">call_successful</span><span class="p">,</span> <span class="n">transcript_summary</span><span class="p">,</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">evaluation_results</span><span class="p">),</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data_collected</span><span class="p">),</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">),</span>
+    <span class="p">))</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</p>
+<h3>7.7 Triggering the Email Alert</h3>
+<p>Finally, we call our <code>send_alert_email</code> helper function and return a successful <code>200 OK</code> status back to ElevenLabs.</p>
+<blockquote>
+<p>[!NOTE]
+On the free tier of PythonAnywhere, background threads are heavily restricted and often killed unpredictably by WSGI workers. Because of this, it is safer to run the email sending function <strong>synchronously</strong>. The webhook responder (ElevenLabs) will wait an extra 1 - 2 seconds while the email is dispatched before receiving the 200 OK response. If you are deploying this on a paid tier or dedicated server, consider moving the email sending logic to a background task using <code>threading</code> or <code>celery</code> to respond to the webhook instantly.</p>
+</blockquote>
+<p>Finish up <code>eleven_app.py</code> with the following block:</p>
+<p><code>Python: eleven_app.py (continued)</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>    <span class="c1"># Send the email alert</span>
+    <span class="n">send_alert_email</span><span class="p">(</span>
+        <span class="n">conversation_id</span><span class="p">,</span> <span class="n">event_ts_str</span><span class="p">,</span> <span class="n">call_successful</span><span class="p">,</span>
+        <span class="n">transcript_summary</span><span class="p">,</span> <span class="n">data_collected</span><span class="p">,</span>
+        <span class="n">agent_id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">call_duration_secs</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Return a 200 OK so ElevenLabs knows we received it successfully</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;ok&quot;</span><span class="p">}),</span> <span class="mi">200</span>
+
+<span class="c1"># ── Entry Point ─────────────────────────────────────────────────────────────</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Note: Do not use debug=True in production.</span>
+    <span class="c1"># No app.run(): PythonAnywhere handles the server automatically using WSGI. </span>
+    <span class="c1"># If you need to test locally, you can uncomment the line below.</span>
+    <span class="c1"># app.run(port=5000)</span>
+    <span class="k">pass</span>
+</pre></div>
+
+</div>
+</p>
+<p>And with that, your Flask application code is entirely complete. Let's move on to configuring ElevenLabs to actually point to this code, and deploying it so it runs 24/7.</p>
+<h2>Step 8: Configure the ElevenLabs Webhook</h2>
+<p>Now that your application is ready to receive requests, you need to tell ElevenLabs where to send them.</p>
+<ol>
+<li>Log in to the <strong>ElevenLabs Dashboard</strong>.</li>
+<li>Select <strong>ElevenAgents</strong> on the upper left pulldown.</li>
+<li>In the left vertical nav bar (near the bottom) click on <strong>Settings</strong></li>
+<li>Navigate to the <strong>Post-Call Webhook</strong> card and click <strong>Select Webhook</strong>.</li>
+<li>A new window will apear and click <strong>Create Webhook</strong></li>
+<li>Configure the webhook with the following details:<ul>
+<li><strong>Name</strong>: A descriptive name (e.g., "Post-Call Alerts").</li>
+<li><strong>URL</strong>: Your public server URL (e.g., <code>https://yourusername.pythonanywhere.com/webhook/elevenlabs</code>). If you are testing locally, you can use a tunneling service like <code>ngrok</code> to get a temporary public URL.</li>
+<li><strong>Webhook Auth Method</strong> This will be preselected</li>
+<li><strong>Events</strong>: Check the box for <code>Transcript</code>.</li>
+<li>Click on "<strong>Create</strong>" and it will return the <strong>HMAC Key</strong></li>
+</ul>
+</li>
+<li>Open your <code>.env</code> file and paste the secret: <code>ELEVENLABS_HMAC_KEY=your_copied_secret</code></li>
+<li>Finally, assign the webhook to your agent: Go to your <strong>Agent</strong> settings, click <strong>Advanced</strong>, find the <strong>Webhook</strong> section, and select the webhook you just created.</li>
+</ol>
+<h2>Step 9: Deploy to PythonAnywhere</h2>
+<p>Your webhook needs to be online 24/7 to receive calls from ElevenLabs. PythonAnywhere is an excellent host because it requires almost no server configuration and offers a generous free tier.</p>
+<h3>9.1 Upload Your Code</h3>
+<ol>
+<li>Create an account on <a href="https://www.pythonanywhere.com/">PythonAnywhere</a>.</li>
+<li>Navigate to the <strong>Files</strong> tab.</li>
+<li>Create a folder like <code>/home/yourusername/my_project/</code>.</li>
+<li>Upload <code>eleven_app.py</code>, <code>requirements.txt</code>, and your carefully populated <code>.env</code> file into this folder.</li>
+</ol>
+<h3>9.2 Create the Web App</h3>
+<ol>
+<li>Navigate to the <strong>Web</strong> tab and click <strong>Add a new web app</strong>.</li>
+<li>Select <strong>Manual configuration</strong> (do not select the Flask autoconfigure option) and choose <strong>Python 3.10</strong> (or whatever version you prefer up to 3.13).</li>
+<li>Scroll down to the <strong>Virtualenv</strong> section and configure your environment by opening a bash console and running <code>pip install -r /home/yourusername/my_project/requirements.txt --user</code>.</li>
+<li>Set the <strong>Source code</strong> path to <code>/home/yourusername/my_project</code>.</li>
+<li>Set the <strong>Working directory</strong> to <code>/home/yourusername/my_project</code>.</li>
+</ol>
+<h3>9.3 Edit the WSGI Configuration</h3>
+<p>PythonAnywhere relies on WSGI to serve Flask apps.</p>
+<ol>
+<li>In the Web tab, click the link to your WSGI configuration file (it will look something like <code>/var/www/yourusername_pythonanywhere_com_wsgi.py</code>).</li>
+<li>Delete everything in the file and replace it with the following snippet:</li>
+</ol>
+<p><code>Python: wsgi.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="c1"># Tell the WSGI server where your project lives</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;/home/yourusername/my_project&#39;</span><span class="p">)</span>
+
+<span class="c1"># Import your Flask app from eleven_app.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eleven_app</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span> <span class="k">as</span> <span class="n">application</span>
+</pre></div>
+
+</div>
+</p>
+<ol>
+<li>Save the file, return to the Web tab, and click the big green <strong>Reload</strong> button. Your webhook is now live!</li>
+</ol>
+<h2>Step 10: Local Testing</h2>
+<p>Before deploying, or if you ever need to debug your code locally, you can test your webhook without making an actual phone call.</p>
+<p>First, add <code>LOCAL_DEV=true</code> to your <code>.env</code> file locally. This explicitly tells your webhook to skip the HMAC verification check, allowing you to test with mocked payloads.</p>
+<h3>Create a Mock Payload</h3>
+<p>Create a file named <code>sample_payload.json</code> in your project folder with this test data:</p>
+<p><code>JSON: sample_payload.json</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">json</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;post_call_transcription&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;event_timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1700000000</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;conversation_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;test-conv-001&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;agent_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;test-agent-001&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;user_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;test-user-001&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;done&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;call_duration_secs&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;cost&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;analysis&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;call_successful&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;transcript_summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The caller asked about pricing.&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;data_collection_results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w">           </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jane Smith&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w">          </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jane@example.com&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;preferred_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Tuesday afternoon&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Interested in the premium plan.&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+</p>
+<h3>Send the Request</h3>
+<p>With your Flask app running securely on your local machine (<code>python eleven_app.py</code>), open a new terminal window to send the mocked payload using <code>curl</code> or PowerShell.</p>
+<p><strong>Windows (PowerShell):</strong></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">powershell</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nv">$body</span> <span class="p">=</span> <span class="nb">Get-Content</span> <span class="n">-Raw</span> <span class="p">.\</span><span class="n">sample_payload</span><span class="p">.</span><span class="n">json</span>
+<span class="nb">Invoke-RestMethod</span> <span class="n">-Method</span> <span class="n">Post</span> <span class="p">`</span>
+  <span class="n">-Uri</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">5000</span><span class="p">/</span><span class="n">webhook</span><span class="p">/</span><span class="n">elevenlabs</span> <span class="p">`</span>
+  <span class="n">-ContentType</span> <span class="s2">&quot;application/json&quot;</span> <span class="p">`</span>
+  <span class="n">-Body</span> <span class="nv">$body</span>
+</pre></div>
+
+</div>
+</p>
+<p><strong>macOS/Linux (Shell):</strong></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nb">curl</span><span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:5000/webhook/elevenlabs<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span>@sample_payload.json
+</pre></div>
+
+</div>
+</p>
+<p>If everything is configured correctly, your Flask app should print a success message to the terminal, and an email from Jane Smith should arrive in your inbox!</p>
+<blockquote>
+<p>[!CAUTION]
+Remember to remove or comment out <code>LOCAL_DEV=true</code> from your active environment variables before deploying to PythonAnywhere. Otherwise, you will leave your webhook completely unprotected in production.</p>
+<p>You must also change <code>GMAIL_SMTP_PORT=465</code> to <code>GMAIL_SMTP_PORT=587</code> in your PythonAnywhere <code>.env</code> file, as their free tier explicitly requires port 587.</p>
+</blockquote>
+<h2>Frequently Asked Questions</h2>
+<p><strong>Why am I getting a 401 Unauthorized error?</strong>
+Most likely, your <code>ELEVENLABS_HMAC_KEY</code> in the <code>.env</code> file does not match the key generated in the ElevenLabs dashboard. Ensure the <code>.env</code> file is in the correct directory and that you reload the PythonAnywhere web app after making changes.</p>
+<p><strong>Why did my webhook fail, but the email still arrived?</strong>
+The free tier of PythonAnywhere strictly restricts background threading. If you try to run the <code>send_alert_email</code> function in a daemon thread so your Flask app can respond to ElevenLabs immediately, the WSGI worker might kill the thread before the email actually sends. This tutorial runs the email function synchronously to guarantee delivery, meaning ElevenLabs has to wait a few seconds for the <code>200 OK</code> response.</p>
+<p><strong>How do I test this locally without making actual phone calls?</strong>
+Set <code>LOCAL_DEV=true</code> in your <code>.env</code> file to temporarily bypass the HMAC check. You can then use tools like <code>curl</code> or Postman to send a mocked JSON payload directly to <code>http://127.0.0.1:5000/webhook/elevenlabs</code>. Ensure you remove <code>LOCAL_DEV=true</code> before pushing to production!</p>
+<h2>Get the Code</h2>
+<p>You can find the complete, ready-to-deploy source code for this webhook project on GitHub:
+<a href="https://github.com/KikeVen/elevenlabs_post-call"><code>https://github.com/KikeVen/elevenlabs_post-call</code></a></p>
+
+        
+    </article>
+
+    <!-- Author Bio Card: fixed bio section for Enrique Bruzual with title,
+     description, Substack and GitHub follow links. Only rendered when
+     visibility is not ai_only (hidden from machine-only content). -->
+    
+    <section class="mt-20 p-8 bg-[#323339] border-l-4 border-primary">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="font-display text-2xl font-bold text-gray-100">Enrique Bruzual</h3>
+                <p class="text-primary text-sm font-medium tracking-wide uppercase">Strategic AI Architect</p>
+            </div>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+            Enrique is a Lead AI Solutions Architect specializing in scalable AI systems and distributed
+            orchestration. With over 30 years in the industry, he focuses on bridging the gap between complex
+            data infrastructure and elegant, production-grade solutions.
+        </p>
+        <div class="flex gap-6">
+            <a class="text-xs font-bold uppercase tracking-widest text-gray-100 hover:text-primary underline decoration-primary underline-offset-8"
+                href="https://substack.com/@enriquebruzual" target="_blank" rel="noopener noreferrer">Follow on
+                Substack</a>
+            <a class="text-xs font-bold uppercase tracking-widest text-gray-100 hover:text-primary underline decoration-primary underline-offset-8"
+                href="https://github.com/KikeVen" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+        </div>
+    </section>
+    
+</div>
+
+<!-- Copy Code: vanilla JS clipboard integration targeting .copy-code-btn
+     within .my-10 code containers. Copies the innerText of the adjacent
+     .codehilite pre block; provides 2-second check icon visual feedback
+     using Material Symbols swap and Tailwind color transitions. -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const copyButtons = document.querySelectorAll('.copy-code-btn');
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Find the closest parent container and then the associated pre tag
+                const container = btn.closest('.my-10');
+                if (container) {
+                    const codeBlock = container.querySelector('.codehilite pre');
+                    if (codeBlock) {
+                        navigator.clipboard.writeText(codeBlock.innerText);
+                        const icon = btn.querySelector('.material-icons');
+                        const originalIcon = icon.innerText;
+
+                        // Visual feedback
+                        icon.innerText = 'check';
+                        btn.classList.remove('text-gray-500');
+                        btn.classList.add('text-primary'); // match the brand
+
+                        setTimeout(() => {
+                            icon.innerText = originalIcon;
+                            btn.classList.add('text-gray-500');
+                            btn.classList.remove('text-primary');
+                        }, 2000);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+    </main>
+
+    <!-- Footer: 4-column Tailwind grid with brand tagline, site navigation,
+         social links (Substack, GitHub, Facebook) via Material Icons, and
+         ElevenLabs convai widget embed with contact-link trigger logic. -->
+    <footer class="bg-[#1a1b1e] text-white pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 border-b border-gray-800 pb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <h2 class="font-display text-5xl mb-6">Let's build something <br /><span
+                            class="text-primary italic">extraordinary.</span></h2>
+                    <p class="text-gray-400 max-w-md mb-8">
+                        Available for select freelance opportunities and consulting roles. Let's discuss your
+                        architectural challenges. Start a Technical Briefing with my AI
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Navigation</h4>
+                    <ul class="space-y-4">
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/">Home</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About
+                                Me</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
+                                href="/#services">Services</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
+                                href="/#work">Projects</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Social</h4>
+                    <ul class="space-y-4">
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://substack.com/@enriquebruzual" rel="noopener noreferrer"
+                                target="_blank"><span class="material-icons text-xs mr-2">link</span> Substack</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://github.com/KikeVen" rel="noopener noreferrer" target="_blank"><span
+                                    class="material-icons text-xs mr-2">code</span> GitHub</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://www.facebook.com/ZerikaiConsulting/" rel="noopener noreferrer"
+                                target="_blank"><span class="material-icons text-xs mr-2">thumb_up</span> Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
+                <p>© 2026 Enrique Bruzual. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a class="hover:text-gray-400 transition-colors" href="#">Privacy Policy</a>
+                    <a class="hover:text-gray-400 transition-colors" href="#">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ElevenLabs Agent (Inherited) -->
+    <elevenlabs-convai id="enrique-agent" agent-id="agent_0101kjr8jk36fpatbexzk50k5m6c"
+        variant="tiny"></elevenlabs-convai>
+    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close menu when clicking a link
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // AI Widget Integration Trigger
+            const agent = document.querySelector('elevenlabs-convai');
+            const contactLinks = document.querySelectorAll('#contact-link, #mobile-contact-link');
+
+            contactLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (!agent) return;
+
+                    agent.setAttribute('override-first-message', "I can assist you with reaching Enrique. You can email him at zerikai.dev@gmail.com, or I can take a message and your preferred contact time right here.");
+
+                    const openWidget = () => {
+                        const shadow = agent.shadowRoot;
+                        if (!shadow) return;
+                        const btn = shadow.querySelector('button[aria-label="Ask anything"]') ||
+                                    shadow.querySelector('button[aria-label="Open widget"]') ||
+                                    shadow.querySelector('button[aria-label="Open chat"]') ||
+                                    shadow.querySelector('button:first-of-type');
+                        if (btn) btn.click();
+                    };
+
+                    setTimeout(openWidget, 80);
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

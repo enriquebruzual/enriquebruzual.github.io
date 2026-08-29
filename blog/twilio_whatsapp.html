@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S1Y40WEYM3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-S1Y40WEYM3');
+    </script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <!-- Dynamic Title -->
+    <title>Build a WhatsApp Bot with Sentiment Analysis using Python and Twilio | Enrique Bruzual</title>
+
+    <!-- Meta Description & SEO -->
+    <meta name="description" content="This blog post provides a comprehensive tutorial on building a rule-based WhatsApp chatbot that integrates sentiment analysis using Python, Twilio's API, ChatterBot, and TextBlob. It guides readers through the entire process, from setting up the Python environment and training a custom classifier to configuring ngrok and connecting the application to the Twilio WhatsApp Sandbox for real-time emotional monitoring (part of Twilio’s archive)">
+    
+    <link rel="canonical" href="https://www.twilio.com/en-us/blog/archive/2020/build-whatsapp-bot-sentiment-analysis-python-twilio">
+    <meta property="og:url" content="https://www.twilio.com/en-us/blog/archive/2020/build-whatsapp-bot-sentiment-analysis-python-twilio">
+    
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:title" content="Build a WhatsApp Bot with Sentiment Analysis using Python and Twilio">
+    <meta property="og:description" content="This blog post provides a comprehensive tutorial on building a rule-based WhatsApp chatbot that integrates sentiment analysis using Python, Twilio's API, ChatterBot, and TextBlob. It guides readers through the entire process, from setting up the Python environment and training a custom classifier to configuring ngrok and connecting the application to the Twilio WhatsApp Sandbox for real-time emotional monitoring (part of Twilio’s archive)">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png">
+    <meta name="twitter:image" content="https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Build a WhatsApp Bot with Sentiment Analysis using Python and Twilio">
+    <meta name="twitter:description" content="This blog post provides a comprehensive tutorial on building a rule-based WhatsApp chatbot that integrates sentiment analysis using Python, Twilio's API, ChatterBot, and TextBlob. It guides readers through the entire process, from setting up the Python environment and training a custom classifier to configuring ngrok and connecting the application to the Twilio WhatsApp Sandbox for real-time emotional monitoring (part of Twilio’s archive)">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/src/assets/images/favicon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/src/assets/images/favicon-512.png" />
+    <link rel="apple-touch-icon" href="/src/assets/images/favicon-192.png" />
+
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Fonts & Tailwind -->
+    <link rel="stylesheet" href="/src/css/tailwind.css" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2A2B30;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        html.dark {
+            background-color: #2A2B30;
+        }
+    </style>
+    
+
+<!-- Pygments (Monokai theme) CSS overrides for Stitch dark-mode design:
+     colors codehilite spans, inline <code>, tables, blockquotes, and
+     headings. Uses Playfair Display serif for H2/H3 with primary accent
+     left-border. Inline code gets primary-color tinted background. -->
+<style>
+    /* Pygments Monokai Theme */
+    .codehilite pre {
+        padding: 1.5rem;
+        overflow-x: auto;
+        margin: 0;
+        background-color: transparent !important;
+    }
+
+    .codehilite .hll {
+        background-color: #49483e
+    }
+
+    .codehilite {
+        background: transparent !important;
+        color: #F8F8F2;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.875rem;
+    }
+
+    .codehilite .c {
+        color: #959077
+    }
+
+    /* Comment */
+    .codehilite .err {
+        color: #ED007E;
+        background-color: #1E0010
+    }
+
+    /* Error */
+    .codehilite .esc {
+        color: #F8F8F2
+    }
+
+    /* Escape */
+    .codehilite .g {
+        color: #F8F8F2
+    }
+
+    /* Generic */
+    .codehilite .k {
+        color: #66D9EF
+    }
+
+    /* Keyword */
+    .codehilite .l {
+        color: #AE81FF
+    }
+
+    /* Literal */
+    .codehilite .n {
+        color: #F8F8F2
+    }
+
+    /* Name */
+    .codehilite .o {
+        color: #FF4689
+    }
+
+    /* Operator */
+    .codehilite .x {
+        color: #F8F8F2
+    }
+
+    /* Other */
+    .codehilite .p {
+        color: #F8F8F2
+    }
+
+    /* Punctuation */
+    .codehilite .ch {
+        color: #959077
+    }
+
+    /* Comment.Hashbang */
+    .codehilite .cm {
+        color: #959077
+    }
+
+    /* Comment.Multiline */
+    .codehilite .cp {
+        color: #959077
+    }
+
+    /* Comment.Preproc */
+    .codehilite .cpf {
+        color: #959077
+    }
+
+    /* Comment.PreprocFile */
+    .codehilite .c1 {
+        color: #959077
+    }
+
+    /* Comment.Single */
+    .codehilite .cs {
+        color: #959077
+    }
+
+    /* Comment.Special */
+    .codehilite .gd {
+        color: #FF4689
+    }
+
+    /* Generic.Deleted */
+    .codehilite .ge {
+        color: #F8F8F2;
+        font-style: italic
+    }
+
+    /* Generic.Emph */
+    .codehilite .ges {
+        color: #F8F8F2;
+        font-weight: bold;
+        font-style: italic
+    }
+
+    /* Generic.EmphStrong */
+    .codehilite .gr {
+        color: #F8F8F2
+    }
+
+    /* Generic.Error */
+    .codehilite .gh {
+        color: #F8F8F2
+    }
+
+    /* Generic.Heading */
+    .codehilite .gi {
+        color: #A6E22E
+    }
+
+    /* Generic.Inserted */
+    .codehilite .go {
+        color: #66D9EF
+    }
+
+    /* Generic.Output */
+    .codehilite .gp {
+        color: #FF4689;
+        font-weight: bold
+    }
+
+    /* Generic.Prompt */
+    .codehilite .gs {
+        color: #F8F8F2;
+        font-weight: bold
+    }
+
+    /* Generic.Strong */
+    .codehilite .gu {
+        color: #959077
+    }
+
+    /* Generic.Subheading */
+    .codehilite .gt {
+        color: #F8F8F2
+    }
+
+    /* Generic.Traceback */
+    .codehilite .kc {
+        color: #66D9EF
+    }
+
+    /* Keyword.Constant */
+    .codehilite .kd {
+        color: #66D9EF
+    }
+
+    /* Keyword.Declaration */
+    .codehilite .kn {
+        color: #FF4689
+    }
+
+    /* Keyword.Namespace */
+    .codehilite .kp {
+        color: #66D9EF
+    }
+
+    /* Keyword.Pseudo */
+    .codehilite .kr {
+        color: #66D9EF
+    }
+
+    /* Keyword.Reserved */
+    .codehilite .kt {
+        color: #66D9EF
+    }
+
+    /* Keyword.Type */
+    .codehilite .ld {
+        color: #E6DB74
+    }
+
+    /* Literal.Date */
+    .codehilite .m {
+        color: #AE81FF
+    }
+
+    /* Literal.Number */
+    .codehilite .s {
+        color: #E6DB74
+    }
+
+    /* Literal.String */
+    .codehilite .na {
+        color: #A6E22E
+    }
+
+    /* Name.Attribute */
+    .codehilite .nb {
+        color: #66D9EF
+    }
+
+    /* Name.Builtin (using cyan instead of white) */
+    .codehilite .nc {
+        color: #A6E22E
+    }
+
+    /* Name.Class */
+    .codehilite .no {
+        color: #66D9EF
+    }
+
+    /* Name.Constant */
+    .codehilite .nd {
+        color: #A6E22E
+    }
+
+    /* Name.Decorator */
+    .codehilite .ni {
+        color: #F8F8F2
+    }
+
+    /* Name.Entity */
+    .codehilite .ne {
+        color: #A6E22E
+    }
+
+    /* Name.Exception */
+    .codehilite .nf {
+        color: #A6E22E
+    }
+
+    /* Name.Function */
+    .codehilite .nl {
+        color: #F8F8F2
+    }
+
+    /* Name.Label */
+    .codehilite .nn {
+        color: #F8F8F2
+    }
+
+    /* Name.Namespace */
+    .codehilite .nx {
+        color: #A6E22E
+    }
+
+    /* Name.Other */
+    .codehilite .py {
+        color: #F8F8F2
+    }
+
+    /* Name.Property */
+    .codehilite .nt {
+        color: #FF4689
+    }
+
+    /* Name.Tag */
+    .codehilite .nv {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable */
+    .codehilite .ow {
+        color: #FF4689
+    }
+
+    /* Operator.Word */
+    .codehilite .pm {
+        color: #F8F8F2
+    }
+
+    /* Punctuation.Marker */
+    .codehilite .w {
+        color: #F8F8F2
+    }
+
+    /* Text.Whitespace */
+    .codehilite .mb {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Bin */
+    .codehilite .mf {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Float */
+    .codehilite .mh {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Hex */
+    .codehilite .mi {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Integer */
+    .codehilite .mo {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Oct */
+    .codehilite .sa {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Affix */
+    .codehilite .sb {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Backtick */
+    .codehilite .sc {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Char */
+    .codehilite .dl {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Delimiter */
+    .codehilite .sd {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Doc */
+    .codehilite .s2 {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Double */
+    .codehilite .se {
+        color: #AE81FF
+    }
+
+    /* Literal.String.Escape */
+    .codehilite .sh {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Heredoc */
+    .codehilite .si {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Interpol */
+    .codehilite .sx {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Other */
+    .codehilite .sr {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Regex */
+    .codehilite .s1 {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Single */
+    .codehilite .ss {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Symbol */
+    .codehilite .bp {
+        color: #F8F8F2
+    }
+
+    /* Name.Builtin.Pseudo */
+    .codehilite .fm {
+        color: #A6E22E
+    }
+
+    /* Name.Function.Magic */
+    .codehilite .vc {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Class */
+    .codehilite .vg {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Global */
+    .codehilite .vi {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Instance */
+    .codehilite .vm {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Magic */
+    .codehilite .il {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Integer.Long */
+
+    /* Inline Code Styling */
+    :not(pre)>code {
+        background-color: rgba(190, 94, 56, 0.1);
+        /* Primary color at 10% opacity */
+        color: #BE5E38;
+        /* Primary color */
+        padding: 0.2em 0.4em;
+        font-size: 85%;
+        border-radius: 0;
+        font-family: 'Fira Code', monospace;
+    }
+
+    /* General Markdown Prose Styles tailored to the Stitch design */
+    .prose p {
+        color: #9CA3AF;
+        /* muted-gray */
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+
+    .prose h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.875rem;
+        /* text-3xl */
+        font-weight: 700;
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+        padding-left: 1.5rem;
+        border-left: 4px solid #BE5E38;
+        /* Primary Accent */
+        color: #F5F5F7;
+        /* Ivory */
+    }
+
+    .prose h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        /* text-2xl */
+        font-weight: 700;
+        margin-top: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: #F5F5F7;
+    }
+
+    .prose a {
+        color: #BE5E38;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .prose a:hover {
+        color: #F5F5F7;
+    }
+
+    .prose blockquote {
+        margin: 3rem 0;
+        padding-left: 2rem;
+        border-left: 4px solid #BE5E38;
+        font-style: italic;
+        font-size: 1.5rem;
+        color: #9CA3AF;
+        line-height: 1.625;
+        quotes: none;
+        /* remove default quotes if any */
+    }
+
+    /* Tables */
+    .prose table {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 3rem 0;
+    }
+
+    .prose thead tr {
+        background-color: #323339;
+        /* surface */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .prose th {
+        padding: 1rem;
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #F5F5F7;
+    }
+
+    .prose tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .prose tbody tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.02);
+        /* Slight zebra striping */
+    }
+
+    .prose td {
+        padding: 1rem;
+        color: #9CA3AF;
+    }
+
+    /* Images */
+    .prose img {
+        max-width: 100%;
+        height: auto;
+        margin: 2rem auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Lists */
+    .prose ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        color: #9CA3AF;
+        margin-bottom: 2rem;
+    }
+
+    .prose ol {
+        list-style-type: decimal;
+        padding-left: 1.5rem;
+        color: #9CA3AF;
+        margin-bottom: 2rem;
+    }
+
+    .prose li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<!-- FAQ JSON-LD Schema: conditionally rendered when ai_faq is True.
+     Injects schema.org FAQPage structured data from pre-built faq_jsonld
+     (generated by build_blog.py from frontmatter + body extraction). -->
+
+<script type="application/ld+json">
+        {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "How do you expose your locally running Flask chatbot application to the internet for Twilio to communicate with it?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You use ngrok by running ngrok http 5000 (or whichever port your Flask app is using) to create a secure tunnel that provides a public URL forwarding to your local development environment."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Where do you configure your Twilio account to use the WhatsApp Sandbox? ",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "In the Twilio Console, navigate to Programmable SMS, select WhatsApp, and then go to the Sandbox section to find your assigned sandbox number and join code."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How do you connect your personal smartphone to the Twilio WhatsApp Sandbox for testing?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You must send a WhatsApp message containing a specific join code (beginning with the word 'join' followed by a randomly generated two-word phrase) to the sandbox number assigned to your Twilio account."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What information from ngrok needs to be added to the Twilio Console to route incoming WhatsApp messages to your bot? ",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You must paste the https:// forwarding URL generated by ngrok, appended with your Flask endpoint route (e.g., https://<subdomain>.ngrok.io/get), into the 'When a message comes in' field in the WhatsApp Sandbox settings."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What HTTP method should be set in the Twilio Sandbox configuration for the incoming message webhook?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The request method in the Twilio Sandbox settings must be configured as HTTP POST to properly send the incoming message payload to your Flask application."
+            }
+        }
+    ]
+}
+    </script>
+
+
+<!-- Article Schema (NewsArticle, BlogPosting, or custom): Google Rich
+     Results compliant JSON-LD with headline, datePublished, mainEntityOfPage
+     ImageObject, publisher Organization, and author Person. Uses Jinja2
+     template variables from post frontmatter for all dynamic fields. -->
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Build a WhatsApp Bot with Sentiment Analysis using Python and Twilio",
+        "datePublished": "2020-02-28T00:00:00+00:00",
+        "dateModified": "2020-02-28T00:00:00+00:00",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "url": "https://www.twilio.com/en-us/blog/archive/2020/build-whatsapp-bot-sentiment-analysis-python-twilio",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png"
+            }
+        },
+        "description": "This blog post provides a comprehensive tutorial on building a rule-based WhatsApp chatbot that integrates sentiment analysis using Python, Twilio&#39;s API, ChatterBot, and TextBlob. It guides readers through the entire process, from setting up the Python environment and training a custom classifier to configuring ngrok and connecting the application to the Twilio WhatsApp Sandbox for real-time emotional monitoring (part of Twilio’s archive)",
+        "image": [
+            "https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png"
+        ],
+        "publisher": {
+            "@type": "Organization",
+            "name": "Enrique Bruzual",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io"
+            }
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Enrique Bruzual",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png",
+                "width": 512,
+                "height": 512
+            }
+        },
+        "@id": "https://www.twilio.com/en-us/blog/archive/2020/build-whatsapp-bot-sentiment-analysis-python-twilio"
+    }
+    </script>
+
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-body antialiased selection:bg-primary/30">
+
+    <script>
+        // Force dark mode to match the portfolio aesthetic 
+        document.documentElement.classList.add('dark');
+    </script>
+
+    <!-- Navigation: dark-mode fixed navbar with Tailwind backdrop-blur,
+         responsive mobile menu toggle (vanilla JS), Enrique Bruzual brand
+         link, and ElevenLabs convai contact trigger via shadow DOM. -->
+    <nav
+        class="fixed w-full z-50 bg-white/90 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="/" class="hover:opacity-80 transition-opacity">
+                        <span class="text-2xl font-serif font-bold tracking-tighter text-primary">E/B</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-12">
+                    <a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                        href="/">Home</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest text-primary"
+                        href="/blog/">Blog</a>
+                    <a class="px-6 py-2 border border-primary text-primary text-sm font-medium hover:bg-primary hover:text-white transition-all uppercase tracking-widest"
+                        href="#" id="contact-link">Contact</a>
+                </div>
+                <!-- Mobile button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-500 hover:text-primary focus:outline-none">
+                        <span class="material-icons">menu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu"
+            class="md:hidden hidden bg-background-light dark:bg-background-dark border-b border-gray-200 dark:border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
+                <a class="block px-3 py-2 text-base font-medium hover:text-primary transition-colors uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                    href="/">Home</a>
+                <a class="block px-3 py-2 text-base font-medium hover:text-primary transition-colors uppercase tracking-widest text-primary"
+                    href="/blog/">Blog</a>
+                <a class="block px-3 py-2 mt-4 border border-primary text-primary text-base font-medium hover:bg-primary hover:text-white transition-all uppercase tracking-widest w-1/2 text-center"
+                    href="#" id="mobile-contact-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
+        
+<div class="max-w-[800px] mx-auto">
+    <!-- Article Header -->
+    <div class="mb-12">
+        <span class="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Tutorial: Python</span>
+        <h1 class="font-display text-4xl md:text-6xl font-bold leading-tight mb-6 text-gray-100">
+            Build a WhatsApp Bot with Sentiment Analysis using Python and Twilio
+        </h1>
+        <p class="text-xl italic text-gray-400 mb-10 leading-relaxed font-light">
+            "As chatbots become more popular in the marketplace assisting companies to manage customer interaction, it is important to provide a high-level customer experience."
+        </p>
+
+        <div class="flex items-center justify-between py-6 border-y border-primary">
+            <div class="flex items-center gap-4">
+                <img alt="Enrique Bruzual" class="w-12 h-12 object-cover grayscale brightness-110"
+                    src="/src/assets/images/enrique_bruzual_48-48.png" />
+                <div class="text-sm">
+                    <p class="font-semibold text-gray-100">Enrique Bruzual</p>
+                    <p class="text-gray-400">Feb 28, 2020</p>
+                </div>
+            </div>
+            <div class="flex gap-4 text-gray-400">
+                <span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors"
+                    onclick="navigator.clipboard.writeText(window.location.href); const originalText = this.innerText; this.innerText = 'check'; setTimeout(() => this.innerText = originalText, 2000);"
+                    title="Copy link to clipboard">share</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Content -->
+    <article class="prose prose-invert max-w-none">
+        <div class="flex items-center gap-6 mb-8 mt-12">
+            <a class="text-primary flex items-center gap-3 font-bold text-sm tracking-widest uppercase group !no-underline"
+                href="/blog/">
+                <span class="font-sans text-lg group-hover:-translate-x-1 transition-transform"
+                    aria-hidden="true">&#8592;</span>
+                All Articles
+            </a>
+        </div>
+
+        <!-- The converted Markdown will be injected here -->
+        <blockquote>
+<p>"This post is part of Twilio’s archive and may contain outdated information. We’re always building something new, so be sure to check out our latest posts for the most up-to-date insights." ~ <em>Twilio</em></p>
+</blockquote>
+<p><img alt="New image here " src="/src/assets/blogs/twilio_bot_30.png" title="Build a WhatsApp Bot with Sentiment Analysis using Python and Twilio" /></p>
+<p>Chat robot technology is still early, and much of the focus has been on basic question-and-answer interactions. Although some chatbots have been trained to be incredibly accurate in their responses, most lack the ability to monitor human emotion—and perhaps for good reason.</p>
+<p>Emotions vary not only among individuals but also within a person and the moment. Detecting an emotional response requires multisensorial awareness, something most of us do instinctively.</p>
+<p>The only way we are able to capture emotions in a chatbot is through sentiment analysis of a chat, which poses its own set of challenges. If we are able to detect and analyze each user response to obtain an emotional index, we could use this information to help monitor the level of satisfaction of a customer.</p>
+<p><img alt="whatsapp bot demo" src="/src/assets/blogs/eQKwz_DtAzpL_tw2EthpMKtkLEhz1TIFXRQuTX5geFnfnUOAq-vpFK9-uaVfDUSgh74RWZSb3kLSZK.gif" /></p>
+<p>With sentiment analysis tools, we can try to detect the emotional level of an individual on a per-sentence basis. As each user sentence is captured during a chat session, it can be evaluated for negative sentiment.</p>
+<p>Normally, the analyzer vectorizes the sentence, returning a float value. Depending on the model, the index value can then be used to trigger a response.</p>
+<p>Based on the index range we can extract the emotional level of each response. As we evaluate each sentence, we can program our chatbot to also take into consideration the emotional level of the user input.</p>
+<p>In this tutorial we will write a WhatsApp proof-of-concept bot using <a href="https://www.twilio.com/docs/sms/whatsapp/api">Twilio’s WhatsApp API</a>, the <a href="https://www.twilio.com/docs/libraries/python">Twilio's Python Helper Library</a>, <a href="https://chatterbot.readthedocs.io/en/stable/">ChatterBot</a> and <a href="https://textblob.readthedocs.io/en/dev/">TextBlob</a>.</p>
+<p>We will use ChatterBot to create a corpus file in JSON format that defines a custom-built, rule-based chatbot. Textblob will provide sentiment analysis capabilities and its other built-in tools to help us write our chatbot.</p>
+<h2>Project requirements</h2>
+<p>To get started, the following are needed.</p>
+<ul>
+<li><a href="https://www.python.org/downloads/">Python 3.7+</a>:  You may download the appropriate interpreter from <a href="https://www.python.org/">python.org</a></li>
+<li><a href="https://docs.python.org/3/tutorial/venv.html">Virtual environment</a>: <code>venv</code> comes with Python.</li>
+<li><a href="https://ngrok.com">ngrok:</a> a utility program to create a secure tunnel from the internet to your local development environment.</li>
+<li><a href="https://www.twilio.com/referral/KLVFTh">Twilio account:</a> You can get a Twilio free account and get started now.</li>
+</ul>
+<h3><a href="#project-setup">Project setup</a></h3>
+<p>Please make sure you have the appropriate <strong>Python</strong> version installed on your system.</p>
+<p>To create our  <strong>virtual environment</strong> follow the instructions below. We will be using Python’s built-in virtual environment, <code>venv</code><strong>.</strong></p>
+<p>For <strong>Unix</strong> or <strong>Mac OS</strong> systems, open a terminal and enter the following commands to do the tasks described above:</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>mkdir<span class="w"> </span>twily
+<span class="nb">cd</span><span class="w"> </span>twily
+python3.7<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+<span class="nb">source</span><span class="w"> </span>venv/bin/activate
+</pre></div>
+
+</div>
+</p>
+<p>On <strong>Windows</strong>, enter the following commands in a command prompt window:</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>md<span class="w"> </span>twily
+<span class="nb">cd</span><span class="w"> </span>twily
+<span class="nb">python</span><span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate.bat
+</pre></div>
+
+</div>
+</p>
+<p>Our project will consist of <strong>six files</strong>, five python scripts and one JSON file. They exist at root level in our project folder, <strong>twily</strong>. These files will be created and explained throughout the tutorial.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">None</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>|-- twily
+    `-- app.py
+    `-- chatter_trainer.py
+    `-- simplebot.py
+    `-- stop_words.py
+    `-- twily_classifier.py
+    `-- twilybot.json
+</pre></div>
+
+</div>
+</p>
+<h3><a href="#installing-the-python-dependencies">Installing the Python Dependencies</a></h3>
+<p>In addition to the tools needed to get the project all setup we are also going to need to install a few python dependencies.</p>
+<ul>
+<li><a href="https://www.twilio.com/docs/libraries/python">Twilio Python Helper Library:</a> comes with a number of tools to get started with Twilio APIs.</li>
+<li><a href="https://chatterbot.readthedocs.io/en/stable/">ChatterBot:</a> a Python library making it easy to generate automated responses to a user’s input.</li>
+<li><a href="https://palletsprojects.com/p/flask/">Flask:</a> a flexible web Framework supporting just about any type of app configuration.</li>
+<li><a href="https://textblob.readthedocs.io/en/dev/">TextBlob:</a> a Python library for processing textual data.</li>
+</ul>
+<p>Once you have created and activated your virtual environment, you can <code>pip install</code> your packages.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nb">pip</span><span class="w"> </span>install<span class="w"> </span>twilio<span class="w"> </span>chatterbot<span class="w"> </span>chatterbot_corpus<span class="w"> </span>Flask
+</pre></div>
+
+</div>
+</p>
+<p>To install <strong>TextBlob</strong> the documentation requires doing a couple of steps</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nb">pip</span><span class="w"> </span>install<span class="w"> </span>textblob
+<span class="nb">python</span><span class="w"> </span>-m<span class="w"> </span>textblob.download_corpora
+</pre></div>
+
+</div>
+</p>
+<p>If you type <code>pip list</code> in your activated virtual environment, it should display a list of all your installed libraries and dependencies.</p>
+<h2>ChatterBot</h2>
+<p><em>"ChatterBot uses a selection of machine learning algorithms to produce different types of responses. This makes it easy for developers to create chat bots and automate conversations with users.__"</em> ~ ChatterBot documentation</p>
+<p>We are going to use ChatterBot's training corpus as the dataset for our sentiment analysis robot. At this point the complexity and branching of the conversation is limited, but we will be able to write an adequate application to explore a user's emotional state during a chat session with a chatbot.</p>
+<p>In ChatterBot the user needs to create a conversation and train the bot in order for the chatbot to answer properly. ChatterBot also allows us to export the trained data. We are going to train a bot and export the data into a JSON formatted file, which we'll then use for our custom bot. We won't be using ChatterBot beyond that point.</p>
+<p>If you would like to download the corpus file and skip this section, please <a href="https://github.com/KikeVen/simplebot/blob/master/twilybot.json">click here</a> to download.</p>
+<p>ChatterBot allows a chatbot to be trained using a list of strings where the <strong>list represents a conversation</strong>. For example, each list below could be considered a conversation with ChatterBot responding “Hello” to three different types of user inputs or questions.</p>
+<ul>
+<li><code>[ "Hi there!", "Hello",]</code></li>
+<li><code>[ "Greetings!",  "Hello",]</code></li>
+<li><code>[ "What’s up!",  "Hello",]</code></li>
+</ul>
+<p>Although ChatterBot is able to handle longer lists of training conversations, for our project we will use a simple “<strong>question/answer</strong>” format.</p>
+<p>Start by creating a python file named, <code>chatter_trainer.py</code> in the root of our project folder, <code>twily</code>. In the file let's write our code.</p>
+<h3>Setting up the trainer</h3>
+<ul>
+<li>We first need to import the ChatterBot library and trainers</li>
+<li>We assign our <code>ChatBot()</code> instance by passing a chatbot name and assign it to the <code>chatbot</code> variable.</li>
+<li>We instantiate the appropriate trainer. We will use the <code>ListTrainer()</code>, pass the bot name as an argument and assign it to the <code>trainer</code> variable.</li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">chatterbot</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatBot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chatterbot.trainers</span><span class="w"> </span><span class="kn">import</span> <span class="n">ListTrainer</span>
+
+<span class="n">chatbot</span> <span class="o">=</span> <span class="n">ChatBot</span><span class="p">(</span><span class="s2">&quot;Twily&quot;</span><span class="p">)</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">ListTrainer</span><span class="p">(</span><span class="n">chatbot</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</p>
+<h3>Training lists</h3>
+<p>Our three types of arbitrary conversations are <code>documentation_topics</code>, <code>twilio_knowledge</code> and <code>classifier</code>.</p>
+<ul>
+<li><code>documentation_topics</code> provides documentation links based on keywords found in the user's question</li>
+<li><code>twilio_knowledge</code> will answer predefined general questions</li>
+<li><code>classifier</code> has some keywords associated with a user frustration response, the bot will use these to try to de-escalate the user's frustration.</li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="n">documentation_topics</span> <span class="o">=</span> <span class="p">[</span>
+<span class="p">(</span><span class="s2">&quot;sdk&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.twilio.com/docs/sms/whatsapp#sdks&quot;</span><span class="p">),</span>
+<span class="p">(</span><span class="s2">&quot;python helper library&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.twilio.com/docs/libraries/python&quot;</span><span class="p">),</span>
+<span class="p">(</span><span class="s2">&quot;tutorials&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.twilio.com/docs/sms/whatsapp/tutorial/ send-and-receive-media-messages-twilio-api-whatsapp&quot;</span><span class="p">),</span>
+<span class="p">(</span><span class="s2">&quot;autopilot&quot;</span><span class="p">,</span> <span class="s2">&quot;https://www.twilio.com/docs/autopilot/channels/whatsapp&quot;</span><span class="p">),</span>
+<span class="p">(</span><span class="s2">&quot;contact us&quot;</span><span class="p">,</span> <span class="s2">&quot;https://support.twilio.com/hc/en-us&quot;</span><span class="p">)]</span>
+
+<span class="n">twilio_knowledge</span> <span class="o">=</span> <span class="p">[</span>
+<span class="p">(</span><span class="s2">&quot;Twilio description&quot;</span><span class="p">,</span> <span class="s2">&quot;Simply put, Twilio is a developer platform for communications.</span><span class="se">\</span>
+<span class="s2">        Software teams use Twilio APIs to add capabilities like voice, video, and messaging </span><span class="se">\</span>
+<span class="s2">        to their applications. This enables businesses to provide the right communications </span><span class="se">\</span>
+<span class="s2">            experience for their customers.&quot;</span><span class="p">),</span>
+<span class="p">(</span><span class="s2">&quot;Twilio email&quot;</span><span class="p">,</span> <span class="s2">&quot;Sorry, you can submit a ticket at: https://www.twilio.com/console/support/tickets/create&quot;</span><span class="p">),</span>
+<span class="p">(</span><span class="s2">&quot;Twilio phone number&quot;</span><span class="p">,</span> <span class="s2">&quot;We don&#39;t have a phone number for this type of account&quot;</span><span class="p">),</span>
+<span class="p">(</span><span class="s2">&quot;mailing address&quot;</span><span class="p">,</span> <span class="s2">&quot;You can email our corporate headquarters at [email protected]&quot;</span><span class="p">),</span>
+<span class="p">(</span><span class="s2">&quot;chatterbot&quot;</span><span class="p">,</span> <span class="s2">&quot;library making it easy to generate automated responses to a user&#39;s input, visit https://chatterbot.readthedocs.io/en/stable/&quot;</span><span class="p">),</span>
+<span class="p">(</span><span class="s2">&quot;textblob&quot;</span><span class="p">,</span> <span class="s2">&quot;library for processing textual data, please visit https://textblob.readthedocs.io/en/dev/&quot;</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">classifier</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;silly&quot;</span><span class="p">,</span> <span class="s2">&quot;dumb&quot;</span><span class="p">,</span> <span class="s2">&quot;stupid&quot;</span><span class="p">,</span> <span class="s2">&quot;I&#39;dont think so&quot;</span><span class="p">,</span> <span class="s2">&quot;I don&#39;t care&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;do you know anything&quot;</span><span class="p">,</span> <span class="s2">&quot;not good&quot;</span><span class="p">,</span> <span class="s2">&quot;omg&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;this is bad&quot;</span><span class="p">,</span> <span class="s2">&quot;not what I want&quot;</span><span class="p">,</span> <span class="s2">&quot;live help&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;get me a rep&quot;</span><span class="p">,</span> <span class="s2">&quot;I need a real person&quot;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</p>
+<h3>Training iterators</h3>
+<p>Below the training list we will write three list iterators, each with a pre-formatted <strong>question/answer</strong>. Each loop calls the <code>trainer</code> instance and the <code>train()</code> method, passing the name of the list as an argument. This will generate conversations using the information found in each list.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">for</span> <span class="n">topic</span><span class="p">,</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">documentation_topics</span><span class="p">:</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">([</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;Sure, here is the </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2"> link: </span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">])</span>
+
+<span class="k">for</span> <span class="n">topic</span><span class="p">,</span> <span class="n">description</span> <span class="ow">in</span> <span class="n">twilio_knowledge</span><span class="p">:</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">([</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;Ok, here is the </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2"> information you are looking for: </span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">])</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">classifier</span><span class="p">:</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">([</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;I am sorry you feel that way, please ask the question again&quot;</span>
+    <span class="p">])</span>
+</pre></div>
+
+</div>
+</p>
+<h3>Corpus file export</h3>
+<p>Finally, we export our <code>trainer</code> instance to a JSON file using ChatterBot's <code>.export_for_training()</code> method, which takes an argument in the form of the JSON filename.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">export_for_training</span><span class="p">(</span><span class="s1">&#39;twilybot.json&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</p>
+<p>To generate the JSON file, <code>twilybot.json</code>, all we have to do is run the program as <code>python chatter_trainer.py</code>, and the file will be saved in the <code>twily</code> folder. We can now put ChatterBot aside. We are going to keep this file in the same directory as the others.</p>
+<h2>TextBlob</h2>
+<p><em>"TextBlob provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, noun phrase extraction, sentiment analysis, classification, translation, and more."</em> ~ TextBlob documentation</p>
+<p>This application will mostly rely on TextBlob to create a custom classifier as well as do sentiment analysis and create our rule base chatbot.</p>
+<h3>Textblob custom classifier</h3>
+<p>In this section we will write our custom classifier, the other Textblob features will be explained as they are implemented throughout the tutorial.</p>
+<p>For this portion we need to create our <code>train</code> data. The data sets can be written in the script or imported from a file. TextBlob supports a few file formats for this operation, but we will write the data in our script.</p>
+<p>The data is a <strong>list</strong> of <strong>tuples</strong>, each housing the training string separated by a comma followed by "<strong>pos</strong>" or "<strong>neg</strong>", representing <strong>positive</strong> or <strong>negative</strong> sentiment.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="p">(</span><span class="s2">&quot;phrase one&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</p>
+<p>Let's write our classifier module. Begin by creating a Python file named <code>twily_classifier.py</code> in our <code>twily</code> folder.</p>
+<p>We will create a function in order to import it into other scripts as a module.</p>
+<ul>
+<li>We will import the Naive Bayers classifier from TextBlob.</li>
+<li>Then we will create a function called <code>trainer()</code> which does not take any parameters at this point.</li>
+<li>In it, we will assign our training data list to the <code>train</code> variable. The train data listed below is truncated to minimize the length of this tutorial.</li>
+<li>Finally return <code>NaiveBayesClassifier()</code> constructor passing the train data as an argument.</li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">textblob.classifiers</span><span class="w"> </span><span class="kn">import</span> <span class="n">NaiveBayesClassifier</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">trainer</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Trainer function for Naive Bayers classifier&quot;&quot;&quot;</span>
+
+    <span class="n">train</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;i am good&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;fine thanks&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;doing ok&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;thank you&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;i am crappy&quot;</span><span class="p">,</span> <span class="s2">&quot;neg&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;omg&quot;</span><span class="p">,</span> <span class="s2">&quot;neg&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;no thanks&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;do you have information on the SDK&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;not good&quot;</span><span class="p">,</span> <span class="s2">&quot;neg&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;you are awesome&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;i don&#39;t know&quot;</span><span class="p">,</span> <span class="s2">&quot;neg&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;forget you&quot;</span><span class="p">,</span> <span class="s2">&quot;neg&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;it didn&#39;t answer my question&quot;</span><span class="p">,</span> <span class="s2">&quot;neg&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">NaiveBayesClassifier</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</p>
+<p>To test our classifier as a stand-alone script, we will write test code below our <code>trainer</code> function.</p>
+<ul>
+<li>We test our script by calling the <code>trainer()</code> function</li>
+<li>And get the probability distribution by calling the <code>.prob_classify()</code> method and pass a test string we want analyzed as an argument.</li>
+<li>We can extract the negative value by calling the <code>.prob()</code> method and passing the <code>"neg"</code> label as an argument.</li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">user_input</span> <span class="o">=</span> <span class="s2">&quot;I didn&#39;t find this helpful&quot;</span>
+    <span class="n">classy</span> <span class="o">=</span> <span class="n">trainer</span><span class="p">()</span><span class="o">.</span><span class="n">prob_classify</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;String:  </span><span class="si">{</span><span class="n">user_input</span><span class="si">}</span><span class="s1"> &#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;---------</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span><span class="o">*</span><span class="w"> </span><span class="s2">&quot;-&quot;</span><span class="si">}</span><span class="s1">+&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">Negative</span> <span class="n">probability</span><span class="p">:</span> <span class="p">{</span><span class="n">classy</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="s2">&quot;neg&quot;</span><span class="p">)}</span><span class="s1">&#39;)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">Positive</span> <span class="n">probability</span><span class="p">:</span> <span class="p">{</span><span class="n">classy</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="s2">&quot;pos&quot;</span><span class="p">)}</span><span class="s1">&#39;)</span>
+</pre></div>
+
+</div>
+</p>
+<p>To run the test above simply run the file with <code>python twily_classifier.py</code>. Edit the <code>user_input</code> variable if you want to see how other sentences are classified.</p>
+<h2>NLTK stop word set</h2>
+<p>We are going to need a list of stop words. These are commonly used filler words that we want filtered out from the user input. Later we will learn how to use the stop word set.</p>
+<p>As <a href="https://www.nltk.org/">NLTK</a> was installed as one of the dependencies of TextBlob, we can use it to generate a set of stop words.</p>
+<p>We can use Python’s interactive console to generate a set of stop words and print them to the screen, then copy and paste this set into a new python file.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span><span class="w"> </span><span class="nn">nltk.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">stopwords</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</p>
+<ul>
+<li>Create a document called <code>stop_words.py</code>.</li>
+<li>In the new file add a variable called <code>sw_list</code>.</li>
+<li>Paste the set to the variable.</li>
+<li>Save and close the file.</li>
+</ul>
+<p>The list below has been truncated. The one you generate will be a lot longer. This list can be edited if need be by adding or removing words.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="n">sw_list</span> <span class="o">=</span>  <span class="p">{</span><span class="s1">&#39;ll&#39;</span><span class="p">,</span>  <span class="s1">&#39;haven&#39;</span><span class="p">,</span>  <span class="s2">&quot;that&#39;ll&quot;</span><span class="p">,</span>  <span class="s1">&#39;against&#39;</span><span class="p">,</span>  <span class="s1">&#39;himself&#39;</span><span class="p">,</span>  <span class="s1">&#39;his&#39;</span><span class="p">,</span>  <span class="s1">&#39;all&#39;</span><span class="p">,</span>  <span class="s1">&#39;very&#39;</span><span class="p">}</span>  <span class="c1"># This set is truncated</span>
+</pre></div>
+
+</div>
+</p>
+<p>By saving the set of stop words into a new Python file, our bot will execute much faster than if, every time we process user input, the application requested the stop word list from NLTK.</p>
+<h2>Sentiment analysis</h2>
+<p>We will write our chatbot application as a module, as it can be isolated and tested prior to integrating with Flask.</p>
+<p>We are going to call our module <code>simplebot.py</code>, this will be the core application. The application will take one argument, the <code>user_input</code> as a <code>str</code>.</p>
+<p>The application will do a sentiment analysis of the unedited string, and it will also normalize the string and turn keywords into a set that will be used to intersect the dialog corpus file for matching responses.</p>
+<h3>Module setup</h3>
+<p>Let's create a file named <code>simplebot.py</code> in the <code>twily</code> folder, and let's start by importing the libraries.</p>
+<ul>
+<li><code>twily_classifier</code> is our TextBlob trained sentiment classifier.</li>
+<li><code>stop_words</code> is the list of words to exclude from our input string.</li>
+<li><code>json</code> to open the conversation corpus generated with ChatterBot.</li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot; Simple rule based chatbot with emotional monitoring &quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">textblob</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextBlob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">twily_classifier</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">stop_words</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">stopwords</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</pre></div>
+
+</div>
+</p>
+<p>Below the imports, start by opening our JSON file with the trained <code>conversation</code> corpus using the built-in <code>open()</code> function to access the file and load it into the <code>array</code> variable.</p>
+<p>We can then call the <code>array</code> index <code>conversation</code>, it holds all the corpus data.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;twilybot.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="n">CONVERSATION</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="s2">&quot;conversations&quot;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</p>
+<p>Let's go ahead and set up a few other constants and variables.</p>
+<ul>
+<li><code>BOT_NAME</code> constant (string type) holds the name of our bot.</li>
+<li><code>STOP_WORDS</code> constant (set type) holds a list of all the stop words. This was the set we generated using NLTK.</li>
+<li><code>neg_distribution</code> variable (list type) holds the negative sentiment floating point value. This will be used to monitor the user's sentiment index. It will be appended everytime there is user input, with the negative probability percent value.</li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="n">BOT_NAME</span> <span class="o">=</span> <span class="s1">&#39;Twily&#39;</span>
+<span class="n">STOP_WORDS</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">sw_list</span>
+<span class="n">neg_distribution</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+
+</div>
+</p>
+<p>Our <code>simplebot.py</code> module is made up of three functions, <code>sentiment()</code>, <code>simplebot()</code> and <code>escalation()</code>, where <code>escalation()</code> is the main function while the other two are auxiliary dependencies.</p>
+<h3>The sentiment() function</h3>
+<p>This function appends the <code>neg_distribution</code> list with negative probability and returns the appended value.</p>
+<p><img alt="sentiment() function flow chart" src="/src/assets/blogs/wVrvcXO-XXsH1iM8rTYGl772M0ZhZa7YyeJ2JBEvWuuJOPV4-YC3BB1UHbMp2ddIYgrLj2l33281DO.png" /></p>
+<ul>
+<li>From <code>twily_classifier</code> call the <code>cl.trainer()</code> function and the <code>.prob_classify(u_input)</code> passing our input string when called. Assign it to <code>blob_it</code> variable.</li>
+<li>From the returned value in <code>blob_it</code> we are going to extract just the negative values, rounded up to two decimal points and assigned to the <code>npd</code> variable.</li>
+<li>With the most recent negative value, we are going to update our <code>neg_distribution</code> list.</li>
+<li>We also return the appended value in case it is needed for another operation.</li>
+</ul>
+<p>This function will be called by our main function <code>escalation()</code>.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sentiment</span><span class="p">(</span><span class="n">u_input</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Auxiliary function: Appends &#39;neg_distribution&#39;</span>
+<span class="sd">    with negative probability also returns Negative Probability&quot;&quot;&quot;</span>
+
+    <span class="n">blob_it</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">trainer</span><span class="p">()</span><span class="o">.</span><span class="n">prob_classify</span><span class="p">(</span><span class="n">u_input</span><span class="p">)</span>
+    <span class="n">npd</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">blob_it</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="s2">&quot;neg&quot;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">neg_distribution</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">npd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">npd</span>
+</pre></div>
+
+</div>
+</p>
+<h3>The simplebot() function</h3>
+<p>This function implements a rule-based bot. It takes the user input in the form of a string and, in sequence, it pre-processes the input string, converts it to lowercase, tokenizes it, and removes stop words. It then iterates through <code>CONVERSATION</code>. If <code>filtered_input</code> intersects, <code>response_set</code> is updated. If the set is empty, it returns a message; otherwise, it returns the longest string in the set.</p>
+<p><img alt="simplebot() function flow chart" src="/src/assets/blogs/x7FxHjvNwInNmzWB5T1G7n5nX0zF6l7i0Rgy_QT6F9DsMYUF_xJLEPTV_jaD4P1MhRS-09QSSu67Id.png" /></p>
+<h4>User input</h4>
+<ul>
+<li>Define the function, <code>def simplebot(user):</code></li>
+<li>Here we take the user input and turn it into a <code>TextBlob</code> object.</li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">simplebot</span><span class="p">(</span><span class="n">user_input</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rule base bot, takes an argument, user input in form of a string. (truncated)&quot;&quot;&quot;</span>
+
+    <span class="n">user_blob</span> <span class="o">=</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</p>
+<h4>pre-processing and normalization</h4>
+<p>Once we have a textblob object we can modify it by using textblob built in tools</p>
+<ul>
+<li>We normalize our input string by turning it into an all lower case string.</li>
+<li><code>user_blob.lower()</code>.</li>
+<li>We then tokenize the textblob object into words by calling:</li>
+<li><code>lower_input.words</code>.</li>
+<li>Finally we create a list of words not listed in <code>STOP_WORDS</code> from our textblob object and assign it to the <code>filtered_input</code> variable.</li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>    <span class="n">lower_input</span> <span class="o">=</span> <span class="n">user_blob</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">token_input</span> <span class="o">=</span> <span class="n">lower_input</span><span class="o">.</span><span class="n">words</span>
+    <span class="n">filtered_input</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">token_input</span> <span class="k">if</span> <span class="n">w</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">STOP_WORDS</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</p>
+<h4>Set iterator</h4>
+<p>We are going to create an empty set to be updated with all the possible matches returned by our set intersection of user input and <code>CONVERSATION</code>.</p>
+<ul>
+<li>Assign an empty set to <code>response_set</code></li>
+<li>Create a for loop to iterate through every list in <code>CONVERSATION</code></li>
+<li>Add a nested loop to iterate through every <code>sentence</code> in each <code>list</code>.</li>
+<li>Turn each <code>sentence</code> into a <code>list</code> of words by using the <code>.split()</code> method. Assign it to the <code>sentence_split</code> variable</li>
+<li>If the <code>set()</code> of <code>filtered_input</code> **intersects** <code>sentence_split</code></li>
+<li>Update <code>response_set</code> with the intersection</li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>    <span class="n">response_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">con_list</span> <span class="ow">in</span> <span class="n">CONVERSATION</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">con_list</span><span class="p">:</span>
+            <span class="n">sentence_split</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">filtered_input</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">sentence_split</span><span class="p">):</span>
+                <span class="n">response_set</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">con_list</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</p>
+<h4>Returned value based on response_set</h4>
+<p>We want to return one value from the <code>response_set</code>, it could be empty, with one value or more.</p>
+<ul>
+<li>If <code>response_set</code> is empty we want to return a string</li>
+<li><code>"I am sorry, I don't have an answer, ask again"</code></li>
+<li>If the set has one value or more we will return the longest value</li>
+<li><code>return max(response_set, key=len)</code></li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>    <span class="k">if</span> <span class="ow">not</span> <span class="n">response_set</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;I am sorry, I don&#39;t have an answer. Ask again please!&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">response_set</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</p>
+<p>Although returning the <strong>longest</strong> value seems arbitrary, in our case it works, most correct answers will be the longest, but there is room for error. In our case some arbitrary errors are desirable as we need to increase the emotional index of the users.</p>
+<h3>The escalation() function</h3>
+<p>This function takes an argument <code>user_input</code> in the form of a string and calls <code>sentiment()</code> to monitor the user sentiment index. If the emotional index, set by <code>sentiment()</code> and taken from <code>neg_distribution</code>, increases above a set threshold and is sustained, an automatic response/action is triggered. The function also sends <code>user_input</code> to <code>simplebot()</code> to generate a chatbot response.</p>
+<p><img alt="escalation() function flow chart" src="/src/assets/blogs/-LyCcXyMF5oXjVM8UjFfoGpzt4jGslRS7eL78OO7abfJRDEiFuwSK42Athm0VXIk159DBnDsrntzbD.png" /></p>
+<ul>
+<li><code>live_rep</code> represents the trigger action taken if the emotional conditions are met for escalation.</li>
+<li>We pass the <code>user_input</code> to <code>sentiment()</code>, to analyse the negative sentiment of the sentence.</li>
+<li>We calculate the length of <code>neg_distribution</code> by using the <code>len()</code> function and assign it to <code>list_len</code></li>
+<li>We send the input_string to <code>simplebot()</code> to get a response</li>
+<li>Create a condition, if the <code>list_len</code> is greater than <code>3</code></li>
+<li>Take the last three items in the list<ul>
+<li>If the first item of the last three is greater than .40 and greater or equal to the next two items take action by triggering <code>live_rep</code></li>
+</ul>
+</li>
+<li>If not, <code>return bot_response</code></li>
+<li>If none of the conditions above are met, <code>return bot_response</code></li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">escalation</span><span class="p">(</span><span class="n">user_input</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Takes an argument, user_input, in form of a string ...&quot;&quot;&quot;</span>
+
+    <span class="n">live_rep</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;We apologize </span><span class="si">{</span><span class="n">BOT_NAME</span><span class="si">}</span><span class="s2"> is unable to assist you, we are getting a live representative for you, please stay with us ...&quot;</span>
+
+    <span class="n">sentiment</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span>
+    <span class="n">list_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">neg_distribution</span><span class="p">)</span>
+    <span class="n">bot_response</span> <span class="o">=</span> <span class="n">simplebot</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">list_len</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">last_3</span> <span class="o">=</span> <span class="n">neg_distribution</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">last_3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">.40</span> <span class="ow">and</span> <span class="n">last_3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">last_3</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">last_3</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">live_rep</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bot_response</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">bot_response</span>
+</pre></div>
+
+</div>
+</p>
+<h4>Stand-alone testing</h4>
+<p>In order to test our script, write a stand-alone test block that runs the chatbot as follows:</p>
+<ul>
+<li><code>while True</code> we are going to <code>try</code> to run our program.</li>
+<li>In case of an <code>except</code> we end the program.</li>
+</ul>
+<p>Here we can test our application as we write it and before transforming it into a web service with Flask.</p>
+<p>By printing <code>neg_distribution</code> we are able to see the negative index on every response and see the application trigger on the last three values of the list. In our final WhatsApp application we won't display the emotional values.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;You: &#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">escalation</span><span class="p">(</span><span class="n">user_input</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">neg_distribution</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyboardInterrupt</span><span class="p">,</span> <span class="ne">EOFError</span><span class="p">,</span> <span class="ne">SystemExit</span><span class="p">):</span>
+            <span class="k">break</span>
+</pre></div>
+
+</div>
+</p>
+<p>When we run <code>simplebot.py</code> in your interactive prompt, we should see a prompt waiting for our input. This is an example of an actual interaction with <code>simplebot.py</code></p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>You:<span class="w"> </span><span class="k">do</span><span class="w"> </span>you<span class="w"> </span>have<span class="w"> </span>information<span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span>whatsapp<span class="w"> </span>api
+Ok<span class="w"> </span>sure,<span class="w"> </span>library<span class="w"> </span>making<span class="w"> </span>it<span class="w"> </span>easy<span class="w"> </span>to<span class="w"> </span>generate<span class="w"> </span>automated<span class="w"> </span>responses<span class="w"> </span>to<span class="w"> </span>a<span class="w"> </span>user<span class="s1">&#39;s input. For more information please visit https://chatterbot.readthedocs.io/en/stable/</span>
+<span class="s1">[0.0]</span>
+<span class="s1">You: Can you show me a tutorial</span>
+<span class="s1">I am sorry, I don&#39;</span>t<span class="w"> </span>have<span class="w"> </span>an<span class="w"> </span>answer,<span class="w"> </span>ask<span class="w"> </span>again
+<span class="o">[</span><span class="m">0</span>.0,<span class="w"> </span><span class="m">0</span>.6<span class="o">]</span>
+You:<span class="w"> </span><span class="k">do</span><span class="w"> </span>you<span class="w"> </span>have<span class="w"> </span>any<span class="w"> </span>tutorials
+Sure,<span class="w"> </span>here<span class="w"> </span>is<span class="w"> </span>the<span class="w"> </span>tutorials<span class="w"> </span>link:<span class="w"> </span>https://www.twilio.com/docs/sms/whatsapp/tutorial/send-and-receive-media-messages-twilio-api-whatsapp
+<span class="o">[</span><span class="m">0</span>.0,<span class="w"> </span><span class="m">0</span>.6,<span class="w"> </span><span class="m">0</span>.33<span class="o">]</span>
+You:<span class="w"> </span>thank<span class="w"> </span>you
+I<span class="w"> </span>am<span class="w"> </span>sorry,<span class="w"> </span>I<span class="w"> </span>don<span class="s1">&#39;t have an answer, ask again</span>
+<span class="s1">[0.0, 0.6, 0.33, 0.23]</span>
+<span class="s1">You: this is not good</span>
+<span class="s1">I am sorry you feel that way, please ask the question again</span>
+<span class="s1">[0.0, 0.6, 0.33, 0.23, 0.99]</span>
+<span class="s1">You: no thanks</span>
+<span class="s1">I am sorry, I don&#39;</span>t<span class="w"> </span>have<span class="w"> </span>an<span class="w"> </span>answer,<span class="w"> </span>ask<span class="w"> </span>again
+<span class="o">[</span><span class="m">0</span>.0,<span class="w"> </span><span class="m">0</span>.6,<span class="w"> </span><span class="m">0</span>.33,<span class="w"> </span><span class="m">0</span>.23,<span class="w"> </span><span class="m">0</span>.99,<span class="w"> </span><span class="m">0</span>.18<span class="o">]</span>
+You:<span class="w"> </span>no
+I<span class="w"> </span>am<span class="w"> </span>sorry,<span class="w"> </span>I<span class="w"> </span>don<span class="err">&#39;</span>t<span class="w"> </span>have<span class="w"> </span>an<span class="w"> </span>answer,<span class="w"> </span>ask<span class="w"> </span>again
+<span class="o">[</span><span class="m">0</span>.0,<span class="w"> </span><span class="m">0</span>.6,<span class="w"> </span><span class="m">0</span>.33,<span class="w"> </span><span class="m">0</span>.23,<span class="w"> </span><span class="m">0</span>.99,<span class="w"> </span><span class="m">0</span>.18,<span class="w"> </span><span class="m">0</span>.56<span class="o">]</span>
+You:<span class="w"> </span>get<span class="w"> </span>me<span class="w"> </span>a<span class="w"> </span>live<span class="w"> </span>rep
+I<span class="w"> </span>am<span class="w"> </span>sorry<span class="w"> </span>you<span class="w"> </span>feel<span class="w"> </span>that<span class="w"> </span>way,<span class="w"> </span>please<span class="w"> </span>ask<span class="w"> </span>the<span class="w"> </span>question<span class="w"> </span>again
+<span class="o">[</span><span class="m">0</span>.0,<span class="w"> </span><span class="m">0</span>.6,<span class="w"> </span><span class="m">0</span>.33,<span class="w"> </span><span class="m">0</span>.23,<span class="w"> </span><span class="m">0</span>.99,<span class="w"> </span><span class="m">0</span>.18,<span class="w"> </span><span class="m">0</span>.56,<span class="w"> </span><span class="m">1</span>.0<span class="o">]</span>
+You:<span class="w"> </span>no
+We<span class="w"> </span>apologize<span class="w"> </span>Twily<span class="w"> </span>is<span class="w"> </span>unable<span class="w"> </span>to<span class="w"> </span>assist<span class="w"> </span>you,<span class="w"> </span>we<span class="w"> </span>are<span class="w"> </span>getting<span class="w"> </span>a<span class="w"> </span>live<span class="w"> </span>representative<span class="w"> </span><span class="k">for</span><span class="w"> </span>you,<span class="w"> </span>please<span class="w"> </span>stay<span class="w"> </span>with<span class="w"> </span>us<span class="w"> </span>...
+<span class="o">[</span><span class="m">0</span>.0,<span class="w"> </span><span class="m">0</span>.6,<span class="w"> </span><span class="m">0</span>.33,<span class="w"> </span><span class="m">0</span>.23,<span class="w"> </span><span class="m">0</span>.99,<span class="w"> </span><span class="m">0</span>.18,<span class="w"> </span><span class="m">0</span>.56,<span class="w"> </span><span class="m">1</span>.0,<span class="w"> </span><span class="m">0</span>.56<span class="o">]</span>
+You:
+</pre></div>
+
+</div>
+</p>
+<p>Our application is now working as intended. We can tweak it by modifying the values in our conditions as well as generating a more granular conversation corpus file.</p>
+<h3>Creating a Flask Application</h3>
+<p>Let's now create the <a href="https://palletsprojects.com/p/flask/">Flask</a> server, which will ultimately call our chat sentiment analysis application and be a liaison between <a href="https://www.twilio.com/console/sms/whatsapp/sandbox">Twilio Sandbox for WhatsApp</a> and our bot application.</p>
+<p>In our project folder, begin by creating a file called <code>app.py</code>. We will host our Flask app in this file, where we will perform the following tasks:</p>
+<ul>
+<li>Import the flask library.</li>
+<li>Instantiate the app.</li>
+<li>Enable <code>DEBUG</code> mode.</li>
+<li>Write placeholders for the routes that we will use.</li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;&lt;h2&gt;Hello world&lt;/h2&gt; Welcome to twily!&quot;</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/get&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_bot_response</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/test&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bot_response</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</p>
+<h3>Simplebot as a web service</h3>
+<p>Integrating our <code>simplebot.py</code> module with Flask and testing it is relatively easy. If we open the <code>app.py</code> file we created above we can import our module and <code>escalation()</code> function.</p>
+<p>In the <code>app.py</code> file, we can import our simplebot as <code>sb</code>. We can do the import right below the Flask import:</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">simplebot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sb</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+
+</div>
+</p>
+<p>Let's update the <code>("/test")</code> route, as this will allow us to test the bot through our browser by getting the <code>user_input</code> and integrating the escalation function as well as importing the <code>neg_distribution</code> list.</p>
+<ul>
+<li>We will request the user input through <code>request</code> and use the <code>.lower()</code> method to turn the input string to all lowercase.</li>
+<li>Inside an <code>f</code> string, we can call the <code>sb.escalation()</code> function in order to get our response and update <code>neg_distribution</code></li>
+</ul>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/test&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bot_response</span><span class="p">():</span>
+    <span class="n">user_input</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;msg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;h2&gt;</span><span class="si">{</span><span class="n">sb</span><span class="o">.</span><span class="n">escalation</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/h2&gt; </span><span class="si">{</span><span class="n">sb</span><span class="o">.</span><span class="n">neg_distribution</span><span class="si">}</span><span class="s1">&#39;</span>
+</pre></div>
+
+</div>
+</p>
+<ul>
+<li>To test the app through flask in your interactive console type</li>
+<li><code>python app.py</code></li>
+<li>In your browser, enter a question as a query string argument to the <code>/test</code> URL exposed by the Flask server.</li>
+<li><code>http://localhost:5000/test?msg=”get me some Twilio SDK”</code></li>
+</ul>
+<p><img alt="web browser chat demo" src="/src/assets/blogs/p63-KqGtQfN9p17Pdg-ctYlgm5bSL0lgnmSLwSitUMQ3NiDehJ54-eMFc69bDuDIFA-qHT95-88AAK.png" /></p>
+<p>As we can see above, we call our test route, followed by a question mark, then the appropriate parameter, msg=“<your question here>”. Simplebot is working with Flask as intended!</p>
+<h3>Running the chatbot with ngrok</h3>
+<p>We have our flask app up and running. We can make sure it also responds through ngrok.</p>
+<h4>Expose a local web server to the internet</h4>
+<p>ngrok allows you to expose a web server running on your local machine to the internet. Just tell ngrok what port your web server is listening on.</p>
+<p>If you don't know what port your web server is listening on, it's probably port 80, the default for HTTP.</p>
+<p>Launch <code>ngrok</code>, make sure Flask’s and <code>ngrok</code> ports <strong>match</strong>.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>ngrok<span class="w"> </span>http<span class="w"> </span><span class="m">5000</span>
+</pre></div>
+
+</div>
+</p>
+<p>When you start ngrok, it will display the public URL of your tunnel in your terminal, along with other status and metrics information about connections received.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>ngrok<span class="w"> </span>by<span class="w"> </span>@inconshreveable
+
+Tunnel<span class="w"> </span>Status<span class="w">                 </span>online
+Version<span class="w">                       </span><span class="m">2</span>.0/2.0
+Web<span class="w"> </span>Interface<span class="w">                 </span>http://127.0.0.1:4040
+Forwarding<span class="w">                    </span>http://92832de0.ngrok.io<span class="w"> </span>-&gt;<span class="w"> </span>localhost:5000
+Forwarding<span class="w">                    </span>https://92832de0.ngrok.io<span class="w"> </span>-&gt;<span class="w"> </span>localhost:5000
+
+Connnections<span class="w">                  </span>ttl<span class="w">     </span>opn<span class="w">     </span>rt1<span class="w">     </span>rt5<span class="w">     </span>p50<span class="w">     </span>p90
+<span class="w">                              </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">0</span>.00<span class="w">    </span><span class="m">0</span>.00<span class="w">    </span><span class="m">0</span>.00<span class="w">    </span><span class="m">0</span>.00
+</pre></div>
+
+</div>
+</p>
+<p>Now that we are running ngrok and our Flask app, we can test by accessing the http forwarding domain with another device, you could use a smartphone for this test.</p>
+<p>Enter the forwarding URL followed by <code>/test</code> in a web browser, either in your computer or your smartphone. Note your forwarding URL will have a different subdomain every time you run ngrok. Example:</p>
+<ul>
+<li><a href="https://92832de0.ngrok.io/test?msg=“">https://92832de0.ngrok.io/test?msg=“</a><your question here>’</li>
+</ul>
+<p>If all is working well, your testing device should return an answer to your question.</p>
+<h3>Configure the Twilio WhatsApp Sandbox</h3>
+<p>Twilio provides a <a href="https://www.twilio.com/console/sms/whatsapp/learn">WhatsApp sandbox</a> where you can easily develop and test your application. Once your application is complete you can request <a href="https://www.twilio.com/whatsapp/request-access">production access for your Twilio phone number</a>, which requires approval by WhatsApp.</p>
+<p>Let’s connect your smartphone to the sandbox. From your <a href="https://www.twilio.com/console">Twilio Console</a>, select <a href="https://www.twilio.com/console/sms/dashboard">Programmable SMS</a> and then click on <a href="https://www.twilio.com/console/sms/whatsapp/learn">WhatsApp</a>. The WhatsApp sandbox page will show you the sandbox number assigned to your account, and a join code.</p>
+<p>To enable the WhatsApp sandbox for your smartphone send a WhatsApp message with the given code to the number assigned to your account. The code is going to begin with the word join, followed by a randomly generated two-word phrase. Shortly after you send the message you should receive a reply from Twilio indicating that your mobile number is connected to the sandbox and can start sending and receiving messages.</p>
+<p><img alt="whatsapp sandbox configuration" src="/src/assets/blogs/EYQ5l_M-8nJ3GyZMjhYSiAF3T8v4izxE2cON-9B3dmZKpC9hB-89jfqSgR0Dh0O5jM7VS5wyOG-ifk.png" /></p>
+<p>Note that this step needs to be repeated for any additional phones you’d like to have connected to your sandbox.</p>
+<h2>Using the WhatsApp app</h2>
+<p>Before we can use our app from WhatsApp we need to format the text response as required by Twilio. We will leave the <code>/test</code> route as is for testing and add the WhatsApp formatting on the <code>/get</code> route.</p>
+<h3>Twilio route ("/get")</h3>
+<p>The input message from the user comes in the payload of the <code>POST</code> request with a key of <code>’Body’</code>. It can be accessed through Flask’s <code>request</code> object.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">simplebot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">twilio.twiml.messaging_response</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessagingResponse</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;&lt;h2&gt;Hello world&lt;/h2&gt; Welcome to twily!&quot;</span>
+
+<span class="c1"># --------------- Twilio route --------------------------</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/get&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_bot_response</span><span class="p">():</span>
+        <span class="n">user_input</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="n">resp</span> <span class="o">=</span> <span class="n">MessagingResponse</span><span class="p">()</span>
+<span class="n">msg</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">message</span><span class="p">()</span>
+            <span class="n">twily_response</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">escalation</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">body</span><span class="p">(</span><span class="n">twily_response</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/test&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bot_response</span><span class="p">():</span>
+        <span class="n">user_input</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;msg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">return</span>  <span class="sa">f</span><span class="s1">&#39;&lt;h2&gt;</span><span class="si">{</span><span class="n">sb</span><span class="o">.</span><span class="n">escalation</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/h2&gt; </span><span class="si">{</span><span class="n">sb</span><span class="o">.</span><span class="n">neg_distribution</span><span class="si">}</span><span class="s1">&#39;</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</p>
+<h2>Testing the Twily chatbot from WhatsApp</h2>
+<p>We have configured all the necessary elements in order to test our first chat with Twily. To recap let's make sure the following are working and completed.</p>
+<ul>
+<li>Our script has been tested outside of Flask.</li>
+<li>Our script is working with Flask with the test route.</li>
+<li>ngrok is working with Flask</li>
+</ul>
+<p>Run the Flask <code>app.py</code> file to start twily bot again.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="nb">python</span><span class="w"> </span>app.py
+*<span class="w"> </span>Serving<span class="w"> </span>Flask<span class="w"> </span>app<span class="w"> </span><span class="s2">&quot;app&quot;</span><span class="w"> </span><span class="o">(</span>lazy<span class="w"> </span>loading<span class="o">)</span>
+<span class="w"> </span>*<span class="w"> </span>Environment:<span class="w"> </span>production
+<span class="w">   </span>WARNING:<span class="w"> </span>This<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>development<span class="w"> </span>server.<span class="w"> </span>Do<span class="w"> </span>not<span class="w"> </span>use<span class="w"> </span>it<span class="w"> </span><span class="k">in</span><span class="w"> </span>a<span class="w"> </span>production<span class="w"> </span>deployment.
+<span class="w">   </span>Use<span class="w"> </span>a<span class="w"> </span>production<span class="w"> </span>WSGI<span class="w"> </span>server<span class="w"> </span>instead.
+<span class="w"> </span>*<span class="w"> </span>Debug<span class="w"> </span>mode:<span class="w"> </span>off
+<span class="w"> </span>*<span class="w"> </span>Running<span class="w"> </span>on<span class="w"> </span>http://127.0.0.1:5000/<span class="w"> </span><span class="o">(</span>Press<span class="w"> </span>CTRL+C<span class="w"> </span>to<span class="w"> </span>quit<span class="o">)</span>
+</pre></div>
+
+</div>
+</p>
+<p>If ngrok isn’t still running, start it again.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">bash</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>ngrok<span class="w"> </span>http<span class="w"> </span><span class="m">5000</span>
+</pre></div>
+
+</div>
+</p>
+<p>Now the Twilio endpoint needs to be updated with the ngrok URL.</p>
+<ul>
+<li>Go to the <a href="https://www.twilio.com/console">Twilio Console</a></li>
+<li>Click on <a href="https://www.twilio.com/console/sms/dashboard">Programmable SMS</a></li>
+<li>Then on <a href="https://www.twilio.com/console/sms/whatsapp/learn">WhatsApp</a></li>
+<li>Finally <a href="https://www.twilio.com/console/sms/whatsapp/sandbox">Sandbox</a></li>
+</ul>
+<p>Once in the appropriate menu, paste the https:// URL from ngrok into the “When a message comes in” field. Remember to add the Flask route, in this case <code>/get</code></p>
+<ul>
+<li><code>https://&lt;subdomain&gt;.ngrok.io/get</code></li>
+<li>Make sure the request method is set to <code>HTTP Post</code></li>
+<li>Click the <strong>Save</strong> button</li>
+</ul>
+<p><img alt="WhatsApp sandbox configuration" src="/src/assets/blogs/7sBN1ie5_SWvLAQKte-ssesH78DgeVoxCekDTx7Znkp_bGYYLnmkTO8ODQmOo0SBL7DX7a0KdkaC2w.png" /></p>
+<p>We are all set to start using Twily, the Twilio chatbot for sentiment analysis from WhatsApp. Start sending messages using the phone you connected to the sandbox.</p>
+<p>This chat bot has been trained to answer some very basic Twilio API questions as well as detect any negative user input and take appropriate action based on set rules.</p>
+<h2>Conclusion</h2>
+<p>Although this is a relatively simple application showing the potential of sentiment analysis, there is still a lot to learn from human emotions as a communication layer.</p>
+<p>As we become more and more dependent on software automation, it is important to monitor the emotional variances from the users responses to try to improve service and perhaps develop artificial empathy. Digital response systems can be designed to detect human emotions and respond with follow up questions and emotional consideration.</p>
+<p>Although simplebot is able to show the basic theory, it would require a more sophisticated robot, able to carry a conversation thread and branching to further engage the user. This level of interaction would encourage the user to become more emotionally vested in the exchange thus allowing for better emotional monitoring and empathetic response.</p>
+<h2>Things to try</h2>
+<ul>
+<li>Try to expand and improve the conversation.</li>
+<li>Refine the classifier.</li>
+<li>Implement the built-in TextBlob translator in order to detect and translate into English.</li>
+<li>Expand the level of granularity in the train corpus with more detailed answers without generating false positives.</li>
+<li>Future enhancement: SimpleBot would benefit greatly from being integrated with user sessions, allowing for multiple and more complex conversations between users and the bot.</li>
+</ul>
+<p>This project is available for download from <a href="https://github.com/KikeVen/simplebot">GitHub</a></p>
+<p><em>Enrique Bruzual is a software developer, active Python community member and technical writer.</em> <em>Please feel free to contact him through the links below.</em></p>
+<ul>
+<li>Github: <a href="https://github.com/kikeven">https://github.com/kikeven</a></li>
+</ul>
+
+        
+        <div class="mt-16 pt-8 border-t border-white/5">
+            <a class="text-gray-400 hover:text-gray-100 transition-colors text-sm flex items-center gap-2 no-underline"
+                href="https://www.twilio.com/en-us/blog/archive/2020/build-whatsapp-bot-sentiment-analysis-python-twilio" target="_blank" rel="noopener noreferrer">
+                Also published on Substack
+                <span class="material-symbols-outlined text-xs">north_east</span>
+            </a>
+        </div>
+        
+    </article>
+
+    <!-- Author Bio Card: fixed bio section for Enrique Bruzual with title,
+     description, Substack and GitHub follow links. Only rendered when
+     visibility is not ai_only (hidden from machine-only content). -->
+    
+    <section class="mt-20 p-8 bg-[#323339] border-l-4 border-primary">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="font-display text-2xl font-bold text-gray-100">Enrique Bruzual</h3>
+                <p class="text-primary text-sm font-medium tracking-wide uppercase">Strategic AI Architect</p>
+            </div>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+            Enrique is a Lead AI Solutions Architect specializing in scalable AI systems and distributed
+            orchestration. With over 30 years in the industry, he focuses on bridging the gap between complex
+            data infrastructure and elegant, production-grade solutions.
+        </p>
+        <div class="flex gap-6">
+            <a class="text-xs font-bold uppercase tracking-widest text-gray-100 hover:text-primary underline decoration-primary underline-offset-8"
+                href="https://substack.com/@enriquebruzual" target="_blank" rel="noopener noreferrer">Follow on
+                Substack</a>
+            <a class="text-xs font-bold uppercase tracking-widest text-gray-100 hover:text-primary underline decoration-primary underline-offset-8"
+                href="https://github.com/KikeVen" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+        </div>
+    </section>
+    
+</div>
+
+<!-- Copy Code: vanilla JS clipboard integration targeting .copy-code-btn
+     within .my-10 code containers. Copies the innerText of the adjacent
+     .codehilite pre block; provides 2-second check icon visual feedback
+     using Material Symbols swap and Tailwind color transitions. -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const copyButtons = document.querySelectorAll('.copy-code-btn');
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Find the closest parent container and then the associated pre tag
+                const container = btn.closest('.my-10');
+                if (container) {
+                    const codeBlock = container.querySelector('.codehilite pre');
+                    if (codeBlock) {
+                        navigator.clipboard.writeText(codeBlock.innerText);
+                        const icon = btn.querySelector('.material-icons');
+                        const originalIcon = icon.innerText;
+
+                        // Visual feedback
+                        icon.innerText = 'check';
+                        btn.classList.remove('text-gray-500');
+                        btn.classList.add('text-primary'); // match the brand
+
+                        setTimeout(() => {
+                            icon.innerText = originalIcon;
+                            btn.classList.add('text-gray-500');
+                            btn.classList.remove('text-primary');
+                        }, 2000);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+    </main>
+
+    <!-- Footer: 4-column Tailwind grid with brand tagline, site navigation,
+         social links (Substack, GitHub, Facebook) via Material Icons, and
+         ElevenLabs convai widget embed with contact-link trigger logic. -->
+    <footer class="bg-[#1a1b1e] text-white pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 border-b border-gray-800 pb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <h2 class="font-display text-5xl mb-6">Let's build something <br /><span
+                            class="text-primary italic">extraordinary.</span></h2>
+                    <p class="text-gray-400 max-w-md mb-8">
+                        Available for select freelance opportunities and consulting roles. Let's discuss your
+                        architectural challenges. Start a Technical Briefing with my AI
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Navigation</h4>
+                    <ul class="space-y-4">
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/">Home</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About
+                                Me</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
+                                href="/#services">Services</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
+                                href="/#work">Projects</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Social</h4>
+                    <ul class="space-y-4">
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://substack.com/@enriquebruzual" rel="noopener noreferrer"
+                                target="_blank"><span class="material-icons text-xs mr-2">link</span> Substack</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://github.com/KikeVen" rel="noopener noreferrer" target="_blank"><span
+                                    class="material-icons text-xs mr-2">code</span> GitHub</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://www.facebook.com/ZerikaiConsulting/" rel="noopener noreferrer"
+                                target="_blank"><span class="material-icons text-xs mr-2">thumb_up</span> Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
+                <p>© 2026 Enrique Bruzual. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a class="hover:text-gray-400 transition-colors" href="#">Privacy Policy</a>
+                    <a class="hover:text-gray-400 transition-colors" href="#">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ElevenLabs Agent (Inherited) -->
+    <elevenlabs-convai id="enrique-agent" agent-id="agent_0101kjr8jk36fpatbexzk50k5m6c"
+        variant="tiny"></elevenlabs-convai>
+    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close menu when clicking a link
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // AI Widget Integration Trigger
+            const agent = document.querySelector('elevenlabs-convai');
+            const contactLinks = document.querySelectorAll('#contact-link, #mobile-contact-link');
+
+            contactLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (!agent) return;
+
+                    agent.setAttribute('override-first-message', "I can assist you with reaching Enrique. You can email him at zerikai.dev@gmail.com, or I can take a message and your preferred contact time right here.");
+
+                    const openWidget = () => {
+                        const shadow = agent.shadowRoot;
+                        if (!shadow) return;
+                        const btn = shadow.querySelector('button[aria-label="Ask anything"]') ||
+                                    shadow.querySelector('button[aria-label="Open widget"]') ||
+                                    shadow.querySelector('button[aria-label="Open chat"]') ||
+                                    shadow.querySelector('button:first-of-type');
+                        if (btn) btn.click();
+                    };
+
+                    setTimeout(openWidget, 80);
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S1Y40WEYM3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-S1Y40WEYM3');
+    </script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <!-- Dynamic Title -->
+    <title>Technical Insights | Enrique Bruzual</title>
+
+    <!-- Meta Description & SEO -->
+    <meta name="description" content="A collection of deep dives into AI architecture, Python engineering, and the future of hypermedia.">
+    
+    <link rel="canonical" href="https://enriquebruzual.github.io/blog/">
+    <meta property="og:url" content="https://enriquebruzual.github.io/blog/">
+    
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:title" content="Technical Insights">
+    <meta property="og:description" content="A collection of deep dives into AI architecture, Python engineering, and the future of hypermedia.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png">
+    <meta name="twitter:image" content="https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Technical Insights">
+    <meta name="twitter:description" content="A collection of deep dives into AI architecture, Python engineering, and the future of hypermedia.">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/src/assets/images/favicon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/src/assets/images/favicon-512.png" />
+    <link rel="apple-touch-icon" href="/src/assets/images/favicon-192.png" />
+
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Fonts & Tailwind -->
+    <link rel="stylesheet" href="/src/css/tailwind.css" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2A2B30;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        html.dark {
+            background-color: #2A2B30;
+        }
+    </style>
+    
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Technical Insights | Enrique Bruzual",
+  "description": "A collection of deep dives into AI architecture, Python engineering, and the future of hypermedia.",
+  "url": "https://enriquebruzual.github.io/blog/"
+}
+</script>
+
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-body antialiased selection:bg-primary/30">
+
+    <script>
+        // Force dark mode to match the portfolio aesthetic 
+        document.documentElement.classList.add('dark');
+    </script>
+
+    <!-- Navigation: dark-mode fixed navbar with Tailwind backdrop-blur,
+         responsive mobile menu toggle (vanilla JS), Enrique Bruzual brand
+         link, and ElevenLabs convai contact trigger via shadow DOM. -->
+    <nav
+        class="fixed w-full z-50 bg-white/90 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="/" class="hover:opacity-80 transition-opacity">
+                        <span class="text-2xl font-serif font-bold tracking-tighter text-primary">E/B</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-12">
+                    <a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                        href="/">Home</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest text-primary"
+                        href="/blog/">Blog</a>
+                    <a class="px-6 py-2 border border-primary text-primary text-sm font-medium hover:bg-primary hover:text-white transition-all uppercase tracking-widest"
+                        href="#" id="contact-link">Contact</a>
+                </div>
+                <!-- Mobile button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-500 hover:text-primary focus:outline-none">
+                        <span class="material-icons">menu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu"
+            class="md:hidden hidden bg-background-light dark:bg-background-dark border-b border-gray-200 dark:border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
+                <a class="block px-3 py-2 text-base font-medium hover:text-primary transition-colors uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                    href="/">Home</a>
+                <a class="block px-3 py-2 text-base font-medium hover:text-primary transition-colors uppercase tracking-widest text-primary"
+                    href="/blog/">Blog</a>
+                <a class="block px-3 py-2 mt-4 border border-primary text-primary text-base font-medium hover:bg-primary hover:text-white transition-all uppercase tracking-widest w-1/2 text-center"
+                    href="#" id="mobile-contact-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
+        
+<!-- Header: page title and description block styled per Stitch design
+     system. Renders the #WRITING label, H1, and lead paragraph using
+     Playfair Display and Inter fonts via Tailwind typography utilities. -->
+<header class="mb-20 max-w-4xl">
+    <p class="text-primary text-xs font-bold tracking-[0.3em] uppercase mb-6"># WRITING</p>
+    <h1 class="font-display text-5xl md:text-7xl font-bold mb-8 leading-[1.1]">Technical Insights<span
+            class="text-primary">.</span></h1>
+    <p class="text-gray-400 text-lg md:text-xl leading-relaxed font-light">
+        A collection of deep dives into AI architecture, Python engineering, and the future of hypermedia. Enrique
+        shares over 30 years of technical wisdom, bridging the gap between editorial intent and production-grade logic.
+    </p>
+</header>
+
+<!-- Category Filters: client-side vanilla JS filter bar rendering one
+     button per unique category from Jinja2 context. Toggles Tailwind
+     bg-primary/text-white active state; hides non-matching blog cards. -->
+<div class="flex flex-wrap gap-4 mb-16" id="category-filters">
+    <button
+        class="px-8 py-3 bg-primary text-white text-xs uppercase tracking-widest font-bold border border-primary filter-btn active"
+        data-filter="all">All</button>
+    
+    <button
+        class="px-8 py-3 border border-primary/30 text-gray-400 hover:border-primary hover:text-white text-xs uppercase tracking-widest font-bold transition-colors filter-btn"
+        data-filter="Architecture/Programming">Architecture/Programming</button>
+    
+    <button
+        class="px-8 py-3 border border-primary/30 text-gray-400 hover:border-primary hover:text-white text-xs uppercase tracking-widest font-bold transition-colors filter-btn"
+        data-filter="Business: AI Solutions">Business: AI Solutions</button>
+    
+    <button
+        class="px-8 py-3 border border-primary/30 text-gray-400 hover:border-primary hover:text-white text-xs uppercase tracking-widest font-bold transition-colors filter-btn"
+        data-filter="Marketing:AIO">Marketing:AIO</button>
+    
+    <button
+        class="px-8 py-3 border border-primary/30 text-gray-400 hover:border-primary hover:text-white text-xs uppercase tracking-widest font-bold transition-colors filter-btn"
+        data-filter="Security & Strategy">Security & Strategy</button>
+    
+    <button
+        class="px-8 py-3 border border-primary/30 text-gray-400 hover:border-primary hover:text-white text-xs uppercase tracking-widest font-bold transition-colors filter-btn"
+        data-filter="Services: AI Orchestration">Services: AI Orchestration</button>
+    
+    <button
+        class="px-8 py-3 border border-primary/30 text-gray-400 hover:border-primary hover:text-white text-xs uppercase tracking-widest font-bold transition-colors filter-btn"
+        data-filter="Services: Free AI Readiness Scan">Services: Free AI Readiness Scan</button>
+    
+    <button
+        class="px-8 py-3 border border-primary/30 text-gray-400 hover:border-primary hover:text-white text-xs uppercase tracking-widest font-bold transition-colors filter-btn"
+        data-filter="Strategy: AI">Strategy: AI</button>
+    
+    <button
+        class="px-8 py-3 border border-primary/30 text-gray-400 hover:border-primary hover:text-white text-xs uppercase tracking-widest font-bold transition-colors filter-btn"
+        data-filter="Tutorial: Python">Tutorial: Python</button>
+    
+    <button
+        class="px-8 py-3 border border-primary/30 text-gray-400 hover:border-primary hover:text-white text-xs uppercase tracking-widest font-bold transition-colors filter-btn"
+        data-filter="Tutorial: Webhooks">Tutorial: Webhooks</button>
+    
+</div>
+
+<!-- Blog Grid: 2-column responsive grid of post cards rendered by Jinja2
+     loop. Each card links to /blog/{slug}.html with category, date, title,
+     subtitle, and a hover-animated arrow. Filters exclude ai_only posts. -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12" id="blog-grid">
+    <!-- Jinja starts looping posts here -->
+    
+    
+    <a href="/blog/Post-Mortem_Building_Local_MCP_Server_Codebase_Memory_using_Ollama_and_ChromaDB.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Architecture/Programming</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Jul 15, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    Post-Mortem: Building a Local MCP Server for Codebase Memory using Ollama and ChromaDB</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">Benchmarking Mistral:7b vs Ornith:9b for privacy-first, on-device codebase memory.</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    <a href="/blog/reduce-ai-ide-token-costs-with-zerikai-memory.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Architecture/Programming</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Jun 14, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    Your IDE is bleeding money and context. Here's how to stop it</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">Zerikai Memory is a deterministic memory layer for developers, an Open Source Answer</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    <a href="/blog/ChatGPT_is_recommending_your_competitors_Not_you.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Services: Free AI Readiness Scan</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Apr 20, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    ChatGPT is recommending your competitors. Not you</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">Find out if AI knows your business exists. Free scan. 30 seconds.</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    <a href="/blog/SEO_is_not_enough_in_2026_Make_sure_AI_can_recommend_your_business.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Marketing:AIO</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Apr 18, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    SEO is not enough in 2026: Make sure AI can recommend your business</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">Make your website easy for AI search to understand so you get recommended, not replaced.</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    <a href="/blog/Never_Miss_an_Emergency_Call_The_AI_Scaling_Guide_for_Modern_Contractors.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Business: AI Solutions</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Apr 11, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    Never Miss an Emergency Call: The AI Scaling Guide for Modern Contractors</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">How modern service firms are cutting overhead by 90% and securing 24/7 lead capture through AI voice triage.</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    <a href="/blog/Build_a_Free_ElevenLabs_Post-Call_Webhook_in_Python.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Tutorial: Webhooks</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Mar 9, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    How to Build a Free ElevenLabs Post-Call Webhook in Python</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">Voice AI agents are changing how we interact with applications. But what happens after the conversation ends?</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    <a href="/blog/Bilingual_AI_Dispatching.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Services: AI Orchestration</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Mar 08, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    Bilingual AI Dispatching: The Future of Miami Home Services</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">High-fidelity voice and messaging orchestration for HVAC, Plumbing, and Solar.</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    
+    
+    <a href="/blog/The_SMB_Guide_to_Safe_AI.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Security & Strategy</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Mar 08, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    The SMB Guide to Safe AI: Why Privacy is Your New Competitive Advantage</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">Moving beyond AI hype to secure, production-grade business orchestration.</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    <a href="/blog/2026-seo-geo-framework.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Strategy: AI</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Mar 07, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    The 2026 Search Pivot: Consolidating Traditional SEO and GEO</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">How Principal Architects are building for human readers and LLM crawlers simultaneously.</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    <a href="/blog/smb-lead-gen-ai.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Business: AI Solutions</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Mar 07, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    Stop Wasting Ad Spend: How AI Extracts High-Intent Leads from the Noise</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">A practical guide for SMBs to find customers exactly when they are ready to buy.</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    <a href="/blog/python_to_newsapi-org.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Tutorial: Python</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Feb 27, 2026</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    Connecting Python to NewsAPI.org: Core Concepts for Beginners</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">One of the greatest reasons we write Python code is to solve problems and gather information efficiently.</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+    
+    <a href="/blog/twilio_whatsapp.html" class="block group h-full">
+        <article
+            class="h-full bg-white dark:bg-card-dark border border-gray-200 dark:border-transparent dark:border-l-2 dark:border-l-primary p-10 flex flex-col justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-[#3a3b42] transition-colors relative">
+            <div>
+                <div class="flex items-center gap-3 text-[10px] uppercase tracking-widest text-primary font-bold mb-6">
+                    <span class="category-label">Tutorial: Python</span>
+                    <span class="w-1 h-1 bg-primary/30 rounded-full"></span>
+                    <span class="text-gray-500">Feb 28, 2020</span>
+                </div>
+                <h2
+                    class="font-display text-3xl font-bold mb-6 leading-tight group-hover:text-primary transition-colors text-gray-900 dark:text-gray-100">
+                    Build a WhatsApp Bot with Sentiment Analysis using Python and Twilio</h2>
+                <p class="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-10">As chatbots become more popular in the marketplace assisting companies to manage customer interaction, it is important to provide a high-level customer experience.</p>
+            </div>
+            <div class="flex items-center gap-2 text-primary text-xs uppercase tracking-widest font-bold mt-auto">
+                Read Article <span
+                    class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+            </div>
+        </article>
+    </a>
+    
+    
+</div>
+
+<!-- Pagination Placeholder: hidden pagination bar (prev/next + page info)
+     styled with Material Symbols arrows. Reserved for future multi-page
+     blog index support; currently hidden via Tailwind .hidden. -->
+<div class="mt-20 pt-10 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center hidden"
+    id="pagination-controls">
+    <button
+        class="text-gray-400 hover:text-primary text-xs uppercase tracking-widest font-bold transition-colors flex items-center gap-2"
+        id="prev-page">
+        <span class="material-symbols-outlined text-sm">arrow_left_alt</span> Newer
+    </button>
+    <span class="text-gray-500 text-xs" id="page-info">Page 1 of 1</span>
+    <button
+        class="text-gray-400 hover:text-primary text-xs uppercase tracking-widest font-bold transition-colors flex items-center gap-2"
+        id="next-page">
+        Older <span class="material-symbols-outlined text-sm">arrow_right_alt</span>
+    </button>
+</div>
+
+<script>
+    // Simple client-side filtering logic for the categories
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('.filter-btn');
+        const articles = document.querySelectorAll('#blog-grid > a');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button classes
+                buttons.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-white');
+                    b.classList.add('text-gray-400', 'border-primary/30');
+                });
+                btn.classList.add('bg-primary', 'text-white');
+                btn.classList.remove('text-gray-400', 'border-primary/30');
+
+                const filter = btn.getAttribute('data-filter');
+
+                // Filter articles
+                articles.forEach(article => {
+                    if (filter === 'all') {
+                        article.style.display = 'block';
+                    } else {
+                        const category = article.querySelector('.category-label').textContent.trim();
+                        if (category === filter) {
+                            article.style.display = 'block';
+                        } else {
+                            article.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+    </main>
+
+    <!-- Footer: 4-column Tailwind grid with brand tagline, site navigation,
+         social links (Substack, GitHub, Facebook) via Material Icons, and
+         ElevenLabs convai widget embed with contact-link trigger logic. -->
+    <footer class="bg-[#1a1b1e] text-white pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 border-b border-gray-800 pb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <h2 class="font-display text-5xl mb-6">Let's build something <br /><span
+                            class="text-primary italic">extraordinary.</span></h2>
+                    <p class="text-gray-400 max-w-md mb-8">
+                        Available for select freelance opportunities and consulting roles. Let's discuss your
+                        architectural challenges. Start a Technical Briefing with my AI
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Navigation</h4>
+                    <ul class="space-y-4">
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/">Home</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About
+                                Me</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
+                                href="/#services">Services</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
+                                href="/#work">Projects</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Social</h4>
+                    <ul class="space-y-4">
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://substack.com/@enriquebruzual" rel="noopener noreferrer"
+                                target="_blank"><span class="material-icons text-xs mr-2">link</span> Substack</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://github.com/KikeVen" rel="noopener noreferrer" target="_blank"><span
+                                    class="material-icons text-xs mr-2">code</span> GitHub</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://www.facebook.com/ZerikaiConsulting/" rel="noopener noreferrer"
+                                target="_blank"><span class="material-icons text-xs mr-2">thumb_up</span> Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
+                <p>© 2026 Enrique Bruzual. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a class="hover:text-gray-400 transition-colors" href="#">Privacy Policy</a>
+                    <a class="hover:text-gray-400 transition-colors" href="#">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ElevenLabs Agent (Inherited) -->
+    <elevenlabs-convai id="enrique-agent" agent-id="agent_0101kjr8jk36fpatbexzk50k5m6c"
+        variant="tiny"></elevenlabs-convai>
+    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close menu when clicking a link
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // AI Widget Integration Trigger
+            const agent = document.querySelector('elevenlabs-convai');
+            const contactLinks = document.querySelectorAll('#contact-link, #mobile-contact-link');
+
+            contactLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (!agent) return;
+
+                    agent.setAttribute('override-first-message', "I can assist you with reaching Enrique. You can email him at zerikai.dev@gmail.com, or I can take a message and your preferred contact time right here.");
+
+                    const openWidget = () => {
+                        const shadow = agent.shadowRoot;
+                        if (!shadow) return;
+                        const btn = shadow.querySelector('button[aria-label="Ask anything"]') ||
+                                    shadow.querySelector('button[aria-label="Open widget"]') ||
+                                    shadow.querySelector('button[aria-label="Open chat"]') ||
+                                    shadow.querySelector('button:first-of-type');
+                        if (btn) btn.click();
+                    };
+
+                    setTimeout(openWidget, 80);
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

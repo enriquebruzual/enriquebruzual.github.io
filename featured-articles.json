@@ -1,0 +1,98 @@
+[
+    {
+        "title": "Post-Mortem: Building a Local MCP Server for Codebase Memory using Ollama and ChromaDB",
+        "subtitle": "Benchmarking Mistral:7b vs Ornith:9b for privacy-first, on-device codebase memory.",
+        "category": "Architecture/Programming",
+        "date": "Jul 15, 2026",
+        "status": 1,
+        "url": "blog/Post-Mortem_Building_Local_MCP_Server_Codebase_Memory_using_Ollama_and_ChromaDB.html"
+    },
+    {
+        "title": "Your IDE is bleeding money and context. Here's how to stop it",
+        "subtitle": "Zerikai Memory is a deterministic memory layer for developers, an Open Source Answer",
+        "category": "Architecture/Programming",
+        "date": "Jun 14, 2026",
+        "status": 1,
+        "url": "blog/reduce-ai-ide-token-costs-with-zerikai-memory.html"
+    },
+    {
+        "title": "ChatGPT is recommending your competitors. Not you",
+        "subtitle": "Find out if AI knows your business exists. Free scan. 30 seconds.",
+        "category": "Services: Free AI Readiness Scan",
+        "date": "Apr 20, 2026",
+        "status": 1,
+        "url": "blog/ChatGPT_is_recommending_your_competitors_Not_you.html"
+    },
+    {
+        "title": "SEO is not enough in 2026: Make sure AI can recommend your business",
+        "subtitle": "Make your website easy for AI search to understand so you get recommended, not replaced.",
+        "category": "Marketing:AIO",
+        "date": "Apr 18, 2026",
+        "status": 1,
+        "url": "blog/SEO_is_not_enough_in_2026_Make_sure_AI_can_recommend_your_business.html"
+    },
+    {
+        "title": "Never Miss an Emergency Call: The AI Scaling Guide for Modern Contractors",
+        "subtitle": "How modern service firms are cutting overhead by 90% and securing 24/7 lead capture through AI voice triage.",
+        "category": "Business: AI Solutions",
+        "date": "Apr 11, 2026",
+        "status": 1,
+        "url": "blog/Never_Miss_an_Emergency_Call_The_AI_Scaling_Guide_for_Modern_Contractors.html"
+    },
+    {
+        "title": "How to Build a Free ElevenLabs Post-Call Webhook in Python",
+        "subtitle": "Voice AI agents are changing how we interact with applications. But what happens after the conversation ends?",
+        "category": "Tutorial: Webhooks",
+        "date": "Mar 9, 2026",
+        "status": 1,
+        "url": "blog/Build_a_Free_ElevenLabs_Post-Call_Webhook_in_Python.html"
+    },
+    {
+        "title": "Bilingual AI Dispatching: The Future of Miami Home Services",
+        "subtitle": "High-fidelity voice and messaging orchestration for HVAC, Plumbing, and Solar.",
+        "category": "Services: AI Orchestration",
+        "date": "Mar 08, 2026",
+        "status": 1,
+        "url": "blog/Bilingual_AI_Dispatching.html"
+    },
+    {
+        "title": "The SMB Guide to Safe AI: Why Privacy is Your New Competitive Advantage",
+        "subtitle": "Moving beyond AI hype to secure, production-grade business orchestration.",
+        "category": "Security & Strategy",
+        "date": "Mar 08, 2026",
+        "status": 1,
+        "url": "blog/The_SMB_Guide_to_Safe_AI.html"
+    },
+    {
+        "title": "The 2026 Search Pivot: Consolidating Traditional SEO and GEO",
+        "subtitle": "How Principal Architects are building for human readers and LLM crawlers simultaneously.",
+        "category": "Strategy: AI",
+        "date": "Mar 07, 2026",
+        "status": 1,
+        "url": "blog/2026-seo-geo-framework.html"
+    },
+    {
+        "title": "Stop Wasting Ad Spend: How AI Extracts High-Intent Leads from the Noise",
+        "subtitle": "A practical guide for SMBs to find customers exactly when they are ready to buy.",
+        "category": "Business: AI Solutions",
+        "date": "Mar 07, 2026",
+        "status": 1,
+        "url": "blog/smb-lead-gen-ai.html"
+    },
+    {
+        "title": "Connecting Python to NewsAPI.org: Core Concepts for Beginners",
+        "subtitle": "One of the greatest reasons we write Python code is to solve problems and gather information efficiently.",
+        "category": "Tutorial: Python",
+        "date": "Feb 27, 2026",
+        "status": 1,
+        "url": "blog/python_to_newsapi-org.html"
+    },
+    {
+        "title": "Build a WhatsApp Bot with Sentiment Analysis using Python and Twilio",
+        "subtitle": "As chatbots become more popular in the marketplace assisting companies to manage customer interaction, it is important to provide a high-level customer experience.",
+        "category": "Tutorial: Python",
+        "date": "Feb 28, 2020",
+        "status": 1,
+        "url": "blog/twilio_whatsapp.html"
+    }
+]

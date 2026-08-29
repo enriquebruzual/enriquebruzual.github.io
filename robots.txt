@@ -1,0 +1,9 @@
+# robots.txt for zerikai.com
+User-agent: *
+Allow: /
+
+# Directories
+Disallow: /__ignore/
+Disallow: /tailwind.config.js
+
+Sitemap: https://zerikai.com/sitemap.xml

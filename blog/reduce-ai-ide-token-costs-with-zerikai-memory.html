@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S1Y40WEYM3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-S1Y40WEYM3');
+    </script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <!-- Dynamic Title -->
+    <title>Your IDE is bleeding money and context. Here's how to stop it | Enrique Bruzual</title>
+
+    <!-- Meta Description & SEO -->
+    <meta name="description" content="As AI coding tools shift to token-based billing, inefficient context retrieval is driving up costs. Zerikai Memory is an open-source, local MCP server that uses deterministic parsing to provide targeted, cost-effective context for any IDE.">
+    
+    <link rel="canonical" href="https://enriquebruzual.github.io/blog/reduce-ai-ide-token-costs-with-zerikai-memory.html">
+    <meta property="og:url" content="https://enriquebruzual.github.io/blog/reduce-ai-ide-token-costs-with-zerikai-memory.html">
+    
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:title" content="Your IDE is bleeding money and context. Here's how to stop it">
+    <meta property="og:description" content="As AI coding tools shift to token-based billing, inefficient context retrieval is driving up costs. Zerikai Memory is an open-source, local MCP server that uses deterministic parsing to provide targeted, cost-effective context for any IDE.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://enriquebruzual.github.io/src/assets/blogs/new_ide_tax_70.png">
+    <meta name="twitter:image" content="https://enriquebruzual.github.io/src/assets/blogs/new_ide_tax_70.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Your IDE is bleeding money and context. Here's how to stop it">
+    <meta name="twitter:description" content="As AI coding tools shift to token-based billing, inefficient context retrieval is driving up costs. Zerikai Memory is an open-source, local MCP server that uses deterministic parsing to provide targeted, cost-effective context for any IDE.">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/src/assets/images/favicon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/src/assets/images/favicon-512.png" />
+    <link rel="apple-touch-icon" href="/src/assets/images/favicon-192.png" />
+
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Fonts & Tailwind -->
+    <link rel="stylesheet" href="/src/css/tailwind.css" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2A2B30;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        html.dark {
+            background-color: #2A2B30;
+        }
+    </style>
+    
+
+<!-- Pygments (Monokai theme) CSS overrides for Stitch dark-mode design:
+     colors codehilite spans, inline <code>, tables, blockquotes, and
+     headings. Uses Playfair Display serif for H2/H3 with primary accent
+     left-border. Inline code gets primary-color tinted background. -->
+<style>
+    /* Pygments Monokai Theme */
+    .codehilite pre {
+        padding: 1.5rem;
+        overflow-x: auto;
+        margin: 0;
+        background-color: transparent !important;
+    }
+
+    .codehilite .hll {
+        background-color: #49483e
+    }
+
+    .codehilite {
+        background: transparent !important;
+        color: #F8F8F2;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.875rem;
+    }
+
+    .codehilite .c {
+        color: #959077
+    }
+
+    /* Comment */
+    .codehilite .err {
+        color: #ED007E;
+        background-color: #1E0010
+    }
+
+    /* Error */
+    .codehilite .esc {
+        color: #F8F8F2
+    }
+
+    /* Escape */
+    .codehilite .g {
+        color: #F8F8F2
+    }
+
+    /* Generic */
+    .codehilite .k {
+        color: #66D9EF
+    }
+
+    /* Keyword */
+    .codehilite .l {
+        color: #AE81FF
+    }
+
+    /* Literal */
+    .codehilite .n {
+        color: #F8F8F2
+    }
+
+    /* Name */
+    .codehilite .o {
+        color: #FF4689
+    }
+
+    /* Operator */
+    .codehilite .x {
+        color: #F8F8F2
+    }
+
+    /* Other */
+    .codehilite .p {
+        color: #F8F8F2
+    }
+
+    /* Punctuation */
+    .codehilite .ch {
+        color: #959077
+    }
+
+    /* Comment.Hashbang */
+    .codehilite .cm {
+        color: #959077
+    }
+
+    /* Comment.Multiline */
+    .codehilite .cp {
+        color: #959077
+    }
+
+    /* Comment.Preproc */
+    .codehilite .cpf {
+        color: #959077
+    }
+
+    /* Comment.PreprocFile */
+    .codehilite .c1 {
+        color: #959077
+    }
+
+    /* Comment.Single */
+    .codehilite .cs {
+        color: #959077
+    }
+
+    /* Comment.Special */
+    .codehilite .gd {
+        color: #FF4689
+    }
+
+    /* Generic.Deleted */
+    .codehilite .ge {
+        color: #F8F8F2;
+        font-style: italic
+    }
+
+    /* Generic.Emph */
+    .codehilite .ges {
+        color: #F8F8F2;
+        font-weight: bold;
+        font-style: italic
+    }
+
+    /* Generic.EmphStrong */
+    .codehilite .gr {
+        color: #F8F8F2
+    }
+
+    /* Generic.Error */
+    .codehilite .gh {
+        color: #F8F8F2
+    }
+
+    /* Generic.Heading */
+    .codehilite .gi {
+        color: #A6E22E
+    }
+
+    /* Generic.Inserted */
+    .codehilite .go {
+        color: #66D9EF
+    }
+
+    /* Generic.Output */
+    .codehilite .gp {
+        color: #FF4689;
+        font-weight: bold
+    }
+
+    /* Generic.Prompt */
+    .codehilite .gs {
+        color: #F8F8F2;
+        font-weight: bold
+    }
+
+    /* Generic.Strong */
+    .codehilite .gu {
+        color: #959077
+    }
+
+    /* Generic.Subheading */
+    .codehilite .gt {
+        color: #F8F8F2
+    }
+
+    /* Generic.Traceback */
+    .codehilite .kc {
+        color: #66D9EF
+    }
+
+    /* Keyword.Constant */
+    .codehilite .kd {
+        color: #66D9EF
+    }
+
+    /* Keyword.Declaration */
+    .codehilite .kn {
+        color: #FF4689
+    }
+
+    /* Keyword.Namespace */
+    .codehilite .kp {
+        color: #66D9EF
+    }
+
+    /* Keyword.Pseudo */
+    .codehilite .kr {
+        color: #66D9EF
+    }
+
+    /* Keyword.Reserved */
+    .codehilite .kt {
+        color: #66D9EF
+    }
+
+    /* Keyword.Type */
+    .codehilite .ld {
+        color: #E6DB74
+    }
+
+    /* Literal.Date */
+    .codehilite .m {
+        color: #AE81FF
+    }
+
+    /* Literal.Number */
+    .codehilite .s {
+        color: #E6DB74
+    }
+
+    /* Literal.String */
+    .codehilite .na {
+        color: #A6E22E
+    }
+
+    /* Name.Attribute */
+    .codehilite .nb {
+        color: #66D9EF
+    }
+
+    /* Name.Builtin (using cyan instead of white) */
+    .codehilite .nc {
+        color: #A6E22E
+    }
+
+    /* Name.Class */
+    .codehilite .no {
+        color: #66D9EF
+    }
+
+    /* Name.Constant */
+    .codehilite .nd {
+        color: #A6E22E
+    }
+
+    /* Name.Decorator */
+    .codehilite .ni {
+        color: #F8F8F2
+    }
+
+    /* Name.Entity */
+    .codehilite .ne {
+        color: #A6E22E
+    }
+
+    /* Name.Exception */
+    .codehilite .nf {
+        color: #A6E22E
+    }
+
+    /* Name.Function */
+    .codehilite .nl {
+        color: #F8F8F2
+    }
+
+    /* Name.Label */
+    .codehilite .nn {
+        color: #F8F8F2
+    }
+
+    /* Name.Namespace */
+    .codehilite .nx {
+        color: #A6E22E
+    }
+
+    /* Name.Other */
+    .codehilite .py {
+        color: #F8F8F2
+    }
+
+    /* Name.Property */
+    .codehilite .nt {
+        color: #FF4689
+    }
+
+    /* Name.Tag */
+    .codehilite .nv {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable */
+    .codehilite .ow {
+        color: #FF4689
+    }
+
+    /* Operator.Word */
+    .codehilite .pm {
+        color: #F8F8F2
+    }
+
+    /* Punctuation.Marker */
+    .codehilite .w {
+        color: #F8F8F2
+    }
+
+    /* Text.Whitespace */
+    .codehilite .mb {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Bin */
+    .codehilite .mf {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Float */
+    .codehilite .mh {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Hex */
+    .codehilite .mi {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Integer */
+    .codehilite .mo {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Oct */
+    .codehilite .sa {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Affix */
+    .codehilite .sb {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Backtick */
+    .codehilite .sc {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Char */
+    .codehilite .dl {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Delimiter */
+    .codehilite .sd {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Doc */
+    .codehilite .s2 {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Double */
+    .codehilite .se {
+        color: #AE81FF
+    }
+
+    /* Literal.String.Escape */
+    .codehilite .sh {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Heredoc */
+    .codehilite .si {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Interpol */
+    .codehilite .sx {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Other */
+    .codehilite .sr {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Regex */
+    .codehilite .s1 {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Single */
+    .codehilite .ss {
+        color: #E6DB74
+    }
+
+    /* Literal.String.Symbol */
+    .codehilite .bp {
+        color: #F8F8F2
+    }
+
+    /* Name.Builtin.Pseudo */
+    .codehilite .fm {
+        color: #A6E22E
+    }
+
+    /* Name.Function.Magic */
+    .codehilite .vc {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Class */
+    .codehilite .vg {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Global */
+    .codehilite .vi {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Instance */
+    .codehilite .vm {
+        color: #F8F8F2
+    }
+
+    /* Name.Variable.Magic */
+    .codehilite .il {
+        color: #AE81FF
+    }
+
+    /* Literal.Number.Integer.Long */
+
+    /* Inline Code Styling */
+    :not(pre)>code {
+        background-color: rgba(190, 94, 56, 0.1);
+        /* Primary color at 10% opacity */
+        color: #BE5E38;
+        /* Primary color */
+        padding: 0.2em 0.4em;
+        font-size: 85%;
+        border-radius: 0;
+        font-family: 'Fira Code', monospace;
+    }
+
+    /* General Markdown Prose Styles tailored to the Stitch design */
+    .prose p {
+        color: #9CA3AF;
+        /* muted-gray */
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+
+    .prose h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.875rem;
+        /* text-3xl */
+        font-weight: 700;
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+        padding-left: 1.5rem;
+        border-left: 4px solid #BE5E38;
+        /* Primary Accent */
+        color: #F5F5F7;
+        /* Ivory */
+    }
+
+    .prose h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        /* text-2xl */
+        font-weight: 700;
+        margin-top: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: #F5F5F7;
+    }
+
+    .prose a {
+        color: #BE5E38;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+    .prose a:hover {
+        color: #F5F5F7;
+    }
+
+    .prose blockquote {
+        margin: 3rem 0;
+        padding-left: 2rem;
+        border-left: 4px solid #BE5E38;
+        font-style: italic;
+        font-size: 1.5rem;
+        color: #9CA3AF;
+        line-height: 1.625;
+        quotes: none;
+        /* remove default quotes if any */
+    }
+
+    /* Tables */
+    .prose table {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 3rem 0;
+    }
+
+    .prose thead tr {
+        background-color: #323339;
+        /* surface */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .prose th {
+        padding: 1rem;
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #F5F5F7;
+    }
+
+    .prose tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .prose tbody tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.02);
+        /* Slight zebra striping */
+    }
+
+    .prose td {
+        padding: 1rem;
+        color: #9CA3AF;
+    }
+
+    /* Images */
+    .prose img {
+        max-width: 100%;
+        height: auto;
+        margin: 2rem auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Lists */
+    .prose ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        color: #9CA3AF;
+        margin-bottom: 2rem;
+    }
+
+    .prose ol {
+        list-style-type: decimal;
+        padding-left: 1.5rem;
+        color: #9CA3AF;
+        margin-bottom: 2rem;
+    }
+
+    .prose li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<!-- FAQ JSON-LD Schema: conditionally rendered when ai_faq is True.
+     Injects schema.org FAQPage structured data from pre-built faq_jsonld
+     (generated by build_blog.py from frontmatter + body extraction). -->
+
+<script type="application/ld+json">
+        {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "Why doesn't Zerikai Memory use a graph-based memory approach like other AI tools?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Graph-based memory is built for fluid, evolving data. Code is the opposite: it either compiles or it doesn't. Graph systems try to summarize and evolve relationships between code entities, which leads to hallucinations \u2014 confidently pointing at the wrong function or a broken call chain. Zerikai uses tree-sitter, a deterministic local parser, to extract exact syntax trees with no API calls and no guesswork."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How does Zerikai Memory reduce token costs compared to standard RAG or IDE built-in memory?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Most RAG setups chunk files by line count, which can inject 5,000 tokens of boilerplate to surface a single function. Zerikai indexes each function and class as its own atomic unit and retrieves it in roughly 200 tokens of targeted, cited context. That difference compounds across every query in every session \u2014 and with token-based billing, it hits your bill directly."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Why does Zerikai put the developer in control of re-indexing instead of doing it automatically?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Auto-indexing mid-refactor means ingesting broken syntax, incoherent call chains, and temporary states you never intended to persist. Zerikai's philosophy is 'developer as gatekeeper': you trigger a scan when the code is in a stable, working state. The scan is idempotent \u2014 run it 50 times if you're iterating fast \u2014 but the decision of *when* the index represents ground truth is always yours."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Is my code sent to a third-party server during indexing?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Zerikai Memory uses a local ChromaDB vector store and local tree-sitter parsing. The indexing process runs entirely on your machine, ensuring your code never leaves your local environment."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How does the system leverage DeepSeek's KV cache for cost savings?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The system locks a project brief as a fixed prefix for every query. DeepSeek caches this prefix server-side, reducing the cost of subsequent queries by up to 50x since the large context block isn't recomputed."
+            }
+        }
+    ]
+}
+    </script>
+
+
+<!-- Article Schema (NewsArticle, BlogPosting, or custom): Google Rich
+     Results compliant JSON-LD with headline, datePublished, mainEntityOfPage
+     ImageObject, publisher Organization, and author Person. Uses Jinja2
+     template variables from post frontmatter for all dynamic fields. -->
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Your IDE is bleeding money and context. Here's how to stop it",
+        "datePublished": "2026-06-14T00:00:00+00:00",
+        "dateModified": "2026-06-14T00:00:00+00:00",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "url": "https://enriquebruzual.github.io/blog/reduce-ai-ide-token-costs-with-zerikai-memory.html",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io/src/assets/blogs/new_ide_tax_70.png"
+            }
+        },
+        "description": "As AI coding tools shift to token-based billing, inefficient context retrieval is driving up costs. Zerikai Memory is an open-source, local MCP server that uses deterministic parsing to provide targeted, cost-effective context for any IDE.",
+        "image": [
+            "https://enriquebruzual.github.io/src/assets/blogs/new_ide_tax_70.png"
+        ],
+        "publisher": {
+            "@type": "Organization",
+            "name": "Enrique Bruzual",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io"
+            }
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Enrique Bruzual",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://enriquebruzual.github.io/src/assets/images/enrique_bruzual_3.png",
+                "width": 512,
+                "height": 512
+            }
+        },
+        "@id": "https://enriquebruzual.github.io/blog/reduce-ai-ide-token-costs-with-zerikai-memory.html"
+    }
+    </script>
+
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 font-body antialiased selection:bg-primary/30">
+
+    <script>
+        // Force dark mode to match the portfolio aesthetic 
+        document.documentElement.classList.add('dark');
+    </script>
+
+    <!-- Navigation: dark-mode fixed navbar with Tailwind backdrop-blur,
+         responsive mobile menu toggle (vanilla JS), Enrique Bruzual brand
+         link, and ElevenLabs convai contact trigger via shadow DOM. -->
+    <nav
+        class="fixed w-full z-50 bg-white/90 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="/" class="hover:opacity-80 transition-opacity">
+                        <span class="text-2xl font-serif font-bold tracking-tighter text-primary">E/B</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-12">
+                    <a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                        href="/">Home</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest text-primary"
+                        href="/blog/">Blog</a>
+                    <a class="px-6 py-2 border border-primary text-primary text-sm font-medium hover:bg-primary hover:text-white transition-all uppercase tracking-widest"
+                        href="#" id="contact-link">Contact</a>
+                </div>
+                <!-- Mobile button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-500 hover:text-primary focus:outline-none">
+                        <span class="material-icons">menu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu"
+            class="md:hidden hidden bg-background-light dark:bg-background-dark border-b border-gray-200 dark:border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
+                <a class="block px-3 py-2 text-base font-medium hover:text-primary transition-colors uppercase tracking-widest text-gray-500 dark:text-gray-400"
+                    href="/">Home</a>
+                <a class="block px-3 py-2 text-base font-medium hover:text-primary transition-colors uppercase tracking-widest text-primary"
+                    href="/blog/">Blog</a>
+                <a class="block px-3 py-2 mt-4 border border-primary text-primary text-base font-medium hover:bg-primary hover:text-white transition-all uppercase tracking-widest w-1/2 text-center"
+                    href="#" id="mobile-contact-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
+        
+<div class="max-w-[800px] mx-auto">
+    <!-- Article Header -->
+    <div class="mb-12">
+        <span class="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Architecture/Programming</span>
+        <h1 class="font-display text-4xl md:text-6xl font-bold leading-tight mb-6 text-gray-100">
+            Your IDE is bleeding money and context. Here's how to stop it
+        </h1>
+        <p class="text-xl italic text-gray-400 mb-10 leading-relaxed font-light">
+            "Zerikai Memory is a deterministic memory layer for developers, an Open Source Answer"
+        </p>
+
+        <div class="flex items-center justify-between py-6 border-y border-primary">
+            <div class="flex items-center gap-4">
+                <img alt="Enrique Bruzual" class="w-12 h-12 object-cover grayscale brightness-110"
+                    src="/src/assets/images/enrique_bruzual_48-48.png" />
+                <div class="text-sm">
+                    <p class="font-semibold text-gray-100">Enrique Bruzual</p>
+                    <p class="text-gray-400">Jun 14, 2026</p>
+                </div>
+            </div>
+            <div class="flex gap-4 text-gray-400">
+                <span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors"
+                    onclick="navigator.clipboard.writeText(window.location.href); const originalText = this.innerText; this.innerText = 'check'; setTimeout(() => this.innerText = originalText, 2000);"
+                    title="Copy link to clipboard">share</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Content -->
+    <article class="prose prose-invert max-w-none">
+        <div class="flex items-center gap-6 mb-8 mt-12">
+            <a class="text-primary flex items-center gap-3 font-bold text-sm tracking-widest uppercase group !no-underline"
+                href="/blog/">
+                <span class="font-sans text-lg group-hover:-translate-x-1 transition-transform"
+                    aria-hidden="true">&#8592;</span>
+                All Articles
+            </a>
+        </div>
+
+        <!-- The converted Markdown will be injected here -->
+        <p>In April and June 2026, GitHub Copilot, Cursor, and Claude Code all tightened their pricing in the same six-week window. Copilot moved to token-based billing on June 1, sending some power users from $29/month to $750/month. Cursor's real cost for daily agent use landed at $40 to $80, not the advertised $20. The flat-rate era for AI coding tools is over. Every unnecessary token your agent burns re-reading files it already knows is now directly hitting your bill.</p>
+<p><img alt="the squeeze" src="/src/assets/blogs/new_ide_tax_70.png" /></p>
+<p>I designed <a href="https://github.com/KikeVen/zerikai_memory">Zerikai Memory</a> to address this directly. It is a local MCP server that any IDE can connect to; Cursor, VS Code, Claude Desktop, pi. It parses your codebase with tree-sitter, capturing entities and code descriptions (functions, classes, docstrings and more) into a local ChromaDB vector store, on querying, it retrieves relevant context through L2 and Lexical re-indexing with source verification (Entity, File, Line Number and L2). It runs entirely on your machine. No code ever leaves it.</p>
+<p>This is the engineering case for Zerikai Memory over graph-based approaches: why deterministic parsing matters when your data is source code, how entity-level retrieval keeps your context window from filling up, and what building a developer-controlled memory layer taught me about the limits of AI automation.</p>
+<hr />
+<h2>Two Memory Domains: Why Conversations and Code Need Different Tools</h2>
+<p>There is a distinction that most memory-layer discussions miss:</p>
+<p><strong>Conversational memory</strong> is fluid. A user's preferences change, a support ticket gets updated, a project decision evolves over time. Memory graphs (nodes + edges, temporal tracking, multi-hop reasoning) make sense here. You need the AI to know that "User X bought a product on Tuesday and filed a ticket on Friday," and you need that to update as events happen.</p>
+<p><strong>Codebase memory</strong> is not fluid. Code is binary ground truth. It compiles or it doesn't. Tests pass or they don't. If you are mid-refactor and the code is broken, you don't want your AI indexing that mess, you want it indexing the stable snapshot after you have committed.</p>
+<p>This is why I used tree-sitter instead of a memory graph. Tree-sitter is a deterministic local parser. It extracts exact syntax trees, functions, classes, methods, docstrings, with zero API calls and zero hallucination risk in the index itself. A memory graph would attempt to "summarize" or "evolve" connections between code entities, which is exactly how you get an LLM confidently telling you that "<code>process_data()</code>" calls "<code>validate_input()</code>" when the actual call chain goes through three decorators and a factory function it can't resolve.</p>
+<p>Although today we can program by chatting with an AI agent, code is not a conversation. It is a rigid, deterministic structure. Even inside an AI-enabled app, the prompts embedded in the codebase are just strings. The code treats them no differently than a database query or an error message. The memory layer should match: deterministic parsing of strings, not probabilistic summarization of intent.</p>
+<hr />
+<h2>The Problem</h2>
+<p>You are paying for the same context twice, and it is bleeding your budget dry. Or you are using a continuous graph that records every interaction but lacks a deterministic view of the codebase.</p>
+<p>VS Code Copilot, Cursor, and other AI IDEs have built-in memory layers that attempt to persist context across sessions. However, these often rely on proprietary vector databases or graph structures that are opaque to the user. You can't tap them from other IDEs or CLI tools.</p>
+<p>Graph-based memory systems (like Graphiti) promise to model relationships and temporal dynamics, but they struggle with the static, deterministic nature of code. They can't easily track when a function was last updated or how it relates to other entities without complex multi-hop reasoning that often leads to hallucinations.</p>
+<p>Manual context injection (copy-pasting code snippets into the prompt) is a common workaround, but it quickly eats up your token budget and becomes unmanageable as your codebase grows.</p>
+<hr />
+<h2>What zerikai_memory Actually Does</h2>
+<p>It's a Python MCP server that sits between your IDE and your LLM:</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">text</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>Your Codebase → tree-sitter (local parse) → ChromaDB (zerikai_memory/.brain/)
+                                                    │
+Your IDE → MCP Server (:stdio) →                    │
+                                                    ▼
+                                             DeepSeek / (Ollama)
+                                          (auto-routed synthesis)
+</pre></div>
+
+</div>
+</p>
+<p><strong>The 4-stage query pipeline:</strong></p>
+<ol>
+<li>
+<p><strong>L1: Vector Search (ChromaDB).</strong> The query is embedded and matched against stored entities. Results above a configurable L2 distance threshold are dropped. Vector search is probabilistic, a query can return a near miss. But because the index is built from real parsed code, not summaries, a wrong answer is still a real function at a real file:line you can verify.</p>
+</li>
+<li>
+<p><strong>L2: Lexical Re-ranking.</strong> Surviving results are re-scored using <code>(1/distance) + (keyword_hits × weight)</code> to boost matches on entity names and docstrings. This fixes a known failure mode of pure semantic search: a generic file summary mentioning "parsing" can outscore the actual <code>parse_entities()</code> function in cosine space. The re-ranker gives <code>extract_entities</code> the edge. Nothing is dropped, it's a pure reorder.</p>
+</li>
+<li>
+<p><strong>L3: Auto-routing (hybrid mode)*.</strong> <em>Short, specific queries ("where is <code>process_data</code> defined?") hit Ollama locally for free. Architectural queries ("explain how the routing pipeline decides between flash and pro models") escalate to DeepSeek. The router uses a 4-step priority chain: explicit override → keyword detection → length threshold → <code>.env</code> fallback.</em></p>
+</li>
+<li>
+<p><strong>L4: LLM Synthesis with inline citations.</strong> Every answer includes <code>#file.py:line (distance)</code> citations. The agent doesn't hunt for the function; the citation gives it the exact file, line number, and L2 distance score. In VS Code Copilot, these are clickable. The developer can jump straight to the source and verify.</p>
+</li>
+</ol>
+<p><strong><em>L3 is optional:</em>* You can set <code>ROUTER_MODE=cloud</code> in the <code>.env</code> and all the queries go to </strong>DeepSeek**.</p>
+<p><strong>Why entity-level indexing matters:</strong></p>
+<p>Most RAG setups (including ones built into commercial IDEs) chunk files by token count or line count. A function might get split across two chunks, or buried under 500 lines of imports. Feeding raw files to an agent often injects 5,000 tokens of boilerplate to find one function. zerikai_memory retrieves the same function in roughly 200 tokens of targeted citations. The difference compounds across every query in every session.</p>
+<p><em>zerikai_memory</em> uses tree-sitter to extract each function, class, method, or component as its own atomic unit. The <code>extract_entities</code> function in <code>code_indexer.py</code> returns a list of <code>CodeEntity</code> objects, one per parsed symbol. Clean signal, no noise.</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">python</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span><span class="c1"># From code_indexer.py: each entity is a self-contained retrieval unit</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CodeEntity</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">entity_type</span><span class="p">:</span> <span class="nb">str</span>       <span class="c1"># function, class, method, component</span>
+    <span class="n">language</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">line_number</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">signature</span><span class="p">:</span> <span class="nb">str</span>         <span class="c1"># def process_data(items: List[Item]) -&gt; Result</span>
+    <span class="n">docstring</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parent_class</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="c1"># ... metadata</span>
+</pre></div>
+
+</div>
+</p>
+<p>When the agent queries memory, it gets back a compact payload with source citations:</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">None</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>Sources:
+  extract_entities     #code_indexer.py:184 (0.35)
+  _extract_js_function #code_indexer.py:595 (0.81)
+  _extract_js_like     #code_indexer.py:543 (0.89)
+  CodeEntity           #code_indexer.py:156 (0.83)
+</pre></div>
+
+</div>
+</p>
+<p>The agent uses <code>#file:line (distance)</code> for reasoning regardless. What you see is filtered by your IDE's display layer, some agents surface the distance, some hide it, but the data is always in context.</p>
+<blockquote>
+<p>Note: the <code>code_indexer.py</code> currently parses Python, JS/TS, HTML, CSS, and Markdown. More languages are on the way, tree-sitter grammars exist for most of them; I just haven't wired them all up yet. Feel free to index zerikai_memory itself and tell it to add a new tree-sitter grammar for Go, Rust, Java, C#, etc.</p>
+</blockquote>
+<hr />
+<h2>Beyond the IDE: Why a Snapshot Beats a Session</h2>
+<p>A memory layer tied to your IDE session dies when you close the window. A snapshot stored on disk lives wherever you point an MCP client at it on the same machine.</p>
+<p>That means zerikai_memory works from anywhere that speaks MCP, not just your editor:</p>
+<ul>
+<li><strong>Automation and research.</strong> An N8N workflow can query the snapshot, pull entity data, and feed it into a pipeline. Claude Desktop can fact-check a writeup about a codebase by querying its memory directly, with inline citations pointing back to source.</li>
+<li><strong>IDE switching and onboarding.</strong> Open the same project in Cursor, VS Code, or pi. The snapshot is at <code>zerikai_memory/.brain/</code>. No re-indexing. No re-explaining. A new developer clones the repo, installs zerikai_memory, runs <code>scan_workspace</code>, and their first query pulls the architecture, key files, and conventions from the brief. Each developer generates their own snapshot locally.</li>
+<li><strong>Client and consulting work.</strong> Estimate the blast radius of a bug fix or the cost of a new feature by querying the project snapshot. Send a status report backed by actual entity-level context, not your memory of the last meeting.</li>
+</ul>
+<p>Yes, Claude's project knowledge feature can do some of this. It also costs $20/month and locks you into one vendor. This runs locally, costs nothing, and works across Claude, Cursor, Copilot, and anything else that speaks MCP.</p>
+<p>None of this works with a session-bound memory layer. It works because the index lives at <code>zerikai_memory/.brain/</code> on disk and the same MCP server answers queries regardless of which local tool is asking. You control the snapshot. You decide when it gets updated.</p>
+<hr />
+<h2>Zero-Cost Indexing and the DeepSeek KV Cache Trick</h2>
+<p>tree-sitter + local ChromaDB embeddings cost $0.00 to index your codebase. No API calls, no GPU, no per-token charges. The only thing that touches a paid API is the project brief: a one-time LLM-generated summary of your codebase, structured into 9 sections:</p>
+<ol>
+<li>Overview</li>
+<li>Technical Stack</li>
+<li>Core Architecture</li>
+<li>Primary Conventions</li>
+<li>Purpose</li>
+<li>Key Files</li>
+<li>Data Flow</li>
+<li>Development &amp; Testing</li>
+<li>Future Roadmap</li>
+</ol>
+<p>That brief (~600 tokens) is locked and cached after generation. Why lock it? Because it becomes the fixed prefix of every system message sent to DeepSeek. Here is what that looks like in practice:</p>
+<p>
+<div class="my-10 border border-gray-800 bg-[#1a1b1e] relative group">
+    <div class="flex justify-between items-center px-4 py-2 bg-white/5 border-b border-gray-800">
+        <span class="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Terminal</span>
+        <div class="flex items-center gap-3">
+            <button class="text-gray-500 hover:text-green-500 transition-colors copy-code-btn flex items-center justify-center opacity-0 group-hover:opacity-100" title="Copy code">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+            </button>
+            <span class="text-[10px] uppercase tracking-widest text-[#BE5E38] font-mono font-bold">text</span>
+        </div>
+    </div>
+    <div class="codehilite"><pre><span></span>[SYSTEM - IDENTICAL EVERY CALL, CACHED]:
+You are an AI coding assistant. Below is the project context:
+
+PROJECT BRIEF:
+  Overview: A React dashboard for monitoring CI/CD pipelines...
+  Technical Stack: Next.js 14, Prisma, PostgreSQL, Redis...
+  Core Architecture: App Router -&gt; API handlers -&gt; Prisma -&gt; Postgres...
+  [... 600 tokens total, never changes between scans]
+
+[USER - CHANGES EVERY CALL, NOT CACHED]:
+&quot;Where is get_supported_extensions defined?&quot;
+</pre></div>
+
+</div>
+</p>
+<p>The brief portion is identical across queries, so DeepSeek computes it once and reuses the cached result. This cache persists across separate API calls on DeepSeek's servers, not just within a single session.</p>
+<p>DeepSeek's KV cache is automatic and server-side. When the system message prefix is identical across API calls, DeepSeek reuses the cached computation for that prefix. The first query of a session warms the cache (cache miss, paid at \$0.14/M tokens). Every subsequent query hits the cache at $0.0028/M tokens. That's a <strong>50× reduction</strong> on the largest token block per call.</p>
+<p>If your architecture changes significantly, you trigger <code>update_brief</code> (a command that regenerates the brief via the LLM) after re-scanning. That's a deliberate trade-off, cache stability over automatic freshness. The brief stays locked because the cost savings compound across every query in every session.</p>
+<p><strong>Local mode</strong> is also fully supported: set <code>MEMORY_MODE=local</code>, point at a running Ollama instance, and everything (parsing, embedding, retrieval, synthesis) runs on your machine. Zero cloud dependency. The inline citations still work. Token tracking still logs (it just logs $0.00).</p>
+<hr />
+<h2>The re-indexing model: developer as gatekeeper</h2>
+<p>This is where the architecture makes an explicit choice that some tooling philosophies disagree with.</p>
+<p>Re-indexing is <strong>developer-directed</strong>. You tell your AI Agent to <code>scan_workspace</code> when you've reached a stable state. This command walks your project directory, re-parses every source file with tree-sitter, and updates the ChromaDB index. The gate condition is your judgment that the code is coherent and functional. There is no automated trigger.</p>
+<p><strong>Why not automate it? Because:</strong></p>
+<ul>
+<li><strong>Mid-refactor indexing is not recommended.</strong> If the system auto-detected file changes and re-indexed continuously, it would ingest broken syntax and incoherent call chains. You want the index to reflect a working snapshot, not a construction site. Allowing you to pick and choose the section to refactor, fix, or add, query the current memory, prompt your implementation, test it, and then re-index when it's working is a more stable workflow.</li>
+<li><strong>The scan is idempotent.</strong> Re-running it overwrites existing records using deterministic hashing. Stale entries from deleted files are purged, and anything listed in <code>.memignore</code> (zerikai's <code>.gitignore</code> equivalent, placed in your project root) is skipped during scans. You can scan as often as you want, 50 times in an hour if you're iterating fast, with zero penalty.</li>
+<li><strong>It works with or without CI.</strong> zerikai_memory doesn't assume you have a CI pipeline, a main branch, or a team workflow. It's built for solo developers and small teams who know their own codebase.</li>
+</ul>
+<p><strong>Two-tier re-indexing:</strong></p>
+<ul>
+<li><code>scan_workspace</code>: file-level changes: renamed functions, added methods, updated docstrings.</li>
+<li><code>scan_workspace</code> + <code>force_refresh_brief=True</code>: architectural changes: new modules, restructured directories, changed design patterns.</li>
+</ul>
+<p>If a scan crashes mid-walk? Re-run it. If the index gets corrupted, zerikai ships with a reset script: run <code>drop_memory.py "Workspace Name"</code> to wipe the ChromaDB collection for that project, then re-scan. A collection backup before scan is on the roadmap, not because it's broken without one, but because "undo" is a reasonable thing to offer before you overwrite an index you're happy with.</p>
+<hr />
+<h2>Known Limitations (Because If You Don't List Them, Someone Else Will)</h2>
+<p>tree-sitter is a static parser. It sees syntax, not semantics. This has concrete blind spots:</p>
+<p><strong>Dynamic dispatch and polymorphism.</strong> <code>obj.method()</code> is parsed as a call, but the actual method bound at runtime (duck typing, virtual dispatch, interface implementation) is unknown. The index records the static signature, not the resolved implementation.</p>
+<p><strong>Decorators in Python.</strong> <code>@cache</code>, <code>@retry</code>, <code>@authenticate</code>; tree-sitter sees the decorator node but cannot evaluate what it does. The extracted entity is the decorated function's AST, not its runtime behavior. If a decorator wraps the function in a caching layer, the index won't reflect that the function now has a cache.</p>
+<p><strong>Cross-file references.</strong> tree-sitter works per file. <code>from module import func</code> is parsed as an identifier but not linked to its definition. There's no import resolver, no module graph. This is a deliberate trade-off: the index stores definitions, not a call graph, keeping the memory footprint small. When you query "where is <code>get_supported_extensions</code> used?", you'll get the definition at <code>#code_indexer.py:184</code> with high confidence. The AI agent then uses that <strong>file:line</strong> citation as an entry point; it can grep the codebase, find every <code>import</code> or call site, and synthesize the full picture. The memory provides the entry point; the agent does the traversal. You give up one-click cross-file citations in exchange for a leaner index and faster scans.</p>
+<p><strong>Monkey-patching and runtime alterations.</strong> tree-sitter indexes the original method and the replacement function as separate entities, each with its own docstring. Both are searchable. What tree-sitter cannot interpret is the assignment line that connects them (<code>SomeClass.method = new_func</code>) - it parses the syntax but doesn't understand that it overrides the original. But this is the same pattern as cross-file references: the memory returns both entities with file:line citations, the AI agent follows up with grep, traces the assignment, and answers which one wins. The index provides the entry points; the agent does the resolution.</p>
+<p><strong>Cross-cutting concerns.</strong> Logging, auth, caching implemented via decorators or middleware chains leave no parse-tree footprint. A query like "which middleware modifies the request?" will return low-relevance hits or nothing.</p>
+<p>What I'm doing about it:</p>
+<ul>
+<li>The <code>entity_docstring</code> field can document decorator effects if authored carefully.</li>
+<li>The project brief, stored in zerikai's local data directory at <code>.brain/contexts/</code>, captures high-level descriptions of architecture and cross-cutting concerns.</li>
+<li><strong><code>save_to_memory</code> for edge cases.</strong> When the agent resolves something the static indexer cannot (like which method wins a monkey-patch), you can tell it to <code>save_to_memory</code> (a command that stores a fact directly into the index) and persist that fact. Next query, the answer is already there. No grep needed. The system is deterministic for code, but leaves a manual escape hatch for runtime truths.</li>
+<li>Future hybrid search (BM25 + RRF) may improve recall for indirect patterns.</li>
+<li>A runtime-introspection module that feeds the same ChromaDB is on the long-term roadmap: a third tier that maps not just what code exists, but what actually executes.</li>
+</ul>
+<p>For now, these are accepted trade-offs. The indexer prioritizes speed, determinism, and offline operation over deep semantic understanding. If your codebase is heavily dynamic (metaclasses, runtime code generation, extensive monkey-patching), zerikai_memory will have blind spots. You should know that going in.</p>
+<hr />
+<h2>The Bigger Point: Developer Sovereignty</h2>
+<p>There's an assumption baked into a lot of AI tooling right now: that more automation is always better. That the ideal coding agent should proactively index, update, and adapt without the developer thinking about it.</p>
+<p>Not every tool wants you out of the loop. Some were built to keep you in it.</p>
+<p>zerikai_memory takes the opposite stance. It gives the AI just enough context to be useful, a clean retrieval of the right function at the right line number, and then hands control back to the developer. You decide when to index. You verify the citations. You're the gate.</p>
+<p>I call this "developer sovereignty." It is not Luddism. It is recognizing that code is the ground truth and LLMs are a text synthesis layer on top of it. The LLM does not "understand" your codebase; it retrieves and recombines patterns from it. The more agency you give the retrieval layer, the more you risk it confidently pointing at the wrong line or synthesizing from a broken intermediate state.</p>
+<p>There is a practical side to this philosophy. Because zerikai_memory runs entirely on your machine, no source code ever leaves it. The index, the brief, the embeddings, all of it lives in <code>zerikai_memory/.brain/</code> on your disk. For healthcare, finance, defense, or any regulated industry where sending proprietary code to a cloud vendor is a non-starter, this is not a nice-to-have. It is the only way a memory layer can exist at all.</p>
+<blockquote>
+<p>This isn't a missing feature. It's the design.</p>
+</blockquote>
+<hr />
+<p><em>zerikai_memory is on <a href="https://github.com/KikeVen/zerikai_memory">GitHub</a> (MIT license). If you're hitting the same context re-injection tax across sessions and IDEs, it'll stop that at the root. If your codebase is predominantly Python, JS/TS, HTML, CSS, or Markdown, it works out of the box. More languages are on the way. Tree-sitter grammars exist for most of them; I just haven't wired them all up yet. Feel free to index zerikai_memory itself and tell it to add a new tree-sitter grammar for Go, Rust, Java, C#, etc.</em></p>
+<p><em>What am I missing? If you've built or used a codebase memory layer, I want to hear where your trade-offs landed differently.</em></p>
+
+        
+    </article>
+
+    <!-- Author Bio Card: fixed bio section for Enrique Bruzual with title,
+     description, Substack and GitHub follow links. Only rendered when
+     visibility is not ai_only (hidden from machine-only content). -->
+    
+    <section class="mt-20 p-8 bg-[#323339] border-l-4 border-primary">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="font-display text-2xl font-bold text-gray-100">Enrique Bruzual</h3>
+                <p class="text-primary text-sm font-medium tracking-wide uppercase">Strategic AI Architect</p>
+            </div>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+            Enrique is a Lead AI Solutions Architect specializing in scalable AI systems and distributed
+            orchestration. With over 30 years in the industry, he focuses on bridging the gap between complex
+            data infrastructure and elegant, production-grade solutions.
+        </p>
+        <div class="flex gap-6">
+            <a class="text-xs font-bold uppercase tracking-widest text-gray-100 hover:text-primary underline decoration-primary underline-offset-8"
+                href="https://substack.com/@enriquebruzual" target="_blank" rel="noopener noreferrer">Follow on
+                Substack</a>
+            <a class="text-xs font-bold uppercase tracking-widest text-gray-100 hover:text-primary underline decoration-primary underline-offset-8"
+                href="https://github.com/KikeVen" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+        </div>
+    </section>
+    
+</div>
+
+<!-- Copy Code: vanilla JS clipboard integration targeting .copy-code-btn
+     within .my-10 code containers. Copies the innerText of the adjacent
+     .codehilite pre block; provides 2-second check icon visual feedback
+     using Material Symbols swap and Tailwind color transitions. -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const copyButtons = document.querySelectorAll('.copy-code-btn');
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Find the closest parent container and then the associated pre tag
+                const container = btn.closest('.my-10');
+                if (container) {
+                    const codeBlock = container.querySelector('.codehilite pre');
+                    if (codeBlock) {
+                        navigator.clipboard.writeText(codeBlock.innerText);
+                        const icon = btn.querySelector('.material-icons');
+                        const originalIcon = icon.innerText;
+
+                        // Visual feedback
+                        icon.innerText = 'check';
+                        btn.classList.remove('text-gray-500');
+                        btn.classList.add('text-primary'); // match the brand
+
+                        setTimeout(() => {
+                            icon.innerText = originalIcon;
+                            btn.classList.add('text-gray-500');
+                            btn.classList.remove('text-primary');
+                        }, 2000);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+    </main>
+
+    <!-- Footer: 4-column Tailwind grid with brand tagline, site navigation,
+         social links (Substack, GitHub, Facebook) via Material Icons, and
+         ElevenLabs convai widget embed with contact-link trigger logic. -->
+    <footer class="bg-[#1a1b1e] text-white pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 border-b border-gray-800 pb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <h2 class="font-display text-5xl mb-6">Let's build something <br /><span
+                            class="text-primary italic">extraordinary.</span></h2>
+                    <p class="text-gray-400 max-w-md mb-8">
+                        Available for select freelance opportunities and consulting roles. Let's discuss your
+                        architectural challenges. Start a Technical Briefing with my AI
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Navigation</h4>
+                    <ul class="space-y-4">
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/">Home</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About
+                                Me</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
+                                href="/#services">Services</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
+                                href="/#work">Projects</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Social</h4>
+                    <ul class="space-y-4">
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://substack.com/@enriquebruzual" rel="noopener noreferrer"
+                                target="_blank"><span class="material-icons text-xs mr-2">link</span> Substack</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://github.com/KikeVen" rel="noopener noreferrer" target="_blank"><span
+                                    class="material-icons text-xs mr-2">code</span> GitHub</a></li>
+                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                                href="https://www.facebook.com/ZerikaiConsulting/" rel="noopener noreferrer"
+                                target="_blank"><span class="material-icons text-xs mr-2">thumb_up</span> Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
+                <p>© 2026 Enrique Bruzual. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a class="hover:text-gray-400 transition-colors" href="#">Privacy Policy</a>
+                    <a class="hover:text-gray-400 transition-colors" href="#">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ElevenLabs Agent (Inherited) -->
+    <elevenlabs-convai id="enrique-agent" agent-id="agent_0101kjr8jk36fpatbexzk50k5m6c"
+        variant="tiny"></elevenlabs-convai>
+    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close menu when clicking a link
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // AI Widget Integration Trigger
+            const agent = document.querySelector('elevenlabs-convai');
+            const contactLinks = document.querySelectorAll('#contact-link, #mobile-contact-link');
+
+            contactLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (!agent) return;
+
+                    agent.setAttribute('override-first-message', "I can assist you with reaching Enrique. You can email him at zerikai.dev@gmail.com, or I can take a message and your preferred contact time right here.");
+
+                    const openWidget = () => {
+                        const shadow = agent.shadowRoot;
+                        if (!shadow) return;
+                        const btn = shadow.querySelector('button[aria-label="Ask anything"]') ||
+                                    shadow.querySelector('button[aria-label="Open widget"]') ||
+                                    shadow.querySelector('button[aria-label="Open chat"]') ||
+                                    shadow.querySelector('button:first-of-type');
+                        if (btn) btn.click();
+                    };
+
+                    setTimeout(openWidget, 80);
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
