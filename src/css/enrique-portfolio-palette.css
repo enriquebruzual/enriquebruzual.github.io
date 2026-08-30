@@ -1,0 +1,165 @@
+/* enrique-portfolio-palette.css */
+/* Extracted from code.html - Safe to import alongside existing configs */
+
+/* ============================================
+   TAILWIND MATERIAL YOU PALETTE
+   Safe CSS Variables - No conflicts with existing system
+   ============================================ */
+
+:root {
+  /* Primary Color System */
+  --portfolio-primary: #BE5E38;
+  --portfolio-primary-container: #db744c;
+  --portfolio-primary-fixed: #ffdbcf;
+  --portfolio-primary-fixed-dim: #ffb59a;
+  --portfolio-on-primary: #5b1b00;
+  --portfolio-on-primary-container: #501600;
+  --portfolio-on-primary-fixed: #380d00;
+  --portfolio-on-primary-fixed-variant: #7c2d0a;
+  --portfolio-inverse-primary: #9b4420;
+
+  /* Secondary Color System */
+  --portfolio-secondary: #c6c6cd;
+  --portfolio-secondary-container: #46464d;
+  --portfolio-secondary-fixed: #e3e2e9;
+  --portfolio-secondary-fixed-dim: #c6c6cd;
+  --portfolio-on-secondary: #2f3036;
+  --portfolio-on-secondary-container: #b5b4bc;
+  --portfolio-on-secondary-fixed: #1a1b21;
+  --portfolio-on-secondary-fixed-variant: #46464d;
+
+  /* Tertiary Color System */
+  --portfolio-tertiary: #72d6de;
+  --portfolio-tertiary-container: #339fa7;
+  --portfolio-tertiary-fixed: #8ff2fb;
+  --portfolio-tertiary-fixed-dim: #72d6de;
+  --portfolio-on-tertiary: #00363a;
+  --portfolio-on-tertiary-container: #002f32;
+  --portfolio-on-tertiary-fixed: #002022;
+  --portfolio-on-tertiary-fixed-variant: #004f54;
+
+  /* Error Color System */
+  --portfolio-error: #ffb4ab;
+  --portfolio-error-container: #93000a;
+  --portfolio-on-error: #690005;
+  --portfolio-on-error-container: #ffdad6;
+
+  /* Surface Color System */
+  --portfolio-surface: #2A2B30;
+  --portfolio-surface-dim: #121318;
+  --portfolio-surface-bright: #38393e;
+  --portfolio-surface-container: #1e1f24;
+  --portfolio-surface-container-lowest: #0d0e12;
+  --portfolio-surface-container-low: #1a1b20;
+  --portfolio-surface-container-high: #292a2f;
+  --portfolio-surface-container-highest: #34343a;
+  --portfolio-surface-variant: #34343a;
+  --portfolio-surface-tint: #ffb59a;
+
+  /* Background & Surface Text */
+  --portfolio-background: #121318;
+  --portfolio-on-surface: #e3e2e8;
+  --portfolio-on-surface-variant: #dcc1b8;
+  --portfolio-on-background: #e3e2e8;
+
+  /* Neutral/Outline */
+  --portfolio-outline: #a48c83;
+  --portfolio-outline-variant: #56423c;
+
+  /* Inverse Colors */
+  --portfolio-inverse-surface: #e3e2e8;
+  --portfolio-inverse-on-surface: #2f3035;
+}
+
+/* ============================================
+   CUSTOM UTILITY CLASSES
+   ============================================ */
+
+.portfolio-ghost-border {
+  border: 1px solid rgba(190, 94, 56, 0.2);
+}
+
+.portfolio-vertical-accent {
+  width: 1px;
+  background-color: var(--portfolio-primary, #BE5E38);
+}
+
+.portfolio-horizontal-accent {
+  height: 1px;
+  background-color: var(--portfolio-primary, #BE5E38);
+}
+
+/* Material Symbols Icon Configuration */
+.portfolio-material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+/* ============================================
+   TYPOGRAPHY STYLES
+   ============================================ */
+
+.portfolio-font-headline {
+  font-family: 'Noto Serif', serif;
+}
+
+.portfolio-font-display {
+  font-family: 'Noto Serif', serif;
+}
+
+.portfolio-font-body {
+  font-family: 'Inter', sans-serif;
+}
+
+.portfolio-font-label {
+  font-family: 'Inter', sans-serif;
+}
+
+/* ============================================
+   OPTIONAL: Full Portfolio Theme
+   Apply to any container element
+   ============================================ */
+
+.portfolio-theme {
+  background-color: var(--portfolio-background);
+  color: var(--portfolio-on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.portfolio-theme-surface {
+  background-color: var(--portfolio-surface);
+}
+
+.portfolio-theme-surface-container {
+  background-color: var(--portfolio-surface-container);
+}
+
+.portfolio-theme-surface-container-high {
+  background-color: var(--portfolio-surface-container-high);
+}
+
+/* ============================================
+   RESPONSIVE SPACING (from tailwind config)
+   ============================================ */
+
+:root {
+  --portfolio-spacing-16: 4rem;
+  --portfolio-spacing-20: 5rem;
+  --portfolio-spacing-24: 6rem;
+  --portfolio-spacing-32: 8rem;
+}

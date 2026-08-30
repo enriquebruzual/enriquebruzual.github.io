@@ -6,4 +6,4 @@ Allow: /
 Disallow: /__ignore/
 Disallow: /tailwind.config.js
 
-Sitemap: https://zerikai.com/sitemap.xml
+Sitemap: https://enriquebruzual.github.io/sitemap.xml

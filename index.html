@@ -37,14 +37,15 @@
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="author" type="text/plain" href="/humans.txt" />
-    <link rel="stylesheet" href="/src/css/tailwind.css" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Serif:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
     <style>
         ::-webkit-scrollbar {
             width: 8px;
@@ -136,6 +137,125 @@
         ]
     }
     </script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-fixed-variant": "#7c2d0a",
+                        "surface-variant": "#34343a",
+                        "primary": "#BE5E38",
+                        "outline": "#a48c83",
+                        "surface-dim": "#121318",
+                        "on-error": "#690005",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#72d6de",
+                        "primary-fixed-dim": "#ffb59a",
+                        "surface-container-lowest": "#0d0e12",
+                        "on-secondary-fixed": "#1a1b21",
+                        "primary-fixed": "#ffdbcf",
+                        "tertiary-container": "#339fa7",
+                        "error": "#ffb4ab",
+                        "secondary-container": "#46464d",
+                        "on-surface": "#e3e2e8",
+                        "primary-container": "#db744c",
+                        "on-primary-container": "#501600",
+                        "secondary-fixed-dim": "#c6c6cd",
+                        "surface-container": "#1e1f24",
+                        "on-secondary-container": "#b5b4bc",
+                        "surface-tint": "#ffb59a",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "on-background": "#e3e2e8",
+                        "on-secondary": "#2f3036",
+                        "on-tertiary-fixed": "#002022",
+                        "on-primary": "#5b1b00",
+                        "on-tertiary": "#00363a",
+                        "inverse-primary": "#9b4420",
+                        "background": "#121318",
+                        "surface": "#2A2B30",
+                        "on-tertiary-container": "#002f32",
+                        "on-primary-fixed": "#380d00",
+                        "surface-bright": "#38393e",
+                        "tertiary": "#72d6de",
+                        "on-surface-variant": "#dcc1b8",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#8ff2fb",
+                        "surface-container-high": "#292a2f",
+                        "inverse-on-surface": "#2f3035",
+                        "secondary": "#c6c6cd",
+                        "surface-container-low": "#1a1b20",
+                        "secondary-fixed": "#e3e2e9",
+                        "surface-container-highest": "#34343a",
+                        "on-secondary-fixed-variant": "#46464d",
+                        "outline-variant": "#56423c",
+                        "inverse-surface": "#e3e2e8"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif", "serif"],
+                        "display": ["Noto Serif", "serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    },
+                    spacing: {
+                        '16': '4rem',
+                        '20': '5rem',
+                        '24': '6rem',
+                        '32': '8rem',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #121318;
+            color: #e3e2e8;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .ghost-border {
+            border: 1px solid rgba(190, 94, 56, 0.2);
+        }
+        
+        .vertical-accent {
+            width: 1px;
+            background-color: #BE5E38;
+        }
+        
+        .horizontal-accent {
+            height: 1px;
+            background-color: #BE5E38;
+        }
+
+        .outline-text {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+            color: transparent;
+        }
+
+        .dark .outline-text {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .light .outline-text {
+            -webkit-text-stroke: 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
 </head>
 
 <body
@@ -184,398 +304,385 @@
         </div>
     </nav>
     <main>
-        <!-- Hero Header: full-width intro with large EB watermark,
-             portrait image, job title, lead paragraph, and ElevenLabs
-             convai CTA for an AI briefing. Uses Playfair Display + Inter
-             fonts and Material Icons. -->
-        <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-            <div class="absolute top-0 right-0 -mr-20 -mt-20 opacity-10 pointer-events-none select-none">
-                <span class="font-display text-[20rem] font-bold outline-text leading-none">EB</span>
-            </div>
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div class="space-y-8">
-                        <div class="inline-block border-l-2 border-primary pl-4">
-                            <span
-                                class="text-primary tracking-[0.2em] text-sm font-semibold uppercase">Introducing</span>
-                        </div>
-                        <h1
-                            class="font-display text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight text-gray-900 dark:text-white">
-                            Enrique <br />
-                            <span class="text-primary">Bruzual</span>
-                        </h1>
-                        <h2
-                            class="text-2xl lg:text-3xl font-light text-gray-600 dark:text-gray-300 font-display italic">
-                            Principal AI Solutions Architect
-                        </h2>
-                        <p
-                            class="text-lg text-gray-600 dark:text-gray-400 max-w-lg leading-relaxed border-t border-gray-200 dark:border-gray-800 pt-8 mt-8">
-                            Driving Strategic Intent through Production-Grade Architecture and AI Orchestration. I build
-                            resilient, intent-driven systems that bridge the gap between high-level business logic and
-                            scalable AI execution.
-                        </p>
-                        <div class="pt-4 flex items-center space-x-6">
-                            <a class="inline-flex items-center text-sm font-bold uppercase tracking-widest border-b-2 border-primary pb-1 hover:text-primary transition-colors"
-                                href="#work" id="core_competencies">
-                                Start AI Briefing <span class="material-icons text-sm ml-2">arrow_forward</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="relative lg:h-[600px] flex items-center justify-center lg:justify-end">
-                        <div
-                            class="relative w-full max-w-md aspect-[3/4] bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-2xl">
-                            <img alt="Portrait of Enrique Bruzual, Principal AI Solutions Architect with 30 years of experience in AI orchestration and system architecture"
-                                class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700"
-                                src="src/assets/images/enrique_bruzual_3.png" width="450" height="600" />
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-transparent opacity-60">
-                            </div>
-                        </div>
-                        <div
-                            class="absolute bottom-10 -left-10 bg-card-light dark:bg-card-dark p-6 shadow-xl border-l-4 border-primary max-w-xs hidden md:block">
-                            <p class="font-display text-4xl font-bold text-gray-900 dark:text-white">20+</p>
-                            <p class="text-xs uppercase tracking-widest text-gray-500 mt-1">Years Experience</p>
-                        </div>
-                    </div>
+<!-- Hero Header: full-width intro with large EB watermark,
+     portrait image, job title, lead paragraph, and ElevenLabs
+     convai CTA for an AI briefing. Uses Playfair Display + Inter
+     fonts and Material Icons. -->
+<header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+    <div class="absolute top-0 right-0 -mr-20 -mt-20 opacity-10 pointer-events-none select-none">
+        <span class="font-display text-[20rem] font-bold outline-text leading-none">EB</span>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8">
+                <div class="inline-block border-l-2 border-primary pl-4">
+                    <span
+                        class="text-primary tracking-[0.2em] text-sm font-semibold uppercase">Introducing</span>
                 </div>
-            </div>
-            <div
-                class="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none opacity-5 dark:opacity-[0.03]">
-                <span
-                    class="font-display text-[15vw] leading-none whitespace-nowrap text-gray-900 dark:text-white">ARCHITECT</span>
-            </div>
-        </header>
-        <!-- Core Competencies: 4-card responsive grid (1→2→4 cols) with
-             Material Icons and Tailwind hover transitions. Cards cover
-             Strategic AI, System Architecture, Full-Stack Logic, and Tech
-             Leadership. Each card links to ElevenLabs convai briefing. -->
-        <section class="py-20 bg-gray-50 dark:bg-[#25262B]">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div id="services"
-                    class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-gray-200 dark:border-gray-700 pb-8">
-                    <div>
-                        <span class="text-primary text-xs font-bold tracking-widest uppercase mb-2 block">#
-                            Expertise</span>
-                        <h2 class="font-display text-4xl text-gray-900 dark:text-white">Core Competencies.</h2>
-                    </div>
-                    <a class="hidden md:flex items-center text-xs uppercase tracking-widest hover:text-primary mt-4 md:mt-0"
-                        href="#" id="core_competencies_2">
+                <h1
+                    class="font-display text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight text-gray-900 dark:text-white">
+                    Enrique <br />
+                    <span class="text-primary">Bruzual</span>
+                </h1>
+                <h2
+                    class="text-2xl lg:text-3xl font-light text-gray-600 dark:text-gray-300 font-display italic">
+                    Principal AI Solutions Architect
+                </h2>
+                <p
+                    class="text-lg text-gray-600 dark:text-gray-400 max-w-lg leading-relaxed border-t border-gray-200 dark:border-gray-800 pt-8 mt-8">
+                    Driving Strategic Intent through Production-Grade Architecture and AI Orchestration. I build
+                    resilient, intent-driven systems that bridge the gap between high-level business logic and
+                    scalable AI execution.
+                </p>
+                <div class="pt-4 flex items-center space-x-6">
+                    <a class="inline-flex items-center text-sm font-bold uppercase tracking-widest border-b-2 border-primary pb-1 hover:text-primary transition-colors"
+                        href="#work" id="core_competencies">
                         Start AI Briefing <span class="material-icons text-sm ml-2">arrow_forward</span>
                     </a>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            </div>
+            <div class="relative lg:h-[600px] flex items-center justify-center lg:justify-end">
+                <div
+                    class="relative w-full max-w-md aspect-[3/4] bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-2xl">
+                    <img alt="Portrait of Enrique Bruzual, Principal AI Solutions Architect with 30 years of experience in AI orchestration and system architecture"
+                        class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700"
+                        src="src/assets/images/enrique_bruzual_3.png" width="450" height="600" />
                     <div
-                        class="group p-6 bg-white dark:bg-card-dark border border-gray-100 dark:border-gray-800 hover:border-primary/50 transition-all duration-300">
-                        <div class="text-primary mb-6"><span class="material-icons text-4xl">psychology</span></div>
-                        <h3
-                            class="font-display text-xl text-gray-900 dark:text-white mb-3 group-hover:text-primary transition-colors">
-                            Strategic AI</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                            Architecting high-fidelity intelligence pipelines that bridge complex business logic with
-                            generative multi-agent systems.
-                        </p>
-                    </div>
-                    <div
-                        class="group p-6 bg-white dark:bg-card-dark border border-gray-100 dark:border-gray-800 hover:border-primary/50 transition-all duration-300">
-                        <div class="text-primary mb-6"><span class="material-icons text-4xl">dns</span></div>
-                        <h3
-                            class="font-display text-xl text-gray-900 dark:text-white mb-3 group-hover:text-primary transition-colors">
-                            System Architecture</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                            Designing resilient, high-availability multi-tenant backends engineered for secure,
-                            production-grade traffic.
-                        </p>
-                    </div>
-                    <div
-                        class="group p-6 bg-white dark:bg-card-dark border border-gray-100 dark:border-gray-800 hover:border-primary/50 transition-all duration-300">
-                        <div class="text-primary mb-6"><span class="material-icons text-4xl">code</span></div>
-                        <h3
-                            class="font-display text-xl text-gray-900 dark:text-white mb-3 group-hover:text-primary transition-colors">
-                            Full-Stack Logic</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                            Precision integration of high-performance frontends with complex asynchronous backend data
-                            processing.
-                        </p>
-                    </div>
-                    <div
-                        class="group p-6 bg-white dark:bg-card-dark border border-gray-100 dark:border-gray-800 hover:border-primary/50 transition-all duration-300">
-                        <div class="text-primary mb-6"><span class="material-icons text-4xl">auto_graph</span></div>
-                        <h3
-                            class="font-display text-xl text-gray-900 dark:text-white mb-3 group-hover:text-primary transition-colors">
-                            Tech Leadership</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                            Mentoring engineering teams through years of architectural wisdom and technical roadmapping.
-                        </p>
+                        class="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-transparent opacity-60">
                     </div>
                 </div>
-            </div>
-        </section>
-        <!-- Selected Projects: two alternating-image project showcases
-             (KillShot intelligence engine + Zerikai voice scheduling) with
-             Tailwind 12-col grid, grayscale→color hover images, tech stack
-             tags, and ElevenLabs convai case-study request triggers. -->
-        <section class="py-24 bg-background-light dark:bg-background-dark relative" id="work">
-            <div
-                class="absolute top-40 right-0 pointer-events-none opacity-5 dark:opacity-[0.02] overflow-hidden w-full text-right">
-                <span class="font-display text-[12vw] leading-none text-gray-900 dark:text-white">PROJECTS</span>
-            </div>
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="mb-20">
-                    <span class="text-primary text-xs font-bold tracking-widest uppercase mb-2 block"># Works</span>
-                    <h2 class="font-display text-4xl md:text-5xl text-gray-900 dark:text-white">Selected Projects.</h2>
-                </div>
-                <div class="space-y-24">
-                    <div class="group grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                        <div class="lg:col-span-7 relative overflow-hidden">
-                            <div class="aspect-[16/9] bg-gray-100 dark:bg-card-dark overflow-hidden relative">
-                                <img alt="KillShot strategic intelligence engine dashboard showing real-time predictive analytics and market trend forecasting"
-                                    class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                                    src="src/assets/images/killshot_hp_bw.png" width="800" height="450"
-                                    loading="lazy" />
-                                <div
-                                    class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="lg:col-span-5 lg:pl-8">
-                            <span class="text-xs font-bold text-gray-400 dark:text-gray-500 mb-2 block">01</span>
-                            <h3 class="font-display text-3xl text-gray-900 dark:text-white mb-4">KillShot: Strategic
-                                Intelligence Engine</h3>
-                            <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                                A high-fidelity analytics platform designed for real-time strategic decision making.
-                                Leveraging predictive modeling to forecast market trends with 85% accuracy.
-                            </p>
-                            <ul class="flex flex-wrap gap-3 mb-8">
-                                <li
-                                    class="text-xs border border-gray-300 dark:border-gray-700 px-3 py-1 text-gray-500 uppercase tracking-wide">
-                                    Python</li>
-                                <li
-                                    class="text-xs border border-gray-300 dark:border-gray-700 px-3 py-1 text-gray-500 uppercase tracking-wide">
-                                    pgvector</li>
-                                <li
-                                    class="text-xs border border-gray-300 dark:border-gray-700 px-3 py-1 text-gray-500 uppercase tracking-wide">
-                                    HTMX/AplineJS</li>
-                            </ul>
-                            <a class="text-sm font-bold uppercase tracking-widest text-primary hover:text-white transition-colors flex items-center"
-                                href="#" id="killshot_case">
-                                REQUEST CASE STUDY <span class="material-icons text-sm ml-2">arrow_right_alt</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="group grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                        <div class="lg:col-span-5 lg:pr-8 order-2 lg:order-1">
-                            <span class="text-xs font-bold text-gray-400 dark:text-gray-500 mb-2 block">02</span>
-                            <h3 class="font-display text-3xl text-gray-900 dark:text-white mb-4">AI-Powered
-                                Voice
-                                Scheduling</h3>
-                            <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                                A production-grade, multi-tenant SaaS platform utilizing Model Context Protocol (MCP) to
-                                bridge conversational voice agents with secure, tenant-isolated Django scheduling
-                                backends.
-                            </p>
-                            <ul class="flex flex-wrap gap-3 mb-8">
-                                <li
-                                    class="text-xs border border-gray-300 dark:border-gray-700 px-3 py-1 text-gray-500 uppercase tracking-wide">
-                                    Python</li>
-                                <li
-                                    class="text-xs border border-gray-300 dark:border-gray-700 px-3 py-1 text-gray-500 uppercase tracking-wide">
-                                    Django</li>
-                                <li
-                                    class="text-xs border border-gray-300 dark:border-gray-700 px-3 py-1 text-gray-500 uppercase tracking-wide">
-                                    MCP-Server</li>
-                                <li
-                                    class="text-xs border border-gray-300 dark:border-gray-700 px-3 py-1 text-gray-500 uppercase tracking-wide">
-                                    LLM-integration</li>
-                            </ul>
-                            <a class="text-sm font-bold uppercase tracking-widest text-primary hover:text-white transition-colors flex items-center"
-                                href="#" id="voice_case">
-                                "REQUEST CASE STUDY <span class="material-icons text-sm ml-2">arrow_right_alt</span>
-                            </a>
-                        </div>
-                        <div class="lg:col-span-7 order-1 lg:order-2 relative overflow-hidden">
-                            <div class="aspect-[16/9] bg-gray-100 dark:bg-card-dark overflow-hidden relative">
-                                <img alt="Zerikai AI-powered voice scheduling platform interface showing multi-tenant SaaS architecture with MCP and Django integration"
-                                    class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                                    src="src/assets/images/voice_zerikai_1_bw.png" width="800" height="450"
-                                    loading="lazy" />
-                                <div
-                                    class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-20 text-center">
-                    <a class="inline-block px-8 py-3 border border-gray-300 dark:border-gray-700 hover:border-primary text-gray-900 dark:text-white hover:text-primary transition-all text-sm font-medium uppercase tracking-widest"
-                        href="#">
-                        See All Projects
-                    </a>
-                </div>
-            </div>
-        </section>
-        <section class="py-24 bg-gray-50 dark:bg-[#25262B]" id="articles">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <span class="text-primary text-xs font-bold tracking-widest uppercase mb-2 block"># Writing</span>
-                    <h2 class="font-display text-4xl text-gray-900 dark:text-white">Technical Insights.</h2>
-                </div>
-                <div id="articles-container"
-                    class="grid gap-px bg-gray-200 dark:bg-gray-800 border border-gray-200 dark:border-gray-800">
-                    <!-- Dynamic articles rendered from featured-articles.json via vanilla JS
-                     fetch API. Filters status==1 and displays 5 most recent
-                     as linked cards with Material Icons arrow. -->
-                </div>
-            </div>
-        </section>
-        <!-- About Me: two-column section with portrait image, 30-year
-             career narrative spanning digital architecture, robotics R&D,
-             and multi-agent AI pipelines. Stats grid (Years/Sectors/
-             Systems) with Tailwind border accents. -->
-        <section class="py-24 bg-background-light dark:bg-background-dark" id="about">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div class="relative">
-                        <img alt="Enrique Bruzual working in a minimal office environment, reflecting 30 years of hands-on experience in digital architecture and AI systems"
-                            class="w-full grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl"
-                            src="src/assets/images/about.png" width="600" height="400" loading="lazy" />
-                        <div class="absolute -bottom-6 -right-6 w-48 h-48 border border-primary hidden md:block z-[-1]">
-                        </div>
-                    </div>
-                    <div>
-                        <span class="text-primary text-xs font-bold tracking-widest uppercase mb-4 block"># About
-                            Me</span>
-                        <h2 class="font-display text-4xl lg:text-5xl text-gray-900 dark:text-white mb-8 leading-tight">
-                            Three Decades of Bridging <br /> High-Fidelity Design and Machine Logic.
-
-                        </h2>
-                        <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                            I have spent over 30 years refining how humans interact with complex systems, evolving from
-                            early digital architecture for major media outlets to leading deep R&D initiatives in
-                            robotics
-                            and CNC automation.
-                        </p>
-                        <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                            Whether developing custom hardware-software interfaces during startup phases
-                            and academic tenure, or orchestrating multi-agent AI pipelines for enterprise SaaS, my
-                            philosophy remains the same: technology must be the high-fidelity bridge between strategic
-                            ambition and executable reality.
-                        </p>
-                        <div class="grid grid-cols-3 gap-8 pt-8 border-t border-gray-200 dark:border-gray-800">
-                            <div>
-                                <span class="block font-display text-4xl text-primary font-bold">20+</span>
-                                <span class="text-xs text-gray-500 uppercase tracking-widest mt-1 block">Years</span>
-                            </div>
-                            <div>
-                                <span class="block font-display text-4xl text-primary font-bold">06+</span>
-                                <span class="text-xs text-gray-500 uppercase tracking-widest mt-1 block">Sectors</span>
-                            </div>
-                            <div>
-                                <span class="block font-display text-4xl text-primary font-bold">∞</span>
-                                <span class="text-xs text-gray-500 uppercase tracking-widest mt-1 block">Systems</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-    <!-- Footer: 4-column Tailwind grid with brand tagline, site nav
-         links, social links (Substack, GitHub, Facebook) via Material
-         Icons, and legal links. Includes ElevenLabs convai embed and
-         mobile menu toggle JS. -->
-    <footer class="bg-[#1a1b1e] text-white pt-24 pb-12" id="#">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 border-b border-gray-800 pb-16">
-                <div class="col-span-1 md:col-span-2">
-                    <h2 class="font-display text-5xl mb-6">Let's build something <br /><span
-                            class="text-primary italic">extraordinary.</span></h2>
-                    <p class="text-gray-400 max-w-md mb-8">
-                        Available for select freelance opportunities and consulting roles. Let's discuss your
-                        architectural challenges. Start a Technical Briefing with my AI
-                    </p>
-
-                </div>
-                <div>
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Navigation</h4>
-                    <ul class="space-y-4">
-                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="#">Home</a></li>
-                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="#about">About
-                                Me</a></li>
-                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
-                                href="#services">Services</a></li>
-                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
-                                href="#work">Projects</a></li>
-                        <!-- <li><a class="text-gray-400 hover:text-white transition-colors text-sm"
-                                href="#contact">Contact</a></li> -->
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">Social</h4>
-                    <ul class="space-y-4">
-                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
-                                href="https://substack.com/@enriquebruzual" rel="noopener noreferrer"
-                                target="_blank"><span class="material-icons text-xs mr-2">link</span> Substack</a></li>
-                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
-                                href="https://github.com/KikeVen" rel="noopener noreferrer" target="_blank"><span
-                                    class="material-icons text-xs mr-2">code</span>
-                                GitHub</a></li>
-                        <li><a class="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
-                                href="https://www.facebook.com/ZerikaiConsulting/" rel="noopener noreferrer"
-                                target="_blank"><span class="material-icons text-xs mr-2">thumb_up</span> Facebook</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
-                <p>© 2026 Enrique Bruzual. All rights reserved.</p>
-                <p class="text-xs text-gray-600 mt-2">Last Updated: March 2026</p>
-                <div class="flex space-x-6 mt-4 md:mt-0">
-                    <a class="hover:text-gray-400 transition-colors" href="#" id="private_policy">Privacy Policy</a>
-                    <a class="hover:text-gray-400 transition-colors" href="#" id="terms_use">Terms of Use</a>
+                <div
+                    class="absolute bottom-10 -left-10 bg-card-light dark:bg-card-dark p-6 shadow-xl border-l-4 border-primary max-w-xs hidden md:block">
+                    <p class="font-display text-4xl font-bold text-gray-900 dark:text-white">20+</p>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mt-1">Years Experience</p>
                 </div>
             </div>
         </div>
-    </footer>
-    <script>
-        // --- Dynamic Articles Renderer ---
-        async function renderArticles() {
-            const container = document.getElementById('articles-container');
-            if (!container) return;
-
-            try {
-                const response = await fetch('./featured-articles.json?v=' + new Date().getTime());
-                const articles = await response.json();
-
-                // Filter out unpublished entries (status: 0) and limit to the 5 most recent
-                const published = articles.filter(article => article.status === 1).slice(0, 3);
-
-                container.innerHTML = published.map(article => `
-                    <a href="${article.url || '#'}" class="block">
-                        <article class="bg-white dark:bg-background-dark p-8 md:p-10 hover:bg-gray-50 dark:hover:bg-[#2e2f35] transition-colors group">
-                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-3 mb-3">
-                                        <span class="text-primary text-xs font-bold uppercase tracking-widest">${article.category}</span>
-                                        <span class="text-gray-400 text-xs uppercase tracking-widest">${article.date}</span>
-                                    </div>
-                                    <h3 class="font-display text-2xl text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">${article.title}</h3>
-                                    <p class="text-gray-500 dark:text-gray-400 text-sm max-w-2xl">${article.subtitle}</p>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <span class="material-icons text-gray-300 group-hover:text-primary transition-colors transform group-hover:translate-x-1">arrow_forward</span>
-                                </div>
-                            </div>
-                        </article>
-                    </a>
-                `).join('');
-
-            } catch (error) {
-                console.error('Failed to load articles:', error);
-            }
-        }
-
-        renderArticles();
-    </script>
+    </div>
+    <div
+        class="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none opacity-5 dark:opacity-[0.03]">
+        <span
+            class="font-display text-[15vw] leading-none whitespace-nowrap text-gray-900 dark:text-white">ARCHITECT</span>
+    </div>
+</header>
+<!-- About Section -->
+<section class="py-24 px-8 max-w-7xl mx-auto" id="about">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+<div class="relative group">
+<div class="absolute inset-0 bg-surface-container-high translate-x-4 translate-y-4 transition-transform group-hover:translate-x-6 group-hover:translate-y-6 duration-500"></div>
+<div class="relative z-10 w-full h-[500px] bg-cover bg-center grayscale border border-on-surface-variant/20" data-alt="Grayscale sunset over the ocean with a lone figure on the beach, maintaining the minimalist and moody aesthetic." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuC--o5fNw0XCQvPqhhNJDi0a0pHpoWR_I86dL0SGy6s-bMo1AsAmh0jm9Q6KsB282ThR3jmA9qdOX7B6LsKfBg1LVJQukmDSXIfhs1yYK29c8C3B8Di9XsmgHU65IuD5eb9YZ7nXdhL-7TRMzFjdxpce6XZeALlERfdYkzNDGhjGK9tttv0nIJehl4ATVvYdE1wp_d3FVq4100K_G-EYMyY_IByi-ovkwdaG6pPn3oriBsqBkX7ggHbXlBrGvQ3C1S0Wg&quot;);">
+<div class="absolute left-8 right-8 bg-surface/90 backdrop-blur-sm p-8 border-l-2 border-primary mt-12">
+<p class="font-headline text-lg text-on-surface mb-4">Simplicity is the bases of all understanding.</p>
+<div class="w-16 horizontal-accent"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col justify-center h-full pt-12 md:pt-0 pl-0 md:pl-12">
+<div class="flex items-center space-x-4 mb-6">
+<div class="w-8 horizontal-accent"></div>
+<span class="font-label text-label-md tracking-[0.02em] uppercase text-primary">About Me</span>
+</div>
+<h2 class="font-headline text-[2.5rem] leading-[1.2] mb-8 text-on-surface">Building scalable digital solutions.</h2>
+<p class="font-body text-body-lg text-on-surface-variant mb-16 max-w-xl">
+                    I'm a strategic AI architect with over two decades of experience engineering robust, scalable solutions. I blend deep technical rigor with an understanding of editorial intent, translating complex logic into seamless human experiences.
+                </p>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+<div>
+<span class="block font-headline text-3xl text-primary mb-2">20+</span>
+<span class="block font-label text-label-sm uppercase tracking-widest text-on-surface-variant">Years Experience</span>
+</div>
+<div>
+<span class="block font-headline text-3xl text-primary mb-2">60+</span>
+<span class="block font-label text-label-sm uppercase tracking-widest text-on-surface-variant">Projects Delivered</span>
+</div>
+<div>
+<span class="block font-headline text-3xl text-primary mb-2">01+</span>
+<span class="block font-label text-label-sm uppercase tracking-widest text-on-surface-variant">OPEN<br>SOURCE</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Services Section -->
+<section class="py-24 bg-surface px-8" id="services">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<div class="flex items-center justify-center space-x-4 mb-6">
+<div class="w-8 horizontal-accent"></div>
+<span class="font-label text-label-md tracking-[0.02em] uppercase text-primary">Services</span>
+<div class="w-8 horizontal-accent"></div>
+</div>
+<h2 class="font-headline text-[2.5rem] text-on-surface">What I Can Do For You</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-on-surface-variant/10">
+<!-- Service 1 -->
+<div class="bg-surface p-12 hover:bg-surface-container-high transition-colors duration-300 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-8 block group-hover:scale-110 transition-transform">architecture</span>
+<h3 class="font-headline text-xl text-on-surface mb-4">RAG &amp; Retrieval Architecture Design</h3>
+<p class="font-body text-sm text-on-surface-variant mb-8">Teams building AI assistants/agents needing production-grade retrieval. Reduced context overhead, lower inference costs, precise retrieval</p>
+<a class="text-primary font-label text-label-sm uppercase tracking-widest flex items-center space-x-2 group-hover:space-x-4 transition-all" href="#" id="service_rag">
+<span class="">Learn More</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Service 2 -->
+<div class="bg-surface p-12 hover:bg-surface-container-high transition-colors duration-300 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-8 block group-hover:scale-110 transition-transform">dns</span>
+<h3 class="font-headline text-xl text-on-surface mb-4">Agentic Pipeline Architecture</h3>
+<p class="font-body text-sm text-on-surface-variant mb-8">Startups/SMB building autonomous multi-stage qualification/decision systems. Autonomous systems that scale without UI blocking.</p>
+<a class="text-primary font-label text-label-sm uppercase tracking-widest flex items-center space-x-2 group-hover:space-x-4 transition-all" href="#" id="service_agentic">
+<span class="">Learn More</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Service 3 -->
+<div class="bg-surface p-12 hover:bg-surface-container-high transition-colors duration-300 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-8 block group-hover:scale-110 transition-transform">code_blocks</span>
+<h3 class="font-headline text-xl text-on-surface mb-4">Inference Cost Optimization</h3>
+<p class="font-body text-sm text-on-surface-variant mb-8">Teams with high LLM API bills (OpenAI, Anthropic, DeepSeek). 10-50x cost reduction (your track record: 25x verified).</p>
+<a class="text-primary font-label text-label-sm uppercase tracking-widest flex items-center space-x-2 group-hover:space-x-4 transition-all" href="#" id="service_cost">
+<span class="">Learn More</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Service 4 -->
+<div class="bg-surface p-12 hover:bg-surface-container-high transition-colors duration-300 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-8 block group-hover:scale-110 transition-transform">groups</span>
+<h3 class="font-headline text-xl text-on-surface mb-4">AI-Readiness Audits (SaaS Angle)</h3>
+<p class="font-body text-sm text-on-surface-variant mb-8">Site owners, SEO professionals, enterprises ahead of AI search transition. Positioning advantage as AI search gains market share.</p>
+<a class="text-primary font-label text-label-sm uppercase tracking-widest flex items-center space-x-2 group-hover:space-x-4 transition-all" href="#" id="service_audit">
+<span class="">Learn More</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Skills & Experience Section -->
+<section class="py-24 px-8" id="skills">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+<div>
+<div class="flex items-center space-x-4 mb-6">
+<span class="font-label text-label-sm tracking-widest uppercase text-primary">Skills</span>
+</div>
+<h2 class="font-headline text-[2.5rem] mb-12 text-on-surface">Stack Snap-shot</h2>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between mb-2 font-label text-sm text-on-surface">
+<span class="">Python (Django, FastAPI, MCP server development)</span>
+<span class="">95%</span>
+</div>
+<div class="w-full h-px bg-on-surface-variant/20 relative">
+<div class="absolute top-0 left-0 h-px bg-primary" style="width: 95%;"></div>
+<div class="absolute -top-[2px] bg-primary w-[5px] h-[5px]" style="left: 95%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2 font-label text-sm text-on-surface">
+<span class="">SQL (PostgreSQL, pgvector, advanced ORM patterns)</span>
+<span class="">90%</span>
+</div>
+<div class="w-full h-px bg-on-surface-variant/20 relative">
+<div class="absolute top-0 left-0 h-px bg-primary" style="width: 90%;"></div>
+<div class="absolute -top-[2px] bg-primary w-[5px] h-[5px]" style="left: 90%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2 font-label text-sm text-on-surface">
+<span class="">Hybrid RAG (semantic + lexical + AST) - FastMCP</span>
+<span class="">88%</span>
+</div>
+<div class="w-full h-px bg-on-surface-variant/20 relative">
+<div class="absolute top-0 left-0 h-px bg-primary" style="width: 88%;"></div>
+<div class="absolute -top-[2px] bg-primary w-[5px] h-[5px]" style="left: 88%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2 font-label text-sm text-on-surface">
+<span class="">Model Context Protocol (MCP)</span>
+<span class="">85%</span>
+</div>
+<div class="w-full h-px bg-on-surface-variant/20 relative">
+<div class="absolute top-0 left-0 h-px bg-primary" style="width: 85%;"></div>
+<div class="absolute -top-[2px] bg-primary w-[5px] h-[5px]" style="left: 85%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2 font-label text-sm text-on-surface">
+<span class="">Hybrid RAG (semantic + lexical + AST)</span>
+<span class="">92%</span>
+</div>
+<div class="w-full h-px bg-on-surface-variant/20 relative">
+<div class="absolute top-0 left-0 h-px bg-primary" style="width: 92%;"></div>
+<div class="absolute -top-[2px] bg-primary w-[5px] h-[5px]" style="left: 92%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2 font-label text-sm text-on-surface">
+<span class="">Frontend (Jinja2/HTML/JS/CSS - HTMX/SSR)</span>
+<span class="">90%</span>
+</div>
+<div class="w-full h-px bg-on-surface-variant/20 relative">
+<div class="absolute top-0 left-0 h-px bg-primary" style="width: 90%;"></div>
+<div class="absolute -top-[2px] bg-primary w-[5px] h-[5px]" style="left: 90%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="flex items-center space-x-4 mb-6">
+<span class="font-label text-label-sm tracking-widest uppercase text-primary">Experience</span>
+</div>
+<h2 class="font-headline text-[2.5rem] mb-12 text-on-surface">Most Recent</h2>
+<div class="space-y-12">
+<div class="flex items-start">
+<div class="w-32 flex-shrink-0 font-label text-sm text-primary flex items-center mt-1">
+<div class="w-[5px] h-[5px] bg-primary mr-3"></div>
+2026 - Present
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+<div>
+<h3 class="font-body text-base font-medium text-on-surface mb-1">Senior AI Architect &amp; Developer</h3>
+<p class="font-body text-sm text-on-surface-variant">zerikai_memory</p>
+</div>
+<p class="font-body text-sm text-on-surface-variant">Designed and shipped an open-source hybrid RAG architecture giving AI agents persistent, cost-efficient memory across sessions.</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-32 flex-shrink-0 font-label text-sm text-primary flex items-center mt-1">
+<div class="w-[5px] h-[5px] bg-primary mr-3"></div>02/26 - 7/26</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+<div>
+<h3 class="font-body text-base font-medium text-on-surface mb-1">AI Systems Architect &amp; Development</h3>
+<p class="font-body text-sm text-on-surface-variant">KillShot</p>
+</div>
+<p class="font-body text-sm text-on-surface-variant">4-stage Reddit lead qualification pipeline (summary generation, intent scoring, key point extraction, draft response)</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-32 flex-shrink-0 font-label text-sm text-primary flex items-center mt-1">
+<div class="w-[5px] h-[5px] bg-primary mr-3"></div>04/26 - Present</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+<div>
+<h3 class="font-body text-base font-medium text-on-surface mb-1">AI Systems Architect &amp; Development</h3>
+<p class="font-body text-sm text-on-surface-variant">Zerikai AIO Scanner</p>
+</div>
+<p class="font-body text-sm text-on-surface-variant">uilt a Django SaaS auditing websites for AI-readiness by scanning for llms.txt, agents.md, sitemap.xml, JSON-LD structured data</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Projects Section -->
+<section class="py-24 bg-surface px-8" id="work">
+<div class="max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-16">
+<div>
+<div class="flex items-center space-x-4 mb-6">
+<span class="font-label text-label-sm tracking-widest uppercase text-primary">Featured Projects</span>
+</div>
+<h2 class="font-headline text-[2.5rem] text-on-surface">A Selection of My Work</h2>
+</div>
+<a class="hidden md:flex items-center space-x-2 text-on-surface font-label text-xs uppercase tracking-widest hover:text-primary transition-colors" href="#">
+<span class="">View All Projects</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="group cursor-pointer" id="project_memory">
+<div class="aspect-[4/3] bg-surface-container-high mb-6 overflow-hidden relative border border-on-surface-variant/10">
+<div class="absolute inset-0 bg-surface-container transition-transform duration-500 group-hover:scale-105"></div>
+<div class="absolute inset-0 flex items-center justify-center p-6 text-center z-10"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC55moTyUnCVqrtUTwC6tSS4E37J-ZdcILLZs2G3nxgiBjnkmlDaXm4aypB612XELAnhpP3OiNVNIuADCPX_HFGhhDmuASQAuv6jPrkaGJR1LZW0AjE__WRa_ciHP1TIONbrUy-sSDn_tP8hvFZlXRAOFIgALSTcI63wTrOoH6d_jNQBF4fFx2cQzmiAse2n_byBhL38zywDPAHEO8xjk3eqNKVweMAggZWQ8BQepRuG7GrQR9H9Z7WC55TOWCTtKpl0w" alt="zerikai memory logo" class="w-full h-full object-contain grayscale opacity-70 transition-opacity group-hover:opacity-100"></div>
+</div>
+<h3 class="font-label text-sm text-on-surface uppercase tracking-wider mb-1">zerikai memory</h3>
+<p class="font-body text-xs text-on-surface-variant">RAG &amp; MCP Design</p>
+</div>
+<div class="group cursor-pointer" id="project_killshot">
+<div class="aspect-[4/3] bg-surface-container-high mb-6 overflow-hidden relative border border-on-surface-variant/10">
+<div class="absolute inset-0 bg-surface-container transition-transform duration-500 group-hover:scale-105"></div>
+<div class="absolute inset-0 flex items-center justify-center p-6 text-center z-10"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFMu2Oq2vQVJcKox0Bz28aycMiEVuxvPoSRzhWkvzy362nwmyGYssxLkJyK93H7-uJhdPSk9DnnvDseSoRRrnCsgLr0cKyfgTUlzqtDeW4RkVupqwzlcmvNEsJ3AayZ9tIA4bg1_tHVpESFgqgBIGcFcTZrr7BLA6R3M-Xs6mvfPcB_50E95nKiv0z5PbYF_Y0FRfZKoBaOg9pY9VLk4CnkUqtr2rCejXnfKuDn8uJF0fAnkK_fdPvlFrnDXu64TEPTw" alt="KillShot Project" class="w-full h-full object-cover grayscale transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0"></div>
+</div>
+<h3 class="font-label text-sm text-on-surface uppercase tracking-wider mb-1">killshot - lead qualifyer</h3>
+<p class="font-body text-xs text-on-surface-variant">UI Design, 4-stage AI lead qualification pipeline</p>
+</div>
+<div class="group cursor-pointer" id="project_scanner">
+<div class="aspect-[4/3] bg-surface-container-high mb-6 overflow-hidden relative border border-on-surface-variant/10">
+<div class="absolute inset-0 bg-surface-container transition-transform duration-500 group-hover:scale-105"></div>
+<div class="absolute inset-0 flex items-center justify-center p-6 text-center z-10">
+<img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCscwaiTaVc0yQjFZONlt8T0YzgulrslGrJE94oLVQ2y1kVRR6WmYoPLXXOOx19W4WoLq5B2Riz3j1bw6_T4vmLwGLqlHpbeBCDuWNxN6SIvRdK1U64MZflfM2imf98c4qg04DXDBVL6IZ4k_20DQX4DkUDFD2r7GocF2olHwgqiGGNfI95orUNl3sAdNz2d18bQXTE5FrJlPV29tMOoSu4aNUIl1z49CEBgPFjbcgfmL7I_HmLtu-Q6f505cNgSwjemw" alt="Zerikai AIO Scanner" class="w-full h-full object-cover grayscale transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0">
+</div>
+</div>
+<h3 class="font-label text-sm text-on-surface uppercase tracking-wider mb-1">AIO/SEO Scanner</h3>
+<p class="font-body text-xs text-on-surface-variant">AI-readiness scanner</p>
+</div>
+<div class="group cursor-pointer" id="project_saas">
+<div class="aspect-[4/3] bg-surface-container-high mb-6 overflow-hidden relative border border-on-surface-variant/10">
+<div class="absolute inset-0 bg-surface-container transition-transform duration-500 group-hover:scale-105"></div>
+<div class="absolute inset-0 flex items-center justify-center p-6 text-center z-10"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdIcv-FM66wyLCWrIQLEHzirucRQQa9rpNOvHtpYB_LIXJbo9Di1f7NCUlh21PtEksjyym2HgN24JqVSYPfNRuV4z3HjqB6sSdrWZrU1j_t-QhCD4vuU6SxcF6-NESF5sGTvR3f_K1Xf8DZTNfSSkFd4j8Sfq8V_haBntN9qpqGQ2BbzR6BSPt2c41KwI5gKzf2w8VN0YJRy5ZAEes1oOJ4QPTgTPhaJwVftlpXWfMe5q5EgN3e3a4pq7JiFuA9ddpaA" alt="Compagio Sales Dashboard" class="w-full h-full object-cover grayscale transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0"></div>
+</div>
+<h3 class="font-label text-sm text-on-surface uppercase tracking-wider mb-1">Multi-tenant SaaS platform</h3>
+<p class="font-body text-xs text-on-surface-variant">Amazon SP-API , Data Protection Policy &amp; More</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Let's Connect Section -->
+<section class="py-24 px-8" id="contact">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div>
+<div class="flex items-center space-x-4 mb-6">
+<span class="font-label text-label-sm tracking-widest uppercase text-primary">reach out</span>
+</div>
+<h2 class="font-headline text-[3.5rem] leading-[1.1] mb-8 text-on-surface">Do you have an idea?</h2>
+<p class="font-body text-lg text-on-surface-variant mb-12 max-w-md">Available for select freelance opportunities and consulting roles. Let's discuss your
+                        architectural challenges. Start a Technical Briefing with my AI
+                    </p>
+<div class="space-y-4 mt-8"><a class="flex items-center space-x-4 text-on-surface-variant hover:text-primary transition-colors" href="mailto:hello@enriquebruzual.com"><span class="material-symbols-outlined text-xl">mail</span><span class="font-body">zerikai.dev@gmail.com</span></a><a class="flex items-center space-x-4 text-on-surface-variant hover:text-primary transition-colors" href="https://dev.to/kike" target="_blank" rel="noopener noreferrer"><span class="material-symbols-outlined text-xl">article</span><span class="font-body">dev.to: @kike</span></a><div class="flex items-center space-x-4 text-on-surface-variant"><span class="material-symbols-outlined text-xl">location_on</span><span class="font-body">serving: US . Canada . Mexico . EU</span></div><div class="pt-4"><a class="inline-block border border-primary text-primary font-label text-label-md tracking-[0.02em] uppercase px-6 py-3 hover:bg-primary hover:text-white transition-all" href="#" id="schedule_call">Let's Talk</a></div></div>
+</div>
+<div class="hidden lg:flex justify-center items-center">
+<div class="relative w-[400px] h-[400px] rounded-full border border-primary/20 flex items-center justify-center p-8">
+<div class="w-full h-full rounded-full border border-primary/40 flex items-center justify-center p-8">
+<img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpxciNI7Mv8sJWTpc4U3DMLc9k6qPTQwXUpGf-_tNiljj95yvImJDqiV54jFMIbwFx0qGyPrzd0KXfqxVUR2GC6o7OQA7uZ991atqt-ZU3_UXhfhBRq3PZkTycHG33xd15S_P6InH63HHvT1xH8ja6EzVD-WhgkNnkiiWS9l3YK4-d3-n44tGDS37pglbdBNaAKdN--w67ISMG-A8r2WBK1VR9dv5a4qeD1BRwGvcb2jQ8H8TtHyc144g01dgktvnWNQ" alt="Decorative water drop ripple" class="w-full h-full rounded-full object-cover grayscale opacity-70">
+</div>
+</div>
+</div>
+</div>
+</section>
+    </main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest grid grid-cols-1 md:grid-cols-4 gap-12 px-8 py-20 max-w-full mx-auto border-t border-on-surface-variant/10">
+<div class="md:col-span-1">
+<div class="font-headline text-xl text-on-surface mb-4">E.B</div>
+<p class="font-body text-sm text-on-surface-variant leading-[1.8] mb-8">Strategic AI Architect.<br>Crafting logic that performs.</p>
+<p class="font-body text-xs text-on-surface-variant opacity-70">© 2024 Enrique Bruzual. All Rights Reserved.</p>
+</div>
+<div class="md:col-span-1">
+<h4 class="font-label text-label-sm uppercase tracking-widest text-on-surface mb-6">Quick Links</h4>
+<ul class="space-y-4">
+<li class=""><a class="font-body text-sm text-on-surface-variant hover:text-on-surface transition-opacity duration-200" href="#work">Work</a></li>
+<li class=""><a class="font-body text-sm text-on-surface-variant hover:text-on-surface transition-opacity duration-200" href="#about">About</a></li>
+<li class=""><a class="font-body text-sm text-on-surface-variant hover:text-on-surface transition-opacity duration-200" href="#services">Services</a></li>
+</ul>
+</div>
+<div class="md:col-span-1">
+<h4 class="font-label text-label-sm uppercase tracking-widest text-on-surface mb-6">Socials</h4>
+<ul class="space-y-4">
+<li class=""><a class="font-body text-sm text-on-surface-variant hover:text-on-surface transition-opacity duration-200" href="https://github.com/KikeVen" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+<li class=""><a class="font-body text-sm text-on-surface-variant hover:text-on-surface transition-opacity duration-200" href="https://substack.com/@enriquebruzual" target="_blank" rel="noopener noreferrer">Substack</a></li>
+</ul>
+</div>
+<div class="md:col-span-1">
+<h4 class="font-label text-label-sm uppercase tracking-widest text-on-surface mb-6">Newsletter</h4>
+<p class="font-body text-sm text-on-surface-variant mb-4">Get updates on new architecture patterns and insights.</p>
+<form id="newsletter-form" class="flex border-b border-outline-variant focus-within:border-primary transition-colors">
+<input id="newsletter-email" class="bg-transparent border-none w-full text-on-surface font-body text-sm focus:ring-0 px-0 py-2" placeholder="Your email" type="email">
+<button class="text-primary hover:text-on-surface transition-colors p-2" type="submit">
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</form>
+</div>
+</footer>
 
     <script>
         // Simple dark mode toggle based on system preference initially, but user requested specific theme.
@@ -646,12 +753,17 @@
             // Mapping your specific IDs to the messages
             const triggers = {
                 'contact-link': "I can assist you with reaching Enrique. You can email him at zerikai.dev@gmail.com, or I can take a message and your preferred contact time right here.",
+                'mobile-contact-link': "I can assist you with reaching Enrique. You can email him at zerikai.dev@gmail.com, or I can take a message and your preferred contact time right here.",
                 'core_competencies': "Hello! I'm Enrique's Digital Twin. I can brief you on his 20+ years of leadership and focus on AI orchestration.",
-                'core_competencies_2': "Hello! I'm Enrique's Digital Twin. I can brief you on his 20+ years of leadership and focus on AI orchestration.",
-                'killshot_case': "I'd be happy to discuss the KillShot architecture, including how it achieved 85.3% noise rejection using a Sequential Analysis Pipeline.",
-                'voice_case': "I can walk you through the voice.Zerikai project, specifically the multi-tenant Django backend and MCP integration.",
-                "private_policy": "Would you like to view our Priviate Policy?",
-                "terms_use": "Would you like to read my Terms of Use?"
+                'schedule_call': "I'd be happy to help you schedule a consultation with Enrique. We can arrange a Zoom call to discuss your project requirements, architectural challenges, or explore how his expertise in AI orchestration and system design can benefit your organization. What time zone are you in, and when would work best for you?",
+                'service_rag': "I can explain Enrique's approach to RAG & Retrieval Architecture Design. He specializes in production-grade hybrid retrieval systems combining semantic, lexical, and AST search to reduce context overhead by up to 40% while improving precision. Would you like to discuss your retrieval challenges?",
+                'service_agentic': "Let me tell you about Enrique's Agentic Pipeline Architecture expertise. He designs autonomous multi-stage systems like KillShot, which achieved 85.3% noise rejection using sequential analysis. These pipelines handle qualification, decision-making, and execution without blocking your UI. Interested in learning more?",
+                'service_cost': "I can brief you on Enrique's Inference Cost Optimization strategies. He has a verified track record of achieving 10-50x cost reductions through techniques like prompt optimization, caching strategies, and model selection. His zerikai_memory project reduced costs by 25x. Would you like to discuss your current LLM expenses?",
+                'service_audit': "Let me explain Enrique's AI-Readiness Audits. He evaluates websites for AI search optimization by scanning for llms.txt, agents.md, structured data (JSON-LD), and semantic markup. As AI search engines like ChatGPT and Perplexity gain market share, proper positioning becomes critical. Interested in an audit?",
+                'project_memory': "Let me tell you about zerikai_memory, Enrique's flagship open-source project. It's a hybrid RAG architecture built with Python, ChromaDB, and Ollama that gives AI agents persistent, workspace-isolated memory. The system combines semantic, lexical, and AST search to achieve 25x cost reduction compared to naive context injection. Would you like a technical deep-dive?",
+                'project_killshot': "I can walk you through KillShot, Enrique's 4-stage lead qualification pipeline. It processes Reddit threads through summary generation, intent scoring, key point extraction, and draft response stages—achieving 85.3% noise rejection. Built with Python, pgvector, and HTMX/AlpineJS. Want to discuss the architecture?",
+                'project_scanner': "Let me explain the Zerikai AIO Scanner. It's a Django SaaS platform that audits websites for AI-readiness by scanning for llms.txt, agents.md, sitemap.xml, JSON-LD structured data, and semantic markup. The tool helps businesses prepare for AI search engines like ChatGPT and Perplexity. Interested in how it works?",
+                'project_saas': "I can brief you on Enrique's multi-tenant SaaS platform work. He builds secure, tenant-isolated systems with Django, integrating complex APIs like Amazon SP-API for e-commerce data. These platforms include data protection policies, role-based access control, and scalable architecture patterns. Would you like to know more about multi-tenancy best practices?"
             };
 
             // Apply the logic to your links
@@ -661,6 +773,30 @@
                     el.addEventListener('click', (e) => triggerAgent(e, triggers[id], id));
                 }
             });
+            // Newsletter form: capture email and open widget with it
+            const newsletterForm = document.getElementById('newsletter-form');
+            const newsletterEmail = document.getElementById('newsletter-email');
+            if (newsletterForm && newsletterEmail) {
+                newsletterForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const email = newsletterEmail.value.trim();
+                    if (email && agent) {
+                        agent.setAttribute('override-first-message', 'Thanks for subscribing with ' + email + '. Please type your name and any message in the text field, then press the send button so I can get you on the list.');
+                        const openWidget = () => {
+                            const shadow = agent.shadowRoot;
+                            if (!shadow) return;
+                            const btn =
+                                shadow.querySelector('button[aria-label="Ask anything"]') ||
+                                shadow.querySelector('button[aria-label="Open widget"]') ||
+                                shadow.querySelector('button[aria-label="Open chat"]') ||
+                                shadow.querySelector('button:first-of-type');
+                            if (btn) btn.click();
+                        };
+                        setTimeout(openWidget, 80);
+                        newsletterEmail.value = '';
+                    }
+                });
+            }
             // Mobile Menu Toggle
             const mobileBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -680,6 +816,4 @@
             }
         });
     </script>
-</body>
-
-</html>
+</body></html>
