@@ -20,14 +20,6 @@
 - **URL:** https://enriquebruzual.github.io/blog/reduce-ai-ide-token-costs-with-zerikai-memory.html
 - **Summary:** As AI coding tools shift to token-based billing, inefficient context retrieval is driving up costs. Zerikai Memory is an open-source, local MCP server that uses deterministic parsing to provide targeted, cost-effective context for any IDE.
 
-### ChatGPT is recommending your competitors. Not you
-- **URL:** https://enriquebruzual.github.io/blog/ChatGPT_is_recommending_your_competitors_Not_you.html
-- **Summary:** AI tools like ChatGPT and Gemini are replacing Google for local business searches. Get your free AI-Readiness score at scan.zerikai.com and find out exactly why customers are finding your competitors instead of you.
-
-### SEO is not enough in 2026: Make sure AI can recommend your business
-- **URL:** https://enriquebruzual.github.io/blog/SEO_is_not_enough_in_2026_Make_sure_AI_can_recommend_your_business.html
-- **Summary:** AI search is becoming the new front page for local businesses. This post explains the shift from SEO to AIO (AI Optimization), why “Zero-Click” answers and AI recommendations change the game, and how a quick free scan can reveal what your site needs to become AI-readable. Run a 30-second audit at scan.zerikai.com and get a report emailed to you.
-
 ### Never Miss an Emergency Call: The AI Scaling Guide for Modern Contractors
 - **URL:** https://enriquebruzual.github.io/blog/Never_Miss_an_Emergency_Call_The_AI_Scaling_Guide_for_Modern_Contractors.html
 - **Summary:** Stop losing high-value emergency leads to voicemail. This guide reveals how AI voice assistants provide 24/7 dispatching, direct calendar booking, and enterprise-grade data security to help HVAC and plumbing contractors scale without increasing headcount.

@@ -1,6 +1,6 @@
 /* TEAM */
 Lead AI Solutions Architect: Enrique Bruzual at Zerikai
-Site: https://zerikai.com
+Site: https://enriquebruzual.github.io
 Location: United States
 
 /* SITE */

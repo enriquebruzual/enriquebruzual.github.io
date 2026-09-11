@@ -1,4 +1,4 @@
-# robots.txt for zerikai.com
+# robots.txt for enriquebruzual.github.io
 User-agent: *
 Allow: /
 
