@@ -706,30 +706,16 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Find the widget exactly as defined in the docs
+            // Find the widget
             const agent = document.querySelector('elevenlabs-convai');
 
-            const triggerAgent = (e, message, id) => {
-                // STOP the browser from refreshing the page or jumping
-                e.preventDefault();
-                e.stopPropagation();
-
+            const openWidgetDefault = () => {
                 if (!agent) return;
-
-                // 1. Set the first message override so the agent knows the context
-                agent.setAttribute('override-first-message', message);
-
-                // 2. Open the widget by clicking its internal shadow DOM button.
-                //    The widget is a Web Component with no public expand() API.
-                //    setAttribute('variant','expanded') externally RESETS the widget
-                //    to compact instead of opening it. The correct way is to trigger
-                //    the widget's own toggle button inside its Shadow Root.
+                
                 const openWidget = () => {
                     const shadow = agent.shadowRoot;
                     if (!shadow) return;
 
-                    // The first <button> in the shadow root is the "Ask anything" / expand trigger.
-                    // We target it by aria-label first, then fall back to the first button.
                     const btn =
                         shadow.querySelector('button[aria-label="Ask anything"]') ||
                         shadow.querySelector('button[aria-label="Open widget"]') ||
@@ -741,40 +727,39 @@
                     }
                 };
 
-                // Small delay lets the attribute settle on the web component before we click.
                 setTimeout(openWidget, 80);
+            };
 
-                // 3. Smooth scroll for the contact link (runs immediately, not blocked by timeout)
-                if (id === 'contact-link') {
+            const triggerAgent = (e, id) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                openWidgetDefault();
+
+                // Smooth scroll for the contact links
+                if (id === 'contact-link' || id === 'mobile-contact-link') {
                     const contactSection = document.querySelector('#contact');
                     if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
                 }
             };
 
-            // Mapping your specific IDs to the messages
-            const triggers = {
-                'contact-link': "I can assist you with reaching Enrique. You can email him at zerikai.dev@gmail.com, or I can take a message and your preferred contact time right here.",
-                'mobile-contact-link': "I can assist you with reaching Enrique. You can email him at zerikai.dev@gmail.com, or I can take a message and your preferred contact time right here.",
-                'core_competencies': "Hello! I'm Enrique's Digital Twin. I can brief you on his 20+ years of leadership and focus on AI orchestration.",
-                'schedule_call': "I'd be happy to help you schedule a consultation with Enrique. We can arrange a Zoom call to discuss your project requirements, architectural challenges, or explore how his expertise in AI orchestration and system design can benefit your organization. What time zone are you in, and when would work best for you?",
-                'service_rag': "I can explain Enrique's approach to RAG & Retrieval Architecture Design. He specializes in production-grade hybrid retrieval systems combining semantic, lexical, and AST search to reduce context overhead by up to 40% while improving precision. Would you like to discuss your retrieval challenges?",
-                'service_agentic': "Let me tell you about Enrique's Agentic Pipeline Architecture expertise. He designs autonomous multi-stage systems like KillShot, which achieved 85.3% noise rejection using sequential analysis. These pipelines handle qualification, decision-making, and execution without blocking your UI. Interested in learning more?",
-                'service_cost': "I can brief you on Enrique's Inference Cost Optimization strategies. He has a verified track record of achieving 10-50x cost reductions through techniques like prompt optimization, caching strategies, and model selection. His zerikai_memory project reduced costs by 25x. Would you like to discuss your current LLM expenses?",
-                'service_audit': "Let me explain Enrique's AI-Readiness Audits. He evaluates websites for AI search optimization by scanning for llms.txt, agents.md, structured data (JSON-LD), and semantic markup. As AI search engines like ChatGPT and Perplexity gain market share, proper positioning becomes critical. Interested in an audit?",
-                'project_memory': "Let me tell you about zerikai_memory, Enrique's flagship open-source project. It's a hybrid RAG architecture built with Python, ChromaDB, and Ollama that gives AI agents persistent, workspace-isolated memory. The system combines semantic, lexical, and AST search to achieve 25x cost reduction compared to naive context injection. Would you like a technical deep-dive?",
-                'project_killshot': "I can walk you through KillShot, Enrique's 4-stage lead qualification pipeline. It processes Reddit threads through summary generation, intent scoring, key point extraction, and draft response stages—achieving 85.3% noise rejection. Built with Python, pgvector, and HTMX/AlpineJS. Want to discuss the architecture?",
-                'project_scanner': "Let me explain the Zerikai AIO Scanner. It's a Django SaaS platform that audits websites for AI-readiness by scanning for llms.txt, agents.md, sitemap.xml, JSON-LD structured data, and semantic markup. The tool helps businesses prepare for AI search engines like ChatGPT and Perplexity. Interested in how it works?",
-                'project_saas': "I can brief you on Enrique's multi-tenant SaaS platform work. He builds secure, tenant-isolated systems with Django, integrating complex APIs like Amazon SP-API for e-commerce data. These platforms include data protection policies, role-based access control, and scalable architecture patterns. Would you like to know more about multi-tenancy best practices?"
-            };
+            // IDs of elements that should trigger the widget
+            const triggerIds = [
+                'contact-link', 'mobile-contact-link', 'core_competencies',
+                'schedule_call', 'service_rag', 'service_agentic', 'service_cost',
+                'service_audit', 'project_memory', 'project_killshot', 'project_scanner',
+                'project_saas'
+            ];
 
             // Apply the logic to your links
-            Object.keys(triggers).forEach(id => {
+            triggerIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
-                    el.addEventListener('click', (e) => triggerAgent(e, triggers[id], id));
+                    el.addEventListener('click', (e) => triggerAgent(e, id));
                 }
             });
-            // Newsletter form: capture email and open widget with it
+
+            // Newsletter form: open widget without custom message
             const newsletterForm = document.getElementById('newsletter-form');
             const newsletterEmail = document.getElementById('newsletter-email');
             if (newsletterForm && newsletterEmail) {
@@ -782,22 +767,12 @@
                     e.preventDefault();
                     const email = newsletterEmail.value.trim();
                     if (email && agent) {
-                        agent.setAttribute('override-first-message', 'Thanks for subscribing with ' + email + '. Please type your name and any message in the text field, then press the send button so I can get you on the list.');
-                        const openWidget = () => {
-                            const shadow = agent.shadowRoot;
-                            if (!shadow) return;
-                            const btn =
-                                shadow.querySelector('button[aria-label="Ask anything"]') ||
-                                shadow.querySelector('button[aria-label="Open widget"]') ||
-                                shadow.querySelector('button[aria-label="Open chat"]') ||
-                                shadow.querySelector('button:first-of-type');
-                            if (btn) btn.click();
-                        };
-                        setTimeout(openWidget, 80);
+                        openWidgetDefault();
                         newsletterEmail.value = '';
                     }
                 });
             }
+
             // Mobile Menu Toggle
             const mobileBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');

@@ -1,13 +1,13 @@
 # Enrique Bruzual - Principal AI Solutions Architect
 
-30+ years of software leadership, specializing in Python, AI Orchestration, and Human-Centric System Design.
+20+ years of software leadership, specializing in Python, AI Orchestration, and Human-Centric System Design.
 
 ## Core Technical Profile
 
 - **Expertise:** Production-grade Python, AI Implementation, AI SaaS Architecture, Multi-Agent Orchestration.
 - **Background:** Degree in Communications (Concentration in Graphic Design & New Media).
-- **The Edge:** 30+ years of engineering discipline merged with high-level design thinking. I bridge the gap between "back-end power" and "front-end clarity."
-- **Specialization:** Building resilient AI systems that bridge the gap between "experimental" and "production-ready" (Modern Legacy).research.
+- **The Edge:** 20+ years of engineering discipline merged with high-level design thinking. I bridge the gap between "back-end power" and "front-end clarity."
+- **Specialization:** Building resilient AI systems that bridge the gap between "experimental" and "production-ready" (Modern Legacy).
 - **Key Projects:** KillShot (85.3% noise rejection pipeline), voice.Zerikai (MCP + Django multi-tenant SaaS).
 
 ## Full Knowledge Library
